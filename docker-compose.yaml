@@ -15,6 +15,7 @@ services:
       - eews-zookeeper
     ports:
       - '8097:8097'
+      - '9092:9092'
 
     environment:
       KAFKA_BROKER_ID: 1
