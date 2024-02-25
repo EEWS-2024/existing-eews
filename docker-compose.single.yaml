@@ -1,0 +1,144 @@
+version: '3'
+services:
+  eews-zookeeper:
+    restart: always
+    image: confluentinc/cp-zookeeper
+    container_name: eews-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  eews-kafka:
+    restart: always
+    container_name: eews-kafka
+    image: confluentinc/cp-kafka
+    depends_on:
+      - eews-zookeeper
+    ports:
+      - '8097:8097'
+
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://eews-kafka:9092,PLAINTEXT_HOST://localhost:8097
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '3'
+      KAFKA_MIN_INSYNC_REPLICAS: '1'
+
+  eews-init-kafka:
+    container_name: eews-init-kafka
+    image: confluentinc/cp-kafka:6.1.1
+    depends_on:
+      - eews-kafka
+    entrypoint: ['/bin/sh', '-c']
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server eews-kafka:9092 --list
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic preprocessed --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic prediction --replication-factor 1 --partitions 1
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server eews-kafka:9092 --list
+      "
+
+  eews-redis:
+    image: redis
+    container_name: eews-redis
+    volumes:
+      - redis_data:/data
+
+  eews-seeder:
+    depends_on:
+      - eews-redis
+    build:
+      context: ../seeder
+      dockerfile: Dockerfile
+    container_name: eews-seeder
+    env_file:
+      - .seeder.env
+
+  eews-producer:
+    depends_on:
+      - eews-init-kafka
+      - eews-seeder
+    build:
+      context: ../producer
+      dockerfile: Dockerfile
+    container_name: eews-producer
+    env_file:
+      - .producer.env
+    ports:
+      - '8000:8000'
+
+  eews-queue-1:
+    depends_on:
+      - eews-init-kafka
+      - eews-producer
+    build:
+      context: ../queue
+      dockerfile: Dockerfile
+    container_name: eews-queue-1
+    env_file:
+      - .queue.env
+
+  eews-picker-1:
+    depends_on:
+      - eews-nginx
+      - eews-mongo
+    build:
+      context: ../picker
+      dockerfile: Dockerfile
+    container_name: eews-picker-1
+    env_file:
+      - .picker.env
+
+  eews-ml-1:
+    build:
+      context: ../machine-learning
+      dockerfile: Dockerfile
+    container_name: eews-ml-1
+    depends_on:
+      - eews-redis
+    env_file:
+      - .ml.env
+
+  eews-nginx:
+    image: nginx
+    container_name: eews-nginx
+    volumes:
+      - ./nginx/nginx.single.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - eews-ml-1
+
+  eews-ws-rest:
+    depends_on:
+      - eews-producer
+      - eews-seeder
+    build:
+      context: ../ws-rest
+      dockerfile: Dockerfile
+    container_name: eews-ws-rest
+    env_file:
+      - .ws-rest.env
+    ports:
+      - '8080:8080'
+
+  eews-frontend:
+    depends_on:
+      - eews-ws-rest
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+
+  eews-mongo:
+    image: mongo:latest
+    container_name: eews-mongo
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+  redis_data:

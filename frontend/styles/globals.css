@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+.mapboxgl-map {
+  width: 100%;
+  height: 500px;
+}
+.recharts-x-axis .recharts-cartesian-axis-tick:first-child line {
+  stroke: none;
+}
+.recharts-x-axis .recharts-cartesian-axis-tick:first-child text {
+  font-size: 0;
+}
+td {
+  vertical-align: top;
+}
+.control-table td {
+  vertical-align: center;
+}
+.control-table td,
+.control-table th {
+  border: 1px solid black;
+}

@@ -1,0 +1,10 @@
+version: '3'
+services:
+  eews-frontend:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eews-zookeeper
+    ports:
+      - '80:3000'
