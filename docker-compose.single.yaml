@@ -132,6 +132,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: eews-frontend
+    ports:
+      - '80:3000'
 
   eews-mongo:
     image: mongo:latest
