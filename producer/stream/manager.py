@@ -1,7 +1,8 @@
 from stream.producer import KafkaProducer, kafkaProducer
 from stream.fdsnws_client import FdsnwsClient
 from stream.seedlink_client import SeedlinkClient
-from stream.file_client import FileClient
+
+# from stream.file_client import FileClient
 from stream.const import StreamMode
 from utils.redis_client import RedisSingleton
 
@@ -15,7 +16,7 @@ class StreamManager:
         self.seedlink_server = seedlink_server
         self.fdsnws = FdsnwsClient(self.producer, base_url=self.fdsnws_server)
         self.seedlink = SeedlinkClient(self.producer, server_url=self.seedlink_server)
-        self.fileclient = FileClient(self.producer)
+        # self.fileclient = FileClient(self.producer)
 
     def start(self, mode: StreamMode, *args, **kwargs):
         if self.fdsnws.blocked:
@@ -36,11 +37,11 @@ class StreamManager:
         if mode == StreamMode.FILE:
             try:
                 self.producer.current_mode = StreamMode.FILE
-                self.fileclient.startStreaming(*args, **kwargs)
+                # self.fileclient.startStreaming(*args, **kwargs)
             except Exception as err:
                 print(err)
             finally:
-                self.fileclient.stopStreaming()
+                # self.fileclient.stopStreaming()
                 self.producer.current_mode = StreamMode.IDLE
 
         elif mode == StreamMode.LIVE and self.producer.current_mode == StreamMode.IDLE:
