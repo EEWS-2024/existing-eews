@@ -54,7 +54,7 @@ services:
     depends_on:
       - eews-redis
     build:
-      context: ../seeder
+      context: ./seeder
       dockerfile: Dockerfile
     container_name: eews-seeder
     env_file:
@@ -65,7 +65,7 @@ services:
       - eews-init-kafka
       - eews-seeder
     build:
-      context: ../producer
+      context: ./producer
       dockerfile: Dockerfile
     container_name: eews-producer
     env_file:
@@ -78,7 +78,7 @@ services:
       - eews-init-kafka
       - eews-producer
     build:
-      context: ../queue
+      context: ./queue
       dockerfile: Dockerfile
     container_name: eews-queue-1
     env_file:
@@ -89,7 +89,7 @@ services:
       - eews-nginx
       - eews-mongo
     build:
-      context: ../picker
+      context: ./picker
       dockerfile: Dockerfile
     container_name: eews-picker-1
     env_file:
@@ -97,7 +97,7 @@ services:
 
   eews-ml-1:
     build:
-      context: ../machine-learning
+      context: ./machine-learning
       dockerfile: Dockerfile
     container_name: eews-ml-1
     depends_on:
@@ -118,7 +118,7 @@ services:
       - eews-producer
       - eews-seeder
     build:
-      context: ../ws-rest
+      context: ./ws-rest
       dockerfile: Dockerfile
     container_name: eews-ws-rest
     env_file:
@@ -130,7 +130,7 @@ services:
     depends_on:
       - eews-ws-rest
     build:
-      context: ../frontend
+      context: ./frontend
       dockerfile: Dockerfile
 
   eews-mongo:
