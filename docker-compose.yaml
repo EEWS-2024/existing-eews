@@ -33,7 +33,6 @@ services:
     restart: always
     container_name: eews-kafka-2
     image: confluentinc/cp-kafka
-    user: root
     depends_on:
       - eews-zookeeper
     ports:
@@ -54,7 +53,6 @@ services:
     restart: always
     container_name: eews-kafka-3
     image: confluentinc/cp-kafka
-    user: root
     depends_on:
       - eews-zookeeper
     ports:
