@@ -76,6 +76,7 @@ services:
       - eews-kafka
       - eews-kafka-2
       - eews-kafka-3
+      - eews-zookeeper
     entrypoint: ['/bin/sh', '-c']
     command: |
       "
@@ -107,9 +108,12 @@ services:
       - .seeder.env
 
   eews-producer:
+    restart: always
     depends_on:
       - eews-init-kafka
       - eews-seeder
+      - eews-zookeeper
+      - eews-kafka
     build:
       context: ./producer
       dockerfile: Dockerfile
@@ -120,9 +124,12 @@ services:
       - '8000:8000'
 
   eews-queue-1:
+    restart: always
     depends_on:
       - eews-init-kafka
       - eews-producer
+      - eews-zookeeper
+      - eews-kafka
     build:
       context: ./queue
       dockerfile: Dockerfile
@@ -131,9 +138,12 @@ services:
       - .queue.env
 
   eews-queue-2:
+    restart: always
     depends_on:
       - eews-init-kafka
       - eews-producer
+      - eews-zookeeper
+      - eews-kafka
     build:
       context: ./queue
       dockerfile: Dockerfile
@@ -142,9 +152,12 @@ services:
       - .queue.env
 
   eews-queue-3:
+    restart: always
     depends_on:
       - eews-init-kafka
       - eews-producer
+      - eews-zookeeper
+      - eews-kafka
     build:
       context: ./queue
       dockerfile: Dockerfile
@@ -153,6 +166,7 @@ services:
       - .queue.env
 
   eews-picker-1:
+    restart: always
     depends_on:
       - eews-nginx
       - eews-mongo
@@ -164,6 +178,7 @@ services:
       - .picker.env
 
   eews-picker-2:
+    restart: always
     depends_on:
       - eews-nginx
       - eews-mongo
@@ -175,6 +190,7 @@ services:
       - .picker.env
 
   eews-picker-3:
+    restart: always
     depends_on:
       - eews-nginx
       - eews-mongo
@@ -186,6 +202,7 @@ services:
       - .picker.env
 
   eews-ml-1:
+    restart: always
     build:
       context: ./machine-learning
       dockerfile: Dockerfile
@@ -196,6 +213,7 @@ services:
       - .ml.env
 
   eews-ml-2:
+    restart: always
     build:
       context: ./machine-learning
       dockerfile: Dockerfile
@@ -206,6 +224,7 @@ services:
       - .ml.env
 
   eews-ml-3:
+    restart: always
     build:
       context: ./machine-learning
       dockerfile: Dockerfile
@@ -226,6 +245,7 @@ services:
       - eews-ml-3
 
   eews-ws-rest:
+    restart: always
     depends_on:
       - eews-producer
       - eews-seeder
