@@ -21,6 +21,15 @@ Dokumen ini memberikan panduan untuk melakukan deployment EEWS menggunakan Docke
 2. **Konfigurasi Environtment**
    Set env variable pada file .producer.env, .queue.env, .seeder.env, .ws-rest.env
 
+   Buka file `./frontend/Dockerfile` menggunakan editor teks favorit Anda. Perhatikan bagian konfigurasi di bawah ini:
+
+   ```Dockerfile
+   ENV NEXT_PUBLIC_BACKEND_URL="http://localhost:8080"
+   ENV NEXT_PUBLIC_WS_URL="ws://localhost:8080"
+   ```
+
+   Ubah `localhost` dengan IP atau hostname dari komputer tempat frontend akan dijalankan.
+
 3. **Konfigurasi Docker Compose**
    Sesuaikan konfigurasi Docker Compose pada file `docker-compose.yaml` untuk menyesuaikan jumlah layanan Kafka, Picker, Queue, dan Machine Learning yang akan dijalankan. Pastikan untuk menambah atau mengurangi layanan sesuai kebutuhan.
 
