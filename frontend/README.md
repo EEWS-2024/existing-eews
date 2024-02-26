@@ -19,6 +19,14 @@ Dokumen ini memberikan panduan untuk melakukan deployment frontend EEWS mengguna
 
 2. **Konfigurasi Environment**
    Pastikan konfigurasi environment dalam Dockerfile telah sesuai dengan kebutuhan Anda. Periksa variabel lingkungan yang ada dalam Dockerfile dan sesuaikan jika diperlukan.
+   Buka file `Dockerfile` menggunakan editor teks favorit Anda. Perhatikan bagian konfigurasi di bawah ini:
+
+   ```Dockerfile
+   ENV NEXT_PUBLIC_BACKEND_URL="http://localhost:8080"
+   ENV NEXT_PUBLIC_WS_URL="ws://localhost:8080"
+   ```
+
+   Ubah isi dari env tersebut sesuai dengan alamat layanan ini dideploy.
 
 3. **Mulai Kontainer Docker**
    Jalankan kontainer Docker dengan perintah:
