@@ -103,6 +103,7 @@ services:
       - eews-seeder
       - eews-zookeeper
       - eews-kafka
+      - eews-redis
     build:
       context: ./producer
       dockerfile: Dockerfile
