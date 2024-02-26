@@ -14,7 +14,6 @@ services:
     depends_on:
       - eews-zookeeper
     ports:
-      # - '8097:8097'
       - '19092:19092'
       - '29092:29092'
 
@@ -25,11 +24,6 @@ services:
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.134.231.165:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-      # KAFKA_LISTENERS: EXTERNAL://localhost:8097,INTERNAL://eews-kafka:9092
-      # KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8097,INTERNAL://eews-kafka:9092
-      # KAFKA_ADVERTISED_LISTENERS: EXTERNAL://34.134.231.165:8097,INTERNAL://eews-kafka:9092
-      # KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
-      # KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
 
   eews-kafka-2:
     restart: always
@@ -38,7 +32,6 @@ services:
     depends_on:
       - eews-zookeeper
     ports:
-      # - '8098:8098'
       - '19093:19093'
       - '29093:29093'
     environment:
@@ -48,11 +41,6 @@ services:
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://localhost:19093,OUTSIDE://34.134.231.165:29093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-      # KAFKA_LISTENERS: EXTERNAL://localhost:8098,INTERNAL://eews-kafka-2:9092
-      # KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8098,INTERNAL://eews-kafka-2:9092
-      # KAFKA_ADVERTISED_LISTENERS: EXTERNAL://34.134.231.165:8098,INTERNAL://eews-kafka-2:9092
-      # KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
-      # KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
 
   eews-kafka-3:
     restart: always
@@ -61,7 +49,6 @@ services:
     depends_on:
       - eews-zookeeper
     ports:
-      # - '8099:8099'
       - '19094:19094'
       - '29094:29094'
     environment:
@@ -71,11 +58,6 @@ services:
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.134.231.165:29094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-      # KAFKA_LISTENERS: EXTERNAL://localhost:8099,INTERNAL://eews-kafka-3:9092
-      # KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8099,INTERNAL://eews-kafka-3:9092
-      # KAFKA_ADVERTISED_LISTENERS: EXTERNAL://34.134.231.165:8099,INTERNAL://eews-kafka-3:9092
-      # KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
-      # KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
 
   eews-init-kafka:
     container_name: eews-init-kafka
@@ -94,7 +76,6 @@ services:
       kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic preprocessed --replication-factor 3 --partitions 3
       kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3
       kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic prediction --replication-factor 3 --partitions 1
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       "

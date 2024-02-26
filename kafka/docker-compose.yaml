@@ -1,0 +1,80 @@
+version: '3'
+services:
+  eews-zookeeper:
+    restart: always
+    image: confluentinc/cp-zookeeper
+    container_name: eews-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  eews-kafka:
+    restart: always
+    container_name: eews-kafka
+    image: confluentinc/cp-kafka
+    depends_on:
+      - eews-zookeeper
+    ports:
+      - '19092:19092'
+      - '29092:29092'
+
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+      KAFKA_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://eews-kafka:19092,OUTSIDE://eews-kafka:29092
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.134.231.165:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+
+  eews-kafka-2:
+    restart: always
+    container_name: eews-kafka-2
+    image: confluentinc/cp-kafka
+    depends_on:
+      - eews-zookeeper
+    ports:
+      - '19093:19093'
+      - '29093:29093'
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+      KAFKA_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://eews-kafka-2:19093,OUTSIDE://eews-kafka-2:29093
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://localhost:19093,OUTSIDE://34.134.231.165:29093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+
+  eews-kafka-3:
+    restart: always
+    container_name: eews-kafka-3
+    image: confluentinc/cp-kafka
+    depends_on:
+      - eews-zookeeper
+    ports:
+      - '19094:19094'
+      - '29094:29094'
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+      KAFKA_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://eews-kafka-3:19094,OUTSIDE://eews-kafka-3:29094
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.134.231.165:29094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+
+  eews-init-kafka:
+    container_name: eews-init-kafka
+    image: confluentinc/cp-kafka:6.1.1
+    depends_on:
+      - eews-kafka
+      - eews-kafka-2
+      - eews-kafka-3
+      - eews-zookeeper
+    entrypoint: ['/bin/sh', '-c']
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server eews-kafka:9092 --list
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic preprocessed --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server eews-kafka:9092 --list

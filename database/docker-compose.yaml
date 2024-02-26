@@ -1,0 +1,17 @@
+version: '3'
+services:
+  eews-redis:
+    image: redis
+    container_name: eews-redis
+    volumes:
+      - redis_data:/data
+
+  eews-mongo:
+    image: mongo:latest
+    container_name: eews-mongo
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+  redis_data:
