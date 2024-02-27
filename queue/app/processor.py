@@ -135,7 +135,7 @@ class KafkaDataProcessor:
         )
 
     def _start(self):
-        print("=" * 20, "START", "=" * 20)
+        # print("=" * 20, "START", "=" * 20)
         for i in self.partitions:
             self.producer.startTrace(i.partition)
         self.data_handler.reset_state()

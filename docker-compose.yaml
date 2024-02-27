@@ -21,7 +21,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
       KAFKA_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://eews-kafka:19092,OUTSIDE://eews-kafka:29092
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.134.231.165:29092
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.23.119.16:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
     mem_limit: 512m
@@ -39,7 +39,7 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
       KAFKA_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://eews-kafka-2:19093,OUTSIDE://eews-kafka-2:29093
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://localhost:19093,OUTSIDE://34.134.231.165:29093
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://localhost:19093,OUTSIDE://34.23.119.16:29093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
     mem_limit: 512m
@@ -57,7 +57,7 @@ services:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
       KAFKA_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://eews-kafka-3:19094,OUTSIDE://eews-kafka-3:29094
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.134.231.165:29094
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.23.119.16:29094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
     mem_limit: 512m
@@ -129,7 +129,7 @@ services:
     container_name: eews-queue-1
     env_file:
       - .queue.env
-    mem_limit: 40m
+    mem_limit: 60m
 
   eews-queue-2:
     restart: always
@@ -144,7 +144,7 @@ services:
     container_name: eews-queue-2
     env_file:
       - .queue.env
-    mem_limit: 40m
+    mem_limit: 60m
 
   eews-queue-3:
     restart: always
@@ -159,7 +159,7 @@ services:
     container_name: eews-queue-3
     env_file:
       - .queue.env
-    mem_limit: 40m
+    mem_limit: 60m
 
   eews-picker-1:
     restart: always

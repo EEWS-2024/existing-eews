@@ -45,9 +45,9 @@ class KafkaProducer:
         #     print('packet time: ', [data['starttime'], data['endtime']])
         #     print('eews_producer_time: ', data['eews_producer_time'])
         #     print('eews_queue_time: ', data['eews_queue_time'])
-        log_data = copy.deepcopy(data)
-        log_data["data"] = None
-        print(("=" * 20) + f"{station}____{channel}" + ("=" * 20))
+        # log_data = copy.deepcopy(data)
+        # log_data["data"] = None
+        # print(("=" * 20) + f"{station}____{channel}" + ("=" * 20))
         # print(log_data)
         # print(("=" * 20) + f"{station}____{channel}" + ("="*20))
         self.producer.produce(TOPIC_PRODUCER, key=station, value=json.dumps(data))
@@ -60,7 +60,7 @@ class KafkaProducer:
             partition=int(partition),
         )
         self.producer.flush()
-        print("=" * 20, "Start Trace ", partition, "=" * 20)
+        # print("=" * 20, "Start Trace ", partition, "=" * 20)
 
     def stopTrace(self, partition):
         self.producer.produce(
@@ -70,4 +70,4 @@ class KafkaProducer:
             partition=int(partition),
         )
         self.producer.flush()
-        print("=" * 20, "Stop Trace ", partition, "=" * 20)
+        # print("=" * 20, "Stop Trace ", partition, "=" * 20)
