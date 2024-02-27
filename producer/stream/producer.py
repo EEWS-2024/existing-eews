@@ -64,7 +64,8 @@ class KafkaProducer:
         self.stations = set(stats.split(","))
         for i in range(0, self.partitions):
             self.producer.produce(
-                topic=self.topic_name,
+                # topic=self.topic_name,
+                self.topic_name,
                 value=self.value_serializer(json.dumps({"type": "start"})),
                 partition=i,
                 key="start",
@@ -75,7 +76,8 @@ class KafkaProducer:
     def stopTrace(self):
         for i in range(0, self.partitions):
             self.producer.produce(
-                topic=self.topic_name,
+                # topic=self.topic_name,
+                self.topic_name,
                 value=self.value_serializer(json.dumps({"type": "stop"})),
                 partition=i,
                 key="stop",
@@ -92,7 +94,8 @@ class KafkaProducer:
     ):
         if mode == self.current_mode and key in self.stations:
             self.producer.produce(
-                topic=self.topic_name,
+                # topic=self.topic_name,
+                self.topic_name,
                 value=self.value_serializer(value),
                 key=key,
             )
