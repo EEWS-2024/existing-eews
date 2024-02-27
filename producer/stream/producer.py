@@ -44,9 +44,7 @@ class KafkaProducer:
         self.producer = Producer({**DEFAULT_PRODUCER_CONFIG, **extra_config})
         try:
             self.partitions = len(
-                self.producer.list_topics("preprocessed")
-                .topics.get("preprocessed")
-                .partitions
+                self.producer.list_topics("query").topics.get("query").partitions
             )
         except Exception as e:
             print(e)
@@ -125,4 +123,4 @@ class KafkaProducer:
         )
 
 
-kafkaProducer = KafkaProducer("preprocessed")
+kafkaProducer = KafkaProducer("query")
