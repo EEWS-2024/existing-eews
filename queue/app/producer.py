@@ -50,6 +50,7 @@ class KafkaProducer:
         # print(("=" * 20) + f"{station}____{channel}" + ("=" * 20))
         # print(log_data)
         # print(("=" * 20) + f"{station}____{channel}" + ("="*20))
+        print("Producing ", station, channel, len(data))
         self.producer.produce(TOPIC_PRODUCER, key=station, value=json.dumps(data))
 
     def startTrace(self, partition):

@@ -82,18 +82,6 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       "
-    # healthcheck:
-    #   test:
-    #     [
-    #       'CMD',
-    #       'kafka-topics',
-    #       '--bootstrap-server',
-    #       'eews-kafka:9092',
-    #       '--list',
-    #     ]
-    #   interval: 10s
-    #   retries: 5
-    #   start_period: 10s
 
   eews-redis:
     image: redis
