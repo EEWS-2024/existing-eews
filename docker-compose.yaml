@@ -76,9 +76,9 @@ services:
       # blocks until kafka is reachable
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic preprocessed --replication-factor 2 --partitions 3 --config retention.bytes=20971520 --config retention.ms=900000
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 2 --partitions 3 --config retention.bytes=20971520 --config retention.ms=900000
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 2 --partitions 3 --config retention.bytes=20971520 --config retention.ms=900000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic preprocessed --replication-factor 2 --partitions 3 --config retention.bytes=20971520 --config retention.ms=300000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 2 --partitions 3 --config retention.bytes=20971520 --config retention.ms=420000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 2 --partitions 3 --config retention.bytes=20971520 --config retention.ms=240000
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       "
