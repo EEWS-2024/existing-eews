@@ -103,6 +103,7 @@ services:
       - eews-seeder
       - eews-zookeeper
       - eews-kafka
+      - eews-redis
     build:
       context: ./producer
       dockerfile: Dockerfile
@@ -159,6 +160,7 @@ services:
     depends_on:
       - eews-nginx
       - eews-mongo
+      - eews-redis
     build:
       context: ./picker
       dockerfile: Dockerfile
@@ -171,6 +173,7 @@ services:
     depends_on:
       - eews-nginx
       - eews-mongo
+      - eews-redis
     build:
       context: ./picker
       dockerfile: Dockerfile
@@ -183,6 +186,7 @@ services:
     depends_on:
       - eews-nginx
       - eews-mongo
+      - eews-redis
     build:
       context: ./picker
       dockerfile: Dockerfile
