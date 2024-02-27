@@ -129,6 +129,7 @@ services:
     container_name: eews-queue-1
     env_file:
       - .queue.env
+    mem_limit: 40m
 
   eews-queue-2:
     restart: always
@@ -143,6 +144,7 @@ services:
     container_name: eews-queue-2
     env_file:
       - .queue.env
+    mem_limit: 40m
 
   eews-queue-3:
     restart: always
@@ -157,6 +159,7 @@ services:
     container_name: eews-queue-3
     env_file:
       - .queue.env
+    mem_limit: 40m
 
   eews-picker-1:
     restart: always
