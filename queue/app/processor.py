@@ -55,22 +55,35 @@ class KafkaDataProcessor:
         eews_producer_time = value["eews_producer_time"]
         data = value["data"]
         start_time = datetime.fromisoformat(value["starttime"])
+        end_time = datetime.fromisoformat(value["endtime"])
         sampling_rate = value["sampling_rate"]
         # if station == "BKB" and channel == "BHE":
         #     print("Received ", station, channel)
         #     print("from message: ", value['starttime'])
-        self.data_handler.handle_missing_data(
-            station, channel, start_time, sampling_rate
-        )
-        self.__store_data(
+
+        # TODO: Comment this
+        self.producer.produce(
             station,
             channel,
             data,
             start_time,
-            sampling_rate,
+            end_time,
             eews_producer_time=eews_producer_time,
             arrive_time=arrive_time,
         )
+
+        # self.data_handler.handle_missing_data(
+        #     station, channel, start_time, sampling_rate
+        # )
+        # self.__store_data(
+        #     station,
+        #     channel,
+        #     data,
+        #     start_time,
+        #     sampling_rate,
+        #     eews_producer_time=eews_producer_time,
+        #     arrive_time=arrive_time,
+        # )
 
     def __store_data(
         self,
