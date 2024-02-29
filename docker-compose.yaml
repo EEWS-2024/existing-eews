@@ -211,6 +211,7 @@ services:
       - eews-redis
     env_file:
       - .ml.env
+    mem_limit: 7168m
 
   eews-ml-2:
     restart: always
@@ -222,6 +223,7 @@ services:
       - eews-redis
     env_file:
       - .ml.env
+    mem_limit: 7168m
 
   # eews-ml-3:
   #   restart: always
