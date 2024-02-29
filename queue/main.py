@@ -16,7 +16,7 @@ if __name__ == "__main__":
             'kafka_config': {
                 'bootstrap.servers': BOOTSTRAP_SERVERS,
                 'group.id': 'queue',
-                'auto.offset.reset': 'earliest',
+                'auto.offset.reset': 'latest',
             }
         }, True)
     data_processor = container.data_processor()

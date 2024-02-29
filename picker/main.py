@@ -24,7 +24,7 @@ if __name__ == "__main__":
             "kafka_config": {
                 "bootstrap.servers": BOOTSTRAP_SERVERS,
                 "group.id": "picker",
-                "auto.offset.reset": "earliest",
+                "auto.offset.reset": "latest",
             },
             "redis": {
                 "host": REDIS_HOST,

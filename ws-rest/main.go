@@ -203,7 +203,7 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": kafkaBrokers,
 		"group.id":          "ws-rest",
-		"auto.offset.reset": "earliest",
+		"auto.offset.reset": "latest",
 	})
 
 	if err != nil {
