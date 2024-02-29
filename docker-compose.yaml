@@ -24,7 +24,7 @@ services:
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.23.119.16:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-    mem_limit: 512m
+    mem_limit: 1024m
 
   eews-kafka-2:
     restart: always
@@ -42,25 +42,25 @@ services:
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://localhost:19093,OUTSIDE://34.23.119.16:29093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-    mem_limit: 512m
+    mem_limit: 1024m
 
-  eews-kafka-3:
-    restart: always
-    container_name: eews-kafka-3
-    image: confluentinc/cp-kafka
-    depends_on:
-      - eews-zookeeper
-    ports:
-      - '19094:19094'
-      - '29094:29094'
-    environment:
-      KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
-      KAFKA_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://eews-kafka-3:19094,OUTSIDE://eews-kafka-3:29094
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.23.119.16:29094
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-    mem_limit: 512m
+  # eews-kafka-3:
+  #   restart: always
+  #   container_name: eews-kafka-3
+  #   image: confluentinc/cp-kafka
+  #   depends_on:
+  #     - eews-zookeeper
+  #   ports:
+  #     - '19094:19094'
+  #     - '29094:29094'
+  #   environment:
+  #     KAFKA_BROKER_ID: 3
+  #     KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+  #     KAFKA_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://eews-kafka-3:19094,OUTSIDE://eews-kafka-3:29094
+  #     KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.23.119.16:29094
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+  #   mem_limit: 512m
 
   eews-init-kafka:
     container_name: eews-init-kafka
@@ -68,7 +68,7 @@ services:
     depends_on:
       - eews-kafka
       - eews-kafka-2
-      - eews-kafka-3
+      # - eews-kafka-3
       - eews-zookeeper
     entrypoint: ['/bin/sh', '-c']
     command: |
@@ -76,9 +76,9 @@ services:
       # blocks until kafka is reachable
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 3 --partitions 3 --config retention.bytes=20971520 --config retention.ms=300000
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3 --config retention.bytes=20971520 --config retention.ms=420000
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3 --config retention.bytes=20971520 --config retention.ms=240000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 3 --partitions 3 --config retention.bytes=1000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3 --config retention.bytes=1000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3 --config retention.bytes=1000000 --config retention.ms=120000
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       "
@@ -221,16 +221,16 @@ services:
     env_file:
       - .ml.env
 
-  eews-ml-3:
-    restart: always
-    build:
-      context: ./machine-learning
-      dockerfile: Dockerfile
-    container_name: eews-ml-3
-    depends_on:
-      - eews-redis
-    env_file:
-      - .ml.env
+  # eews-ml-3:
+  #   restart: always
+  #   build:
+  #     context: ./machine-learning
+  #     dockerfile: Dockerfile
+  #   container_name: eews-ml-3
+  #   depends_on:
+  #     - eews-redis
+  #   env_file:
+  #     - .ml.env
 
   eews-nginx:
     image: nginx
@@ -240,7 +240,7 @@ services:
     depends_on:
       - eews-ml-1
       - eews-ml-2
-      - eews-ml-3
+      # - eews-ml-3
 
   eews-ws-rest:
     restart: always

@@ -39,9 +39,6 @@ class Pooler:
         p_time = self.station_p_time.get(station, None)
         s_time = self.station_s_time.get(station, None)
         cache = self.cache.get(station, None)
-        print(f"P_TIME: {p_time}")
-        print(f"S_TIME: {s_time}")
-        print(f"CACHE: {cache}")
 
     def set_cache(self, station: str, channel: str, data: List[int], extend=False):
         if station not in self.cache:
@@ -118,7 +115,7 @@ class Pooler:
 
         first_time = self.station_first_start_time[station]
         count = self.station_data_count[station]
-        time_to_add = timedelta(seconds=count/20)
+        time_to_add = timedelta(seconds=count / 20)
 
         return time_to_add + first_time
 
