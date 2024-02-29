@@ -62,28 +62,28 @@ class KafkaDataProcessor:
         #     print("from message: ", value['starttime'])
 
         # TODO: Comment this
-        self.producer.produce(
-            station,
-            channel,
-            data,
-            start_time,
-            end_time,
-            eews_producer_time=eews_producer_time,
-            arrive_time=arrive_time,
-        )
-
-        # self.data_handler.handle_missing_data(
-        #     station, channel, start_time, sampling_rate
-        # )
-        # self.__store_data(
+        # self.producer.produce(
         #     station,
         #     channel,
         #     data,
         #     start_time,
-        #     sampling_rate,
+        #     end_time,
         #     eews_producer_time=eews_producer_time,
         #     arrive_time=arrive_time,
         # )
+
+        self.data_handler.handle_missing_data(
+            station, channel, start_time, sampling_rate
+        )
+        self.__store_data(
+            station,
+            channel,
+            data,
+            start_time,
+            sampling_rate,
+            eews_producer_time=eews_producer_time,
+            arrive_time=arrive_time,
+        )
 
     def __store_data(
         self,

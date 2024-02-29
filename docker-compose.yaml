@@ -25,7 +25,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '2'
-    mem_limit: 1024m
+    mem_limit: 6144m
 
   eews-kafka-2:
     restart: always
@@ -44,7 +44,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '2'
-    mem_limit: 1024m
+    mem_limit: 6144m
 
   # eews-kafka-3:
   #   restart: always
@@ -78,9 +78,9 @@ services:
       # blocks until kafka is reachable
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 2 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=180000
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 2 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=180000
-      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 2 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=180000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 2 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 2 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 2 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server eews-kafka:9092 --list
       "
