@@ -102,8 +102,10 @@ func init() {
 	// Inisialisasi koneksi ke Redis
 	loadEnv()
 	redisHost := os.Getenv("REDIS_HOST")
+	password := os.Getenv("REDIS_PASSWORD")
 	client = redis.NewClient(&redis.Options{
-		Addr: redisHost,
+		Addr:     redisHost,
+		Password: password,
 	})
 	prometheus.Register(totalRequests)
 	prometheus.Register(responseStatus)
@@ -329,7 +331,7 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 // }
 
 func GetLive(w http.ResponseWriter, _ *http.Request) {
-	producerSvc := "http://" + os.Getenv("PRODUCER_SERVICE") + "/live"
+	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/live"
 	resp, err := http.Get(producerSvc)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -348,7 +350,7 @@ func GetLive(w http.ResponseWriter, _ *http.Request) {
 }
 
 func PostIdle(w http.ResponseWriter, _ *http.Request) {
-	producerSvc := "http://" + os.Getenv("PRODUCER_SERVICE") + "/idle"
+	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/idle"
 	resp, err := http.Post(producerSvc, "application/json", bytes.NewBuffer([]byte("{}")))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -367,7 +369,7 @@ func PostIdle(w http.ResponseWriter, _ *http.Request) {
 }
 
 func GetPlayback(w http.ResponseWriter, r *http.Request) {
-	producerSvc := "http://" + os.Getenv("PRODUCER_SERVICE") + "/playback"
+	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/playback"
 
 	// Extract query parameters "starttime" and "endtime" from the request
 	starttime := r.FormValue("start_time")

@@ -88,6 +88,7 @@ services:
 
   eews-redis:
     image: redis
+    command: redis-server --requirepass eews2024zat
     container_name: eews-redis
     volumes:
       - redis_data:/data

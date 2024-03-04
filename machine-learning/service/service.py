@@ -1,6 +1,7 @@
 """This module defines a BentoML service that uses a Keras model to classify
 digits.
 """
+
 from datetime import datetime, timedelta
 from types import NoneType
 from typing import Optional, List, Tuple, Dict, Set
@@ -43,7 +44,10 @@ pipelines: Dict[str, Pipeline] = dict()
 
 # Redis
 redis_client = redis.Redis(
-    host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB_NUM
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    password=settings.REDIS_PASSWORD,
+    db=settings.REDIS_DB_NUM,
 )
 
 
@@ -259,21 +263,13 @@ def recalculate(input_data: json) -> json:
 
             x_delta = (
                 0.5
-                * np.sqrt(
-                    2 * (ri**2 + rj**2) / R**2
-                    - (ri**2 - rj**2) ** 2 / R**4
-                    - 1
-                )
+                * np.sqrt(2 * (ri**2 + rj**2) / R**2 - (ri**2 - rj**2) ** 2 / R**4 - 1)
                 * (yj - yi)
             )
 
             y_delta = (
                 0.5
-                * np.sqrt(
-                    2 * (ri**2 + rj**2) / R**2
-                    - (ri**2 - rj**2) ** 2 / R**4
-                    - 1
-                )
+                * np.sqrt(2 * (ri**2 + rj**2) / R**2 - (ri**2 - rj**2) ** 2 / R**4 - 1)
                 * (xi - xj)
             )
 

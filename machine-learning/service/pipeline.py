@@ -17,7 +17,12 @@ class Pipeline:
         self._path: Path = path
 
         self._name = name
-        self._redis_client = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB_NUM)
+        self._redis_client = redis.Redis(
+            host=settings.REDIS_HOST,
+            port=settings.REDIS_PORT,
+            password=settings.REDIS_PASSWORD,
+            db=settings.REDIS_DB_NUM,
+        )
 
         self.init_duration = init_duration
         self._redis_client.set(self._name + "~init", pickle.dumps([]))
@@ -28,7 +33,7 @@ class Pipeline:
     def set_name(self, name: str) -> str:
         i = 0
         while True:
-            new_name = f'{self._name}_{name}_{i}'
+            new_name = f"{self._name}_{name}_{i}"
             if new_name not in self._names:
                 self._names.add(new_name)
                 break
@@ -46,7 +51,9 @@ class Pipeline:
         with open(self._path) as f:
             x = init_x
             for line in f:
-                pipeline_function: pipeline_functions.PipelineFunction = eval("pipeline_functions." + line)
+                pipeline_function: pipeline_functions.PipelineFunction = eval(
+                    "pipeline_functions." + line
+                )
                 pipeline_function.set_parent(self)
                 pipeline_function.set_initial_state(x)
                 x = pipeline_function.compute(x)

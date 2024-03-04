@@ -13,16 +13,16 @@ from utils.redis_client import RedisSingleton
 
 load_dotenv()
 
-BOOTSTRAP_SERVER = getenv("BOOTSTRAP_SERVER")
-if not BOOTSTRAP_SERVER:
+BOOTSTRAP_SERVERS = getenv("BOOTSTRAP_SERVERS")
+if not BOOTSTRAP_SERVERS:
     raise Exception("BOOTSTRAP_SERVER env is required")
-print(BOOTSTRAP_SERVER)
+print(BOOTSTRAP_SERVERS)
 TOPIC_NAME = getenv("TOPIC_NAME")
 if not TOPIC_NAME:
     raise Exception("Topic name env is required")
 
 DEFAULT_PRODUCER_CONFIG = {
-    "bootstrap.servers": BOOTSTRAP_SERVER,
+    "bootstrap.servers": BOOTSTRAP_SERVERS,
     # 'compression.type': 'lz4',
     # 'linger.ms': 100,
     # 'batch.size': 131072, # 128 KB

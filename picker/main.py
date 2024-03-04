@@ -9,6 +9,7 @@ BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS")
 TOPIC_CONSUMER = os.getenv("TOPIC_CONSUMER")
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", None)
 MONGO_DB = os.getenv("MONGO_DB", "eews")
 MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
 MONGO_PORT = os.getenv("MONGO_PORT", "27017")
@@ -29,6 +30,7 @@ if __name__ == "__main__":
             "redis": {
                 "host": REDIS_HOST,
                 "port": int(REDIS_PORT),
+                "password": REDIS_PASSWORD,
             },
             "mongo": {
                 "db_name": MONGO_DB,

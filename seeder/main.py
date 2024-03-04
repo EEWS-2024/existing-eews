@@ -38,6 +38,7 @@ def haversine(lat1, lon1, lat2, lon2):
 def save_to_redis():
     host = os.environ.get("REDIS_HOST", "localhost")
     redis_port = os.environ.get("REDIS_PORT", "6379")
+    redis_password = os.environ.get("REDIS_PASSWORD", None)
     env = os.environ.get("ENV", "PROD")
     print(f"ENVIRONMENT: {env}")
     print(f"REDIS_HOST: {host}")
@@ -45,7 +46,13 @@ def save_to_redis():
     # Dapatkan absolute path ke data.json
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data_json_path = os.path.join(current_dir, "data.json")
-    r = redis.Redis(host=host, port=int(redis_port), db=0, decode_responses=True)
+    r = redis.Redis(
+        host=host,
+        port=int(redis_port),
+        password=redis_password,
+        db=0,
+        decode_responses=True,
+    )
     print(f"DATA JSON: {data_json_path}")
     with open(data_json_path, "r") as json_file:
         data = json_file.read()
