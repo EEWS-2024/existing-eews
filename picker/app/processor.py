@@ -74,8 +74,8 @@ class KafkaDataProcessor:
                 if "type" in value and value["type"] != "trace":
                     continue
 
-                print(("=" * 30) + "START" + ("=" * 30), end="\n")
-                print(f"RECEIVED MESSAGE: {logvalue}", end="\n")
+                # print(("=" * 30) + "START" + ("=" * 30), end="\n")
+                # print(f"RECEIVED MESSAGE: {logvalue}", end="\n")
                 start_time = datetime.now()
                 len_data = len(value["data"])
 
@@ -85,10 +85,10 @@ class KafkaDataProcessor:
                 process_time = (end_time - start_time).total_seconds()
                 self.prometheus.inc_rec_data(len_data)
                 self.prometheus.obs_rec_time(process_time)
-                print(("=" * 30) + "END" + ("=" * 30), end="\n")
+                # print(("=" * 30) + "END" + ("=" * 30), end="\n")
             except Exception as e:
-                print(f"ERROR: {str(e)}")
-                print(e)
+                print(f"Error: {str(e)}")
+                # print(e)
                 # print(("="*30) + "END" + ("="*30), end="\n")
                 continue
 
@@ -107,7 +107,7 @@ class KafkaDataProcessor:
             return
 
         if not has_initiated and is_ready_to_init:
-            print("init ", station, channel)
+            # print("init ", station, channel)
             self.__init_station(station)
             return
 
@@ -118,7 +118,7 @@ class KafkaDataProcessor:
 
     def __init_station(self, station: str) -> None:
         stats_init = self.pooler.initiated_stations
-        print(f"INITIATED STATIONS: {stats_init}")
+        # print(f"INITIATED STATIONS: {stats_init}")
         time = self.pooler.get_station_time(station)
         data = self.pooler.get_data_to_init(station)
         data = [list(x) for x in zip(*data)]
@@ -220,10 +220,10 @@ class KafkaDataProcessor:
             result["process_time"] = res["process_time"]
             self.redis.save_waveform(station, result)
             wf3 = self.redis.get_3_waveform(station)
-            print(f"WF3: {wf3}")
+            # print(f"WF3: {wf3}")
             # self.producer.produce({"wf3": wf3})
             if wf3 is not None and len(wf3) >= 3:
-                print("X" * 40)
+                # print("X" * 40)
                 epic = self.__get_epic_ml(wf3)
                 payload = {
                     "time": time.isoformat(),
@@ -236,8 +236,8 @@ class KafkaDataProcessor:
                 }
                 self.producer.produce(payload)
                 self.redis.remove_3_waveform_dict(wf3)
-                # self.mongo.create(payload)
-                print("SAVED TO MONGODB")
+                self.mongo.create(payload)
+                print("SAVED TO MONGODB: ", payload)
 
         self.pooler.reset_ps(station)
 
@@ -248,8 +248,8 @@ class KafkaDataProcessor:
                 # print(f"RETRY {i + 1}")
                 response = requests.post(url, data=json.dumps(data), timeout=timeout)
                 if response.status_code != 200:
-                    print(response.status_code, response.reason)
-                    print(response.json())
+                    # print(response.status_code, response.reason)
+                    print("Error: ", response.json())
                 if isPred:
                     print(f"REQUEST TO {url}, retry {i}")
                     print(f"RESPONSE TEXT: {response.text}")
@@ -264,7 +264,7 @@ class KafkaDataProcessor:
                     return res
                 result = json.loads(response.text)
                 result = json.loads(result)
-                print("=", end="")
+                # print("=", end="")
                 if isinstance(result, dict):
                     self.prometheus.inc_pred_data(len(data["x"]))
                     self.prometheus.inc_pred_req_suc()
@@ -275,8 +275,8 @@ class KafkaDataProcessor:
                 # self.prometheus.inc_pred_req_err()
             except Exception as e:
                 self.prometheus.inc_pred_req_err()
-                print(f"ERROR REQUEST: {str(e)}")
-                print("URL :", url, data["station_code"])
+                print(f"Error: {str(e)}")
+                # print("URL :", url, data["station_code"])
                 # print(data)
                 t.sleep(1)
                 continue
@@ -317,7 +317,7 @@ class KafkaDataProcessor:
         return lat, lon
 
     def __get_epic_ml(self, wf: list[dict]):
-        print("get_epic_ml")
+        # print("get_epic_ml")
         station_codes = []
         station_latitudes = []
         station_longitudes = []
@@ -341,10 +341,10 @@ class KafkaDataProcessor:
             "distances": distances,
             "depths": depths,
         }
-        print(f"REC PAYLOAD: {payload}")
+        # print(f"REC PAYLOAD: {payload}")
         # res = self.__req(REC_URL, payload)
         res = self.recalculate(payload)
-        print(f"REC RES: {res}")
+        # print(f"REC RES: {res}")
 
         if res is not None:
             return res
@@ -393,9 +393,7 @@ class KafkaDataProcessor:
                 x_delta = (
                     0.5
                     * np.sqrt(
-                        2 * (ri**2 + rj**2) / R**2
-                        - (ri**2 - rj**2) ** 2 / R**4
-                        - 1
+                        2 * (ri**2 + rj**2) / R**2 - (ri**2 - rj**2) ** 2 / R**4 - 1
                     )
                     * (yj - yi)
                 )
@@ -403,20 +401,14 @@ class KafkaDataProcessor:
                 y_delta = (
                     0.5
                     * np.sqrt(
-                        2 * (ri**2 + rj**2) / R**2
-                        - (ri**2 - rj**2) ** 2 / R**4
-                        - 1
+                        2 * (ri**2 + rj**2) / R**2 - (ri**2 - rj**2) ** 2 / R**4 - 1
                     )
                     * (xi - xj)
                 )
 
-                x_base = 0.5 * (xi + xj) + (ri**2 - rj**2) / (2 * R**2) * (
-                    xj - xi
-                )
+                x_base = 0.5 * (xi + xj) + (ri**2 - rj**2) / (2 * R**2) * (xj - xi)
 
-                y_base = 0.5 * (yi + yj) + (ri**2 - rj**2) / (2 * R**2) * (
-                    yj - yi
-                )
+                y_base = 0.5 * (yi + yj) + (ri**2 - rj**2) / (2 * R**2) * (yj - yi)
 
                 x_1 = x_base + x_delta
                 x_2 = x_base - x_delta
