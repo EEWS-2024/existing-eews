@@ -215,6 +215,7 @@ class KafkaDataProcessor:
         res = self.__req(
             STAT_URL, {"x": data_cache_t, "station_code": station}, isPred=True
         )
+
         if res:
             result = res["result"]
             result["process_time"] = res["process_time"]

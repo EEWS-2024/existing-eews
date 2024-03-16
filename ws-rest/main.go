@@ -130,32 +130,7 @@ func main() {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	// kafkaBrokers := os.Getenv("BOOTSTRAP_SERVERS")
-	// topicConsumers := os.Getenv("TOPIC_CONSUMERS")
 	port := ":" + os.Getenv("PORT")
-
-	// fmt.Println("Creating Kafka consumer")
-
-	// c, err := kafka.NewConsumer(&kafka.ConfigMap{
-	// 	"bootstrap.servers": kafkaBrokers,
-	// 	"group.id":          "ws-rest",
-	// 	"auto.offset.reset": "earliest",
-	// })
-
-	// if err != nil {
-	// 	fmt.Printf("Error creating Kafka consumer: %s\n", err)
-	// 	return
-	// }
-
-	// kafkaTopics := strings.Split(topicConsumers, ",")
-
-	// defer c.Close()
-	// fmt.Println("Subscribing Kafka topic")
-
-	// if err := c.SubscribeTopics(kafkaTopics, nil); err != nil {
-	// 	fmt.Printf("Error subscribing to topic: %s\n", err)
-	// 	return
-	// }
 
 	r := mux.NewRouter()
 	apiRouter := r.PathPrefix("/api").Subrouter()
@@ -170,16 +145,13 @@ func main() {
 	r.Path("/prometheus").Handler(promhttp.Handler())
 
 	r.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		// WebsocketHandler(w, r, c, sigchan)
+
 		WebsocketHandler(w, r, sigchan)
 	})
-	// r.HandleFunc("/mock/ws", func(w http.ResponseWriter, r *http.Request) {
-	// 	MockWebsocketHandler(w, r, c, sigchan)
-	// })
 
 	http.Handle("/", r)
 	fmt.Println("ListenAndServe")
-	// err = http.ListenAndServe(port, nil)
+
 	err := http.ListenAndServe(port, nil)
 	fmt.Println("ListenAndServe finished successfully")
 
@@ -271,64 +243,6 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 		}
 	}
 }
-
-// func WebsocketHandler(w http.ResponseWriter, r *http.Request, c *kafka.Consumer, sigchan chan os.Signal) {
-// 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
-// 	conn, err := upgrader.Upgrade(w, r, nil)
-// 	if err != nil {
-// 		fmt.Printf("Error while upgrading connection: %s\n", err)
-// 		return
-// 	}
-// 	defer conn.Close()
-
-// 	ticker := time.NewTicker(1 * time.Second)
-// 	defer ticker.Stop()
-
-// 	var messages []map[string]interface{}
-
-// 	for {
-// 		select {
-// 		case <-ticker.C:
-// 			if len(messages) > 0 {
-// 				fmt.Println(len(messages))
-// 				jsonData, err := json.Marshal(messages)
-// 				if err != nil {
-// 					fmt.Printf("Error encoding message: %s\n", err)
-// 					continue
-// 				}
-
-// 				if err := conn.WriteMessage(websocket.TextMessage, jsonData); err != nil {
-// 					fmt.Printf("Error sending Kafka message over WebSocket: %s\n", err)
-// 					return
-// 				}
-
-// 				messages = nil // Clear the message buffer after sending
-
-// 			}
-
-// 		case sig := <-sigchan:
-// 			fmt.Printf("Caught signal %v: terminating\n", sig)
-// 			return
-
-// 		default:
-// 			ev := c.Poll(100)
-// 			if ev == nil {
-// 				continue
-// 			}
-
-// 			switch e := ev.(type) {
-// 			case *kafka.Message:
-// 				message := make(map[string]interface{})
-// 				message["topic"] = e.TopicPartition.Topic
-// 				message["value"] = string(e.Value)
-// 				messages = append(messages, message)
-
-// 			case kafka.Error:
-// 				fmt.Printf("Error while consuming: %v\n", e)
-// 			}
-// 		}
-// 	}
-// }
 
 func GetLive(w http.ResponseWriter, _ *http.Request) {
 	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/live"
