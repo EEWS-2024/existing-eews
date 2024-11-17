@@ -1,4 +1,3 @@
-version: '3'
 services:
   eews-zookeeper:
     restart: always
@@ -14,17 +13,17 @@ services:
     depends_on:
       - eews-zookeeper
     ports:
-      - '19092:19092'
-      - '29092:29092'
+      - "19092:19092"
+      - "29092:29092"
 
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: "eews-zookeeper:2181"
       KAFKA_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://eews-kafka:19092,OUTSIDE://eews-kafka:29092
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.23.119.16:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '3'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
     mem_limit: 1228m
 
   eews-kafka-2:
@@ -34,16 +33,16 @@ services:
     depends_on:
       - eews-zookeeper
     ports:
-      - '19093:19093'
-      - '29093:29093'
+      - "19093:19093"
+      - "29093:29093"
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: "eews-zookeeper:2181"
       KAFKA_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://eews-kafka-2:19093,OUTSIDE://eews-kafka-2:29093
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://localhost:19093,OUTSIDE://34.23.119.16:29093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '3'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
     mem_limit: 1228m
 
   eews-kafka-3:
@@ -53,16 +52,16 @@ services:
     depends_on:
       - eews-zookeeper
     ports:
-      - '19094:19094'
-      - '29094:29094'
+      - "19094:19094"
+      - "29094:29094"
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: 'eews-zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: "eews-zookeeper:2181"
       KAFKA_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://eews-kafka-3:19094,OUTSIDE://eews-kafka-3:29094
       KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.23.119.16:29094
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '3'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
     mem_limit: 1228m
 
   eews-init-kafka:
@@ -73,7 +72,7 @@ services:
       - eews-kafka-2
       - eews-kafka-3
       - eews-zookeeper
-    entrypoint: ['/bin/sh', '-c']
+    entrypoint: ["/bin/sh", "-c"]
     command: |
       "
       # blocks until kafka is reachable
@@ -117,7 +116,7 @@ services:
     env_file:
       - .producer.env
     ports:
-      - '8000:8000'
+      - "8000:8000"
 
   eews-queue-1:
     restart: always
@@ -261,7 +260,7 @@ services:
     env_file:
       - .ws-rest.env
     ports:
-      - '8080:8080'
+      - "8080:8080"
 
   eews-frontend:
     depends_on:
@@ -271,7 +270,7 @@ services:
       dockerfile: Dockerfile
     container_name: eews-frontend
     ports:
-      - '80:3000'
+      - "80:3000"
 
   eews-mongo:
     image: mongo:latest
