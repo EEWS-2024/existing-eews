@@ -55,6 +55,6 @@ services:
 
   old-eews-nginx:
     build:
-      context: .
+      context: ./nginx
       dockerfile: Dockerfile
     image: docker.io/slackingdjaeger/old-eews-nginx:latest
