@@ -1,0 +1,233 @@
+services:
+  eews-zookeeper:
+    restart: always
+    image: confluentinc/cp-zookeeper
+    container_name: eews-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  eews-kafka:
+    restart: always
+    container_name: eews-kafka
+    image: confluentinc/cp-kafka
+    depends_on:
+      - eews-zookeeper
+    ports:
+      - "19092:19092"
+      - "29092:29092"
+
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "eews-zookeeper:2181"
+      KAFKA_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://eews-kafka:19092,OUTSIDE://eews-kafka:29092
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.23.119.16:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+    mem_limit: 1228m
+
+  eews-kafka-2:
+    restart: always
+    container_name: eews-kafka-2
+    image: confluentinc/cp-kafka
+    depends_on:
+      - eews-zookeeper
+    ports:
+      - "19093:19093"
+      - "29093:29093"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: "eews-zookeeper:2181"
+      KAFKA_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://eews-kafka-2:19093,OUTSIDE://eews-kafka-2:29093
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-2:9092,LOCAL://localhost:19093,OUTSIDE://34.23.119.16:29093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+    mem_limit: 1228m
+
+  eews-kafka-3:
+    restart: always
+    container_name: eews-kafka-3
+    image: confluentinc/cp-kafka
+    depends_on:
+      - eews-zookeeper
+    ports:
+      - "19094:19094"
+      - "29094:29094"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: "eews-zookeeper:2181"
+      KAFKA_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://eews-kafka-3:19094,OUTSIDE://eews-kafka-3:29094
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka-3:9092,LOCAL://localhost:19094,OUTSIDE://34.23.119.16:29094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+    mem_limit: 1228m
+
+  eews-init-kafka:
+    container_name: eews-init-kafka
+    image: confluentinc/cp-kafka:6.1.1
+    depends_on:
+      - eews-kafka
+      - eews-kafka-2
+      - eews-kafka-3
+      - eews-zookeeper
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server eews-kafka:9092 --list
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server eews-kafka:9092 --list
+      "
+
+  eews-redis:
+    image: redis
+    command: redis-server --requirepass eews2024zat
+    container_name: eews-redis
+    volumes:
+      - redis_data:/data
+
+  eews-seeder:
+    depends_on:
+      - eews-redis
+    image: docker.io/slackingdjaeger/old-eews-seeder:latest
+    container_name: eews-seeder
+
+  eews-producer:
+    restart: always
+    depends_on:
+      eews-init-kafka:
+        condition: service_completed_successfully
+      eews-seeder:
+        condition: service_completed_successfully
+    image: docker.io/slackingdjaeger/old-eews-producer:latest
+    container_name: eews-producer
+    ports:
+      - "8000:8000"
+
+  eews-queue-1:
+    restart: always
+    depends_on:
+      - eews-init-kafka
+      - eews-producer
+      - eews-zookeeper
+      - eews-kafka
+    image: docker.io/slackingdjaeger/old-eews-queue:latest
+    container_name: eews-queue-1
+    mem_limit: 60m
+
+  eews-queue-2:
+    restart: always
+    depends_on:
+      - eews-init-kafka
+      - eews-producer
+      - eews-zookeeper
+      - eews-kafka
+    image: docker.io/slackingdjaeger/old-eews-queue:latest
+    container_name: eews-queue-2
+    mem_limit: 60m
+
+  eews-queue-3:
+    restart: always
+    depends_on:
+      - eews-init-kafka
+      - eews-producer
+      - eews-zookeeper
+      - eews-kafka
+    image: docker.io/slackingdjaeger/old-eews-queue:latest
+    container_name: eews-queue-3
+    mem_limit: 60m
+
+  eews-picker-1:
+    restart: always
+    depends_on:
+      - eews-nginx
+      - eews-mongo
+      - eews-redis
+    image: docker.io/slackingdjaeger/old-eews-picker:latest
+    container_name: eews-picker-1
+
+  eews-picker-2:
+    restart: always
+    depends_on:
+      - eews-nginx
+      - eews-mongo
+      - eews-redis
+    image: docker.io/slackingdjaeger/old-eews-picker:latest
+    container_name: eews-picker-2
+
+  eews-picker-3:
+    restart: always
+    depends_on:
+      - eews-nginx
+      - eews-mongo
+      - eews-redis
+    image: docker.io/slackingdjaeger/old-eews-picker:latest
+    container_name: eews-picker-3
+
+  eews-ml-1:
+    restart: always
+    image: docker.io/slackingdjaeger/old-eews-ml:latest
+    container_name: eews-ml-1
+    depends_on:
+      - eews-redis
+    mem_limit: 7168m
+
+  eews-ml-2:
+    restart: always
+    image: docker.io/slackingdjaeger/old-eews-ml:latest
+    container_name: eews-ml-2
+    depends_on:
+      - eews-redis
+    mem_limit: 7168m
+
+  eews-ml-3:
+    restart: always
+    image: docker.io/slackingdjaeger/old-eews-ml:latest
+    container_name: eews-ml-3
+    depends_on:
+      - eews-redis
+    mem_limit: 7168m
+
+  eews-nginx:
+    image: nginx
+    container_name: eews-nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - eews-ml-1
+      - eews-ml-2
+      - eews-ml-3
+
+  eews-ws-rest:
+    restart: always
+    depends_on:
+      - eews-producer
+      - eews-seeder
+    image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
+    container_name: eews-ws-rest
+    ports:
+      - "8080:8080"
+
+  eews-frontend:
+    depends_on:
+      - eews-ws-rest
+    image: docker.io/slackingdjaeger/old-eews-frontend:latest
+    container_name: eews-frontend
+    ports:
+      - "80:3000"
+
+  eews-mongo:
+    image: mongo:latest
+    container_name: eews-mongo
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+  redis_data:

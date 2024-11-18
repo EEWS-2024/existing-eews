@@ -1,0 +1,54 @@
+services:
+  eews-seeder:
+    build:
+      context: ./seeder
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-seeder:latest
+    env_file:
+      - .seeder.env
+
+  eews-producer:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-producer:latest
+    env_file:
+      - .producer.env
+
+  eews-queue:
+    build:
+      context: ./queue
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-queue:latest
+    env_file:
+      - .queue.env
+
+  eews-picker:
+    build:
+      context: ./picker
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-picker:latest
+    env_file:
+      - .picker.env
+
+  eews-ml:
+    build:
+      context: ./machine-learning
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-ml:latest
+    env_file:
+      - .ml.env
+
+  eews-ws-rest:
+    build:
+      context: ./ws-rest
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
+    env_file:
+      - .ws-rest.env
+
+  eews-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-frontend:latest
