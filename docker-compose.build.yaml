@@ -52,3 +52,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: docker.io/slackingdjaeger/old-eews-frontend:latest
+
+  old-eews-nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-nginx:latest
