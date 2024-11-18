@@ -63,7 +63,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - "2491:8000"
+      - "2491:6379"
 
   old-eews-seeder:
     pull_policy: "always"
