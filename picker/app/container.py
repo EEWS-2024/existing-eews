@@ -20,8 +20,6 @@ class KafkaContainer(containers.DeclarativeContainer):
         host=config.mongo.host,
         collection_name=config.mongo.collection,
         port=config.mongo.port,
-        user=config.mongo.user,
-        password=config.mongo.password,
     )
     pooler = providers.Singleton(Pooler)
     redis = providers.Singleton(MyRedis, config=config.redis)
