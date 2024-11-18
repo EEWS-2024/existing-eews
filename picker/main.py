@@ -10,9 +10,7 @@ TOPIC_CONSUMER = "p_arrival"
 REDIS_HOST = os.getenv("REDIS_HOST", "old-eews-redis")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 MONGO_DB = os.getenv("MONGO_DB", "eews")
-MONGO_USER = os.getenv("MONGO_USER", "root")
-MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "example")
-MONGO_HOST = os.getenv("MONGO_HOST", "localhost")
+MONGO_HOST = os.getenv("MONGO_HOST", "old-eews-mongo")
 MONGO_PORT = os.getenv("MONGO_PORT", "27017")
 MONGO_COLLECTION = os.getenv("MONGO_COLLECTION", "parameters")
 PROMETHEUS_ADDR = os.getenv("PROMETHEUS_ADDR", "0.0.0.0")
@@ -37,8 +35,6 @@ if __name__ == "__main__":
                 "host": MONGO_HOST,
                 "port": int(MONGO_PORT),
                 "collection": MONGO_COLLECTION,
-                "user": MONGO_USER,
-                "password": MONGO_PASSWORD,
             },
             "prometheus": {
                 "addr": PROMETHEUS_ADDR,

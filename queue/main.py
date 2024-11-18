@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = os.getenv('BOOTSTRAP_SERVERS')
-TOPIC_CONSUMER = os.getenv('TOPIC_CONSUMER')
+BOOTSTRAP_SERVERS = "old-eews-kafka:9092"
+TOPIC_CONSUMER = "query"
 
 
 if __name__ == "__main__":

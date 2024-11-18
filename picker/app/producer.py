@@ -6,7 +6,7 @@ from typing import Any
 
 load_dotenv()
 
-TOPIC_PRODUCER = os.getenv('TOPIC_PRODUCER')
+TOPIC_PRODUCER = "pick"
 
 
 class KafkaProducer:

@@ -4,9 +4,9 @@ from urllib.parse import quote_plus
 
 class MongoDBClient:
     def __init__(
-        self, db_name, collection_name, user, password, host="localhost", port=27017
+        self, db_name, collection_name, host="localhost", port=27017
     ):
-        uri = f"mongodb://{quote_plus(user)}:{quote_plus(password)}@{host}:{port}/"
+        uri = f"mongodb://{host}:{port}/"
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]

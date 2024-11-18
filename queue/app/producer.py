@@ -7,7 +7,7 @@ import copy
 
 load_dotenv()
 
-TOPIC_PRODUCER = "pick"
+TOPIC_PRODUCER = "p_arrival"
 
 
 class KafkaProducer:
