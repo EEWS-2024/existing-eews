@@ -62,8 +62,6 @@ services:
     container_name: old-eews-redis
     volumes:
       - redis_data:/data
-    ports:
-      - "2491:6379"
 
   old-eews-seeder:
     pull_policy: "always"
@@ -166,8 +164,48 @@ services:
     container_name: old-eews-mongo
     volumes:
       - mongodb_data:/data/db
+
+  old-eews-redis-admin:
+    image: rediscommander/redis-commander:latest
+    container_name: old-eews-redis-admin
+    networks:
+      - nginx-manager_customnetwork
+    environment:
+      - REDIS_HOSTS=local:old-eews-redis:6379
     ports:
-      - "2492:27017"
+      - "2491:8081"
+
+  # MongoDB Admin (Mongo Express)
+  old-eews-mongo-admin:
+    image: mongo-express:latest
+    container_name: old-eews-mongo-admin
+    networks:
+      - nginx-manager_customnetwork
+    depends_on:
+      - old-eews-mongo
+    environment:
+      ME_CONFIG_MONGODB_SERVER: old-eews-mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: password
+    ports:
+      - "2492:8081"
+
+  # Kafdrop (Kafka Web UI)
+  old-eews-kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: old-eews-kafdrop
+    networks:
+      - nginx-manager_customnetwork
+    depends_on:
+      - old-eews-kafka
+    ports:
+      - "2493:9000"
+    environment:
+      KAFKA_BROKERCONNECT: old-eews-kafka:9092
+      JVM_OPTS: "-Xms32M -Xmx64M"
 
 volumes:
   mongodb_data:
