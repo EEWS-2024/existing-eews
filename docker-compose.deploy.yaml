@@ -187,6 +187,8 @@ services:
       ME_CONFIG_MONGODB_SERVER: old-eews-mongo
       ME_CONFIG_MONGODB_PORT: 27017
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: password
     ports:
       - "2492:8081"
 
