@@ -1,5 +1,11 @@
+networks:
+  nginx-manager_customnetwork:
+    external: true
+
 services:
   eews-zookeeper:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     image: confluentinc/cp-zookeeper
     container_name: eews-zookeeper
@@ -7,6 +13,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
 
   eews-kafka:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     container_name: eews-kafka
     image: confluentinc/cp-kafka
@@ -27,6 +35,8 @@ services:
     mem_limit: 1228m
 
   eews-kafka-2:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     container_name: eews-kafka-2
     image: confluentinc/cp-kafka
@@ -46,6 +56,8 @@ services:
     mem_limit: 1228m
 
   eews-kafka-3:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     container_name: eews-kafka-3
     image: confluentinc/cp-kafka
@@ -65,6 +77,8 @@ services:
     mem_limit: 1228m
 
   eews-init-kafka:
+    networks:
+      - nginx-manager_customnetwork
     container_name: eews-init-kafka
     image: confluentinc/cp-kafka:6.1.1
     depends_on:
@@ -86,6 +100,8 @@ services:
       "
 
   eews-redis:
+    networks:
+      - nginx-manager_customnetwork
     image: redis
     command: redis-server --requirepass eews2024zat
     container_name: eews-redis
@@ -93,12 +109,16 @@ services:
       - redis_data:/data
 
   eews-seeder:
+    networks:
+      - nginx-manager_customnetwork
     depends_on:
       - eews-redis
     image: docker.io/slackingdjaeger/old-eews-seeder:latest
     container_name: eews-seeder
 
   eews-producer:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       eews-init-kafka:
@@ -111,6 +131,8 @@ services:
       - "8000:8000"
 
   eews-queue-1:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       - eews-init-kafka
@@ -122,6 +144,8 @@ services:
     mem_limit: 60m
 
   eews-queue-2:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       - eews-init-kafka
@@ -133,6 +157,8 @@ services:
     mem_limit: 60m
 
   eews-queue-3:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       - eews-init-kafka
@@ -144,6 +170,8 @@ services:
     mem_limit: 60m
 
   eews-picker-1:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       - eews-nginx
@@ -153,6 +181,8 @@ services:
     container_name: eews-picker-1
 
   eews-picker-2:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       - eews-nginx
@@ -162,6 +192,8 @@ services:
     container_name: eews-picker-2
 
   eews-picker-3:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       - eews-nginx
@@ -171,6 +203,8 @@ services:
     container_name: eews-picker-3
 
   eews-ml-1:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     image: docker.io/slackingdjaeger/old-eews-ml:latest
     container_name: eews-ml-1
@@ -179,6 +213,8 @@ services:
     mem_limit: 7168m
 
   eews-ml-2:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     image: docker.io/slackingdjaeger/old-eews-ml:latest
     container_name: eews-ml-2
@@ -187,6 +223,8 @@ services:
     mem_limit: 7168m
 
   eews-ml-3:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     image: docker.io/slackingdjaeger/old-eews-ml:latest
     container_name: eews-ml-3
@@ -195,6 +233,8 @@ services:
     mem_limit: 7168m
 
   eews-nginx:
+    networks:
+      - nginx-manager_customnetwork
     image: nginx
     container_name: eews-nginx
     volumes:
@@ -205,6 +245,8 @@ services:
       - eews-ml-3
 
   eews-ws-rest:
+    networks:
+      - nginx-manager_customnetwork
     restart: always
     depends_on:
       - eews-producer
@@ -215,6 +257,8 @@ services:
       - "8080:8080"
 
   eews-frontend:
+    networks:
+      - nginx-manager_customnetwork
     depends_on:
       - eews-ws-rest
     image: docker.io/slackingdjaeger/old-eews-frontend:latest
@@ -223,6 +267,8 @@ services:
       - "80:3000"
 
   eews-mongo:
+    networks:
+      - nginx-manager_customnetwork
     image: mongo:latest
     container_name: eews-mongo
     volumes:
