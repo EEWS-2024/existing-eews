@@ -64,6 +64,7 @@ services:
       - redis_data:/data
 
   old-eews-seeder:
+    pull_policy: "always"
     networks:
       - nginx-manager_customnetwork
     depends_on:
