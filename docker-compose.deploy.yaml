@@ -1,11 +1,11 @@
-networks:
-  nginx-manager_customnetwork:
-    external: true
+# networks:
+#   nginx-manager_customnetwork:
+#     external: true
 
 services:
   old-eews-zookeeper:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     restart: always
     image: confluentinc/cp-zookeeper
     container_name: old-eews-zookeeper
@@ -13,8 +13,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 1485
 
   old-eews-kafka:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     restart: always
     container_name: old-eews-kafka
     image: confluentinc/cp-kafka
@@ -35,8 +35,8 @@ services:
     mem_limit: 1228m
 
   old-eews-init-kafka:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     container_name: old-eews-init-kafka
     image: confluentinc/cp-kafka:6.1.1
     depends_on:
@@ -56,25 +56,24 @@ services:
       "
 
   old-eews-redis:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     image: redis
-    command: redis-server --requirepass eews2024zat
     container_name: old-eews-redis
     volumes:
       - redis_data:/data
 
   old-eews-seeder:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     depends_on:
       - old-eews-redis
     image: docker.io/slackingdjaeger/old-eews-seeder:latest
     container_name: old-eews-seeder
 
   old-eews-producer:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     restart: always
     depends_on:
       old-eews-init-kafka:
@@ -87,8 +86,8 @@ services:
       - "8485:8000"
 
   old-eews-queue:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     restart: always
     depends_on:
       - old-eews-init-kafka
@@ -100,8 +99,8 @@ services:
     mem_limit: 60m
 
   old-eews-picker:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     restart: always
     depends_on:
       - old-eews-nginx
@@ -111,8 +110,8 @@ services:
     container_name: old-eews-picker
 
   old-eews-ml:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     restart: always
     image: docker.io/slackingdjaeger/old-eews-ml:latest
     container_name: old-eews-ml
@@ -121,16 +120,16 @@ services:
     mem_limit: 7168m
 
   old-eews-nginx:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     image: docker.io/slackingdjaeger/old-eews-nginx:latest
     container_name: old-eews-nginx
     depends_on:
       - old-eews-ml
 
   old-eews-ws-rest:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     restart: always
     depends_on:
       - old-eews-producer
@@ -141,8 +140,8 @@ services:
       - "10485:8080"
 
   old-eews-frontend:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     depends_on:
       - old-eews-ws-rest
     image: docker.io/slackingdjaeger/old-eews-frontend:latest
@@ -151,8 +150,8 @@ services:
       - "9485:3000"
 
   old-eews-mongo:
-    networks:
-      - nginx-manager_customnetwork
+    # networks:
+    #   - nginx-manager_customnetwork
     image: mongo:latest
     container_name: old-eews-mongo
     volumes:

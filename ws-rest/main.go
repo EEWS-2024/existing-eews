@@ -101,11 +101,9 @@ var client *redis.Client
 func init() {
 	// Inisialisasi koneksi ke Redis
 	loadEnv()
-	redisHost := os.Getenv("REDIS_HOST")
-	password := os.Getenv("REDIS_PASSWORD")
+	redisHost := "old-eews-redis:6379"
 	client = redis.NewClient(&redis.Options{
 		Addr:     redisHost,
-		Password: password,
 	})
 	prometheus.Register(totalRequests)
 	prometheus.Register(responseStatus)
@@ -130,7 +128,7 @@ func main() {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	port := ":" + os.Getenv("PORT")
+	port := ":" + "8080"
 
 	r := mux.NewRouter()
 	apiRouter := r.PathPrefix("/api").Subrouter()
@@ -169,8 +167,8 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 	}
 	defer conn.Close()
 
-	kafkaBrokers := os.Getenv("BOOTSTRAP_SERVERS")
-	topicConsumers := os.Getenv("TOPIC_CONSUMERS")
+	kafkaBrokers := "old-eews-kafka:9092"
+	topicConsumers := "p_arrival,pick"
 
 	fmt.Println("Creating Kafka consumer")
 
@@ -245,7 +243,7 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 }
 
 func GetLive(w http.ResponseWriter, _ *http.Request) {
-	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/live"
+	producerSvc := "http://old-eews-producer:8000" + "/live"
 	resp, err := http.Get(producerSvc)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -264,7 +262,7 @@ func GetLive(w http.ResponseWriter, _ *http.Request) {
 }
 
 func PostIdle(w http.ResponseWriter, _ *http.Request) {
-	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/idle"
+	producerSvc := "http://old-eews-producer:8000" + "/idle"
 	resp, err := http.Post(producerSvc, "application/json", bytes.NewBuffer([]byte("{}")))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -283,7 +281,7 @@ func PostIdle(w http.ResponseWriter, _ *http.Request) {
 }
 
 func GetPlayback(w http.ResponseWriter, r *http.Request) {
-	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/playback"
+	producerSvc := "http://old-eews-producer:8000" + "/playback"
 
 	// Extract query parameters "starttime" and "endtime" from the request
 	starttime := r.FormValue("start_time")

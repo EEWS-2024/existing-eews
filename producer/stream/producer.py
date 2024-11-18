@@ -13,11 +13,11 @@ from utils.redis_client import RedisSingleton
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = getenv("BOOTSTRAP_SERVERS")
+BOOTSTRAP_SERVERS = "old-eews-kafka:9092"
 if not BOOTSTRAP_SERVERS:
     raise Exception("BOOTSTRAP_SERVER env is required")
 print(BOOTSTRAP_SERVERS)
-TOPIC_NAME = getenv("TOPIC_NAME")
+TOPIC_NAME = "query"
 if not TOPIC_NAME:
     raise Exception("Topic name env is required")
 

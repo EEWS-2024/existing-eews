@@ -4,9 +4,8 @@ import os
 
 load_dotenv()
 
-REDIS_HOST = os.getenv("REDIS_HOST")
-REDIS_PORT = os.getenv("REDIS_PORT")
-REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+REDIS_HOST = "old-eews-redis"
+REDIS_PORT = 6379
 
 
 class RedisSingleton:
@@ -18,7 +17,6 @@ class RedisSingleton:
             cls._instance.r = redis.Redis(
                 host=REDIS_HOST,
                 port=int(REDIS_PORT),
-                password=REDIS_PASSWORD,
                 db=db,
                 decode_responses=True,
             )

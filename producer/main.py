@@ -12,7 +12,7 @@ SOURCE_MSEED = "20090118_064750.mseed"
 
 load_dotenv()
 app = FastAPI()
-PORT = os.getenv("PORT")
+PORT = 8000
 
 origins = ["*"]
 

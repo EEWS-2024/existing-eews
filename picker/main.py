@@ -5,11 +5,10 @@ import time
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS")
-TOPIC_CONSUMER = os.getenv("TOPIC_CONSUMER")
-REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+BOOTSTRAP_SERVERS = "old-eews-kafka:9092"
+TOPIC_CONSUMER = "p_arrival"
+REDIS_HOST = os.getenv("REDIS_HOST", "old-eews-redis")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
-REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", None)
 MONGO_DB = os.getenv("MONGO_DB", "eews")
 MONGO_USER = os.getenv("MONGO_USER", "root")
 MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "example")
@@ -32,7 +31,6 @@ if __name__ == "__main__":
             "redis": {
                 "host": REDIS_HOST,
                 "port": int(REDIS_PORT),
-                "password": REDIS_PASSWORD,
             },
             "mongo": {
                 "db_name": MONGO_DB,

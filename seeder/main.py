@@ -36,9 +36,8 @@ def haversine(lat1, lon1, lat2, lon2):
 
 
 def save_to_redis():
-    host = os.environ.get("REDIS_HOST", "localhost")
+    host = os.environ.get("REDIS_HOST", "old-eews-redis")
     redis_port = os.environ.get("REDIS_PORT", "6379")
-    redis_password = os.environ.get("REDIS_PASSWORD", None)
     env = os.environ.get("ENV", "PROD")
     print(f"ENVIRONMENT: {env}")
     print(f"REDIS_HOST: {host}")
@@ -49,7 +48,6 @@ def save_to_redis():
     r = redis.Redis(
         host=host,
         port=int(redis_port),
-        password=redis_password,
         db=0,
         decode_responses=True,
     )
