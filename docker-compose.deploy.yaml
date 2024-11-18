@@ -3,57 +3,57 @@ networks:
     external: true
 
 services:
-  # old-eews-zookeeper:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   restart: always
-  #   image: confluentinc/cp-zookeeper
-  #   container_name: old-eews-zookeeper
-  #   environment:
-  #     ZOOKEEPER_CLIENT_PORT: 1485
+  old-eews-zookeeper:
+    networks:
+      - nginx-manager_customnetwork
+    restart: always
+    image: confluentinc/cp-zookeeper
+    container_name: old-eews-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 1485
 
-  # old-eews-kafka:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   restart: always
-  #   container_name: old-eews-kafka
-  #   image: confluentinc/cp-kafka
-  #   depends_on:
-  #     - old-eews-zookeeper
-  #   ports:
-  #     - "2485:2485"
-  #     - "3485:3485"
+  old-eews-kafka:
+    networks:
+      - nginx-manager_customnetwork
+    restart: always
+    container_name: old-eews-kafka
+    image: confluentinc/cp-kafka
+    depends_on:
+      - old-eews-zookeeper
+    ports:
+      - "2485:2485"
+      - "3485:3485"
 
-  #   environment:
-  #     KAFKA_BROKER_ID: 1
-  #     KAFKA_ZOOKEEPER_CONNECT: "old-eews-zookeeper:1485"
-  #     KAFKA_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://old-eews-kafka:2485,OUTSIDE://old-eews-kafka:3485
-  #     KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://localhost:2485,OUTSIDE://34.23.119.16:3485
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
-  #     KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
-  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
-  #   mem_limit: 1228m
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "old-eews-zookeeper:1485"
+      KAFKA_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://old-eews-kafka:2485,OUTSIDE://old-eews-kafka:3485
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://localhost:2485,OUTSIDE://34.23.119.16:3485
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+    mem_limit: 1228m
 
-  # old-eews-init-kafka:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   container_name: old-eews-init-kafka
-  #   image: confluentinc/cp-kafka:6.1.1
-  #   depends_on:
-  #     - old-eews-kafka
-  #     - old-eews-zookeeper
-  #   entrypoint: ["/bin/sh", "-c"]
-  #   command: |
-  #     "
-  #     # blocks until kafka is reachable
-  #     kafka-topics --bootstrap-server old-eews-kafka:9092 --list
-  #     echo -e 'Creating kafka topics'
-  #     kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 1 --partitions 3
-  #     kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 1 --partitions 3
-  #     kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 1 --partitions 3
-  #     echo -e 'Successfully created the following topics:'
-  #     kafka-topics --bootstrap-server old-eews-kafka:9092 --list
-  #     "
+  old-eews-init-kafka:
+    networks:
+      - nginx-manager_customnetwork
+    container_name: old-eews-init-kafka
+    image: confluentinc/cp-kafka:6.1.1
+    depends_on:
+      - old-eews-kafka
+      - old-eews-zookeeper
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --list
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 1 --partitions 3
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --list
+      "
 
   old-eews-redis:
     networks:
@@ -72,92 +72,99 @@ services:
     image: docker.io/slackingdjaeger/old-eews-seeder:latest
     container_name: old-eews-seeder
 
-  # old-eews-producer:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   restart: always
-  #   depends_on:
-  #     old-eews-init-kafka:
-  #       condition: service_completed_successfully
-  #     old-eews-seeder:
-  #       condition: service_completed_successfully
-  #   image: docker.io/slackingdjaeger/old-eews-producer:latest
-  #   container_name: old-eews-producer
-  #   ports:
-  #     - "8485:8000"
+  old-eews-producer:
+    pull_policy: "always"
+    networks:
+      - nginx-manager_customnetwork
+    restart: always
+    depends_on:
+      old-eews-init-kafka:
+        condition: service_completed_successfully
+      old-eews-seeder:
+        condition: service_completed_successfully
+    image: docker.io/slackingdjaeger/old-eews-producer:latest
+    container_name: old-eews-producer
+    ports:
+      - "8485:8000"
 
-  # old-eews-queue:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   restart: always
-  #   depends_on:
-  #     - old-eews-init-kafka
-  #     - old-eews-producer
-  #     - old-eews-zookeeper
-  #     - old-eews-kafka
-  #   image: docker.io/slackingdjaeger/old-eews-queue:latest
-  #   container_name: old-eews-queue
-  #   mem_limit: 60m
+  old-eews-queue:
+    pull_policy: "always"
+    networks:
+      - nginx-manager_customnetwork
+    restart: always
+    depends_on:
+      - old-eews-init-kafka
+      - old-eews-producer
+      - old-eews-zookeeper
+      - old-eews-kafka
+    image: docker.io/slackingdjaeger/old-eews-queue:latest
+    container_name: old-eews-queue
+    mem_limit: 60m
 
-  # old-eews-picker:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   restart: always
-  #   depends_on:
-  #     - old-eews-nginx
-  #     - old-eews-mongo
-  #     - old-eews-redis
-  #   image: docker.io/slackingdjaeger/old-eews-picker:latest
-  #   container_name: old-eews-picker
+  old-eews-picker:
+    pull_policy: "always"
+    networks:
+      - nginx-manager_customnetwork
+    restart: always
+    depends_on:
+      - old-eews-nginx
+      - old-eews-mongo
+      - old-eews-redis
+    image: docker.io/slackingdjaeger/old-eews-picker:latest
+    container_name: old-eews-picker
 
-  # old-eews-ml:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   restart: always
-  #   image: docker.io/slackingdjaeger/old-eews-ml:latest
-  #   container_name: old-eews-ml
-  #   depends_on:
-  #     - old-eews-redis
-  #   mem_limit: 7168m
+  old-eews-ml:
+    pull_policy: "always"
+    networks:
+      - nginx-manager_customnetwork
+    restart: always
+    image: docker.io/slackingdjaeger/old-eews-ml:latest
+    container_name: old-eews-ml
+    depends_on:
+      - old-eews-redis
+    mem_limit: 7168m
 
-  # old-eews-nginx:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   image: docker.io/slackingdjaeger/old-eews-nginx:latest
-  #   container_name: old-eews-nginx
-  #   depends_on:
-  #     - old-eews-ml
+  old-eews-nginx:
+    pull_policy: "always"
+    networks:
+      - nginx-manager_customnetwork
+    image: docker.io/slackingdjaeger/old-eews-nginx:latest
+    container_name: old-eews-nginx
+    depends_on:
+      - old-eews-ml
 
-  # old-eews-ws-rest:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   restart: always
-  #   depends_on:
-  #     - old-eews-producer
-  #     - old-eews-seeder
-  #   image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
-  #   container_name: old-eews-ws-rest
-  #   ports:
-  #     - "10485:8080"
+  old-eews-ws-rest:
+    pull_policy: "always"
+    networks:
+      - nginx-manager_customnetwork
+    restart: always
+    depends_on:
+      - old-eews-producer
+      - old-eews-seeder
+    image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
+    container_name: old-eews-ws-rest
+    ports:
+      - "10485:8080"
 
-  # old-eews-frontend:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   depends_on:
-  #     - old-eews-ws-rest
-  #   image: docker.io/slackingdjaeger/old-eews-frontend:latest
-  #   container_name: old-eews-frontend
-  #   ports:
-  #     - "9485:3000"
+  old-eews-frontend:
+    pull_policy: "always"
+    networks:
+      - nginx-manager_customnetwork
+    depends_on:
+      - old-eews-ws-rest
+    image: docker.io/slackingdjaeger/old-eews-frontend:latest
+    container_name: old-eews-frontend
+    ports:
+      - "9485:3000"
 
-  # old-eews-mongo:
-  #   networks:
-  #     - nginx-manager_customnetwork
-  #   image: mongo:latest
-  #   container_name: old-eews-mongo
-  #   volumes:
-  #     - mongodb_data:/data/db
+  old-eews-mongo:
+    networks:
+      - nginx-manager_customnetwork
+    image: mongo:latest
+    container_name: old-eews-mongo
+    volumes:
+      - mongodb_data:/data/db
 
 volumes:
-  # mongodb_data:
+  mongodb_data:
   redis_data:
