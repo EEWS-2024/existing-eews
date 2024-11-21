@@ -37,5 +37,5 @@ jobs:
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }} << EOF
           docker-compose -f docker-compose.deploy.yaml down
-          docker-compose -f docker-compose.deploy.yaml up -d --pull always
+          docker-compose -f docker-compose.deploy.yaml up -d --force-recreate
           EOF
