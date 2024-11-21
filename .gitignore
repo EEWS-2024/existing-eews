@@ -1,17 +1,14 @@
-.env
 .vscode
 env
 __pycache__
 .venv
 env
-.env
 __pycache__/
 data
 earthquake_samples
 data2
 .vscode
 env
-.env
 __pycache__
 env
 __pycache__
