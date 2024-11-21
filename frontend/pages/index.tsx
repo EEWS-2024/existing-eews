@@ -1,15 +1,15 @@
-import { Inter } from 'next/font/google';
-import { MapGL } from '@/components/map';
-import { Navbar } from '@/components/Navbar';
-import { StationCharts } from '@/components/Charts';
-import { useEffect, useState } from 'react';
-import { useEEWS } from '@/lib/hooks/useEEWS';
-import { ControlPanel } from '@/components/Panel';
-import { createWSConnection } from '@/lib/connection';
-import { Toaster } from 'react-hot-toast';
-import { EEWSProvider } from '@/lib/hooks/eewsCtx';
+import { Inter } from "next/font/google";
+import { MapGL } from "@/components/map";
+import { Navbar } from "@/components/Navbar";
+import { StationCharts } from "@/components/Charts";
+import { useEffect, useState } from "react";
+import { useEEWS } from "@/lib/hooks/useEEWS";
+import { ControlPanel } from "@/components/Panel";
+import { createWSConnection } from "@/lib/connection";
+import { Toaster } from "react-hot-toast";
+import { EEWSProvider } from "@/lib/hooks/eewsCtx";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export default function HomePage() {
   return (
@@ -25,11 +25,11 @@ function Home() {
   useEffect(() => {
     if (!connection && Object.entries(stations).length > 0 && !!packetsCount) {
       console.log(stations);
-      const websocket = createWSConnection('/ws', websocketCallbacks);
+      const websocket = createWSConnection("ws", websocketCallbacks);
       setConnection(websocket);
     }
     const onUnload = () => {
-      console.log('disconnecting');
+      console.log("disconnecting");
       connection?.close();
     };
     window.onbeforeunload = function (e) {

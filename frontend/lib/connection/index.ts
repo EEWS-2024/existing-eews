@@ -1,13 +1,13 @@
-import { WS_URL } from '../credentials';
+import { WS_URL } from "../credentials";
 
 export const createWSConnection = (
   str: string,
   cb: (message: MessageEvent<any>) => void
 ) => {
   const socket = new WebSocket(`${WS_URL}${str}`);
-  console.log('CREATEWSConnection');
+  console.log("CREATEWSConnection");
   socket.onopen = () => {
-    console.log('Connect');
+    console.log("Connect");
   };
   socket.onmessage = cb;
   socket.onclose = (close) => {
