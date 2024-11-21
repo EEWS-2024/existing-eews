@@ -4,6 +4,8 @@ export const createWSConnection = (
   str: string,
   cb: (message: MessageEvent<any>) => void
 ) => {
+  console.log(WS_URL);
+
   const socket = new WebSocket(`${WS_URL}${str}`);
   console.log("CREATEWSConnection");
   socket.onopen = () => {
