@@ -4,8 +4,8 @@ import os
 
 load_dotenv()
 
-REDIS_HOST = "old-eews-redis"
-REDIS_PORT = 6379
+REDIS_HOST = os.getenv('REDIS_HOST', "old-eews-redis")
+REDIS_PORT = os.getenv('REDIS_PORT', "6379")
 
 
 class RedisSingleton:

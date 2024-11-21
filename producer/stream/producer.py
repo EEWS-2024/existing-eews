@@ -1,10 +1,10 @@
+import os
 from dotenv import load_dotenv
 from collections.abc import Callable
 from confluent_kafka import Producer
 from utils.helper import get_current_utc_datetime
 from typing import Any, Dict
 from typing import Optional
-from os import getenv
 import logging
 import pickle
 import json
@@ -13,11 +13,10 @@ from utils.redis_client import RedisSingleton
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = "old-eews-kafka:9092"
+BOOTSTRAP_SERVERS = os.getenv('BOOTSTRAP_SERVERS', "old-eews-kafka:9092")
 if not BOOTSTRAP_SERVERS:
     raise Exception("BOOTSTRAP_SERVER env is required")
-print(BOOTSTRAP_SERVERS)
-TOPIC_NAME = "query"
+TOPIC_NAME = os.getenv('TOPIC_NAME', "query")
 if not TOPIC_NAME:
     raise Exception("Topic name env is required")
 

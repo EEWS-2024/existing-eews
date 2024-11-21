@@ -52,6 +52,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: docker.io/slackingdjaeger/old-eews-frontend:latest
+    env_file:
+      - .frontend.env
 
   old-eews-nginx:
     build:

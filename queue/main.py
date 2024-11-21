@@ -1,10 +1,11 @@
+import os
 from app.container import KafkaContainer
 from dotenv import load_dotenv
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = "old-eews-kafka:9092"
-TOPIC_CONSUMER = "query"
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "old-eews-kafka:9092")
+TOPIC_CONSUMER = os.getenv("TOPIC_CONSUMER", "query")
 
 
 if __name__ == "__main__":

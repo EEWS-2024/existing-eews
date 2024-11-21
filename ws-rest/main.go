@@ -101,7 +101,7 @@ var client *redis.Client
 func init() {
 	// Inisialisasi koneksi ke Redis
 	loadEnv()
-	redisHost := "old-eews-redis:6379"
+	redisHost := os.Getenv("REDIS_HOST")
 	client = redis.NewClient(&redis.Options{
 		Addr:     redisHost,
 	})
@@ -128,7 +128,7 @@ func main() {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	port := ":" + "8080"
+	port := ":" + os.Getenv("PORT")
 
 	r := mux.NewRouter()
 	apiRouter := r.PathPrefix("/api").Subrouter()
@@ -167,8 +167,8 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 	}
 	defer conn.Close()
 
-	kafkaBrokers := "old-eews-kafka:9092"
-	topicConsumers := "p_arrival,pick"
+	kafkaBrokers := os.Getenv("BOOTSTRAP_SERVERS")
+	topicConsumers := os.Getenv("TOPIC_CONSUMERS")
 
 	fmt.Println("Creating Kafka consumer")
 
@@ -243,7 +243,7 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 }
 
 func GetLive(w http.ResponseWriter, _ *http.Request) {
-	producerSvc := "http://old-eews-producer:8000" + "/live"
+	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/live"
 	resp, err := http.Get(producerSvc)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -262,7 +262,7 @@ func GetLive(w http.ResponseWriter, _ *http.Request) {
 }
 
 func PostIdle(w http.ResponseWriter, _ *http.Request) {
-	producerSvc := "http://old-eews-producer:8000" + "/idle"
+	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/idle"
 	resp, err := http.Post(producerSvc, "application/json", bytes.NewBuffer([]byte("{}")))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -281,7 +281,7 @@ func PostIdle(w http.ResponseWriter, _ *http.Request) {
 }
 
 func GetPlayback(w http.ResponseWriter, r *http.Request) {
-	producerSvc := "http://old-eews-producer:8000" + "/playback"
+	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/playback"
 
 	// Extract query parameters "starttime" and "endtime" from the request
 	starttime := r.FormValue("start_time")

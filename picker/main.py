@@ -5,8 +5,8 @@ import time
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = "old-eews-kafka:9092"
-TOPIC_CONSUMER = "p_arrival"
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "old-eews-kafka:9092")
+TOPIC_CONSUMER = os.getenv("BOOTSTRAP_SERVERS", "p_arrival")
 REDIS_HOST = os.getenv("REDIS_HOST", "old-eews-redis")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 MONGO_DB = os.getenv("MONGO_DB", "eews")
