@@ -20,8 +20,8 @@ class KafkaDataProcessor:
         self.consumer.subscribe([topic])
         i = 1
         show_nf = True
-        print("is it running on " + topic)
         while True:
+            print("is it running on " + topic)
             msg = self.consumer.poll(10)
             self.partitions = self.consumer.assignment()
 
