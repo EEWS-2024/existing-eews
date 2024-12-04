@@ -25,6 +25,8 @@ class KafkaDataProcessor:
             msg = self.consumer.poll(10)
             self.partitions = self.consumer.assignment()
 
+            print("message:" + msg)
+            
             if msg is None:
                 if show_nf:
                     print("No message received :(")
