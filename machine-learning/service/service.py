@@ -51,6 +51,7 @@ redis_client = redis.Redis(
 
 @wave_arrival_detector.api(input=Text(), output=Text())
 def hello(_input: str) -> str:
+    print("Hello Kamu")
     return "Hello, World!"
 
 # Restart service ------------------------------------------------------------------------------------------------------

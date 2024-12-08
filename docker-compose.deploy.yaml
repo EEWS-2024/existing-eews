@@ -166,7 +166,7 @@ services:
     depends_on:
       - old-eews-redis
     ports:
-      - "2498:3000"
+      - "2498:8100"
     mem_limit: 7168m
 
   old-eews-nginx:
