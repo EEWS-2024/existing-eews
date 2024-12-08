@@ -165,6 +165,8 @@ services:
     container_name: old-eews-ml
     depends_on:
       - old-eews-redis
+    ports:
+      - "2498:3000"
     mem_limit: 7168m
 
   old-eews-nginx:

@@ -19,6 +19,8 @@ WORKDIR /app/service
 # Build BentoML service
 RUN bentoml build
 
+EXPOSE 3000
+
 # Run BentoML service
 # CMD bentoml build && bentoml serve service:wave_arrival_detector
 CMD bentoml serve service:wave_arrival_detector
