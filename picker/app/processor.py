@@ -13,7 +13,6 @@ from .mongo import MongoDBClient
 import numpy as np
 from scipy.optimize import minimize
 import math
-from .prometheus import Prometheus
 
 load_dotenv()
 
@@ -37,14 +36,12 @@ class KafkaDataProcessor:
         pooler: Pooler,
         redis: MyRedis,
         mongo: MongoDBClient,
-        prometheus: Prometheus,
     ):
         self.consumer = consumer
         self.producer = producer
         self.pooler = pooler
         self.redis = redis
         self.mongo = mongo
-        self.prometheus = prometheus
 
     def consume(self, topic: str):
         self.consumer.subscribe([topic])
@@ -83,8 +80,6 @@ class KafkaDataProcessor:
 
                 end_time = datetime.now()
                 process_time = (end_time - start_time).total_seconds()
-                self.prometheus.inc_rec_data(len_data)
-                self.prometheus.obs_rec_time(process_time)
                 # print(("=" * 30) + "END" + ("=" * 30), end="\n")
             except Exception as e:
                 print(f"Error: {str(e)}")
@@ -257,9 +252,6 @@ class KafkaDataProcessor:
                 end_time = datetime.now()
                 process_time = (end_time - start_time).total_seconds()
                 if response.text == "OK":
-                    self.prometheus.inc_pred_data()
-                    self.prometheus.inc_pred_req_suc()
-                    self.prometheus.obs_pred_time(process_time)
                     res = {"process_time": process_time, "result": {}}
                     # print(f"RESULT FROM 1 {url}: {res}")
                     return res
@@ -267,15 +259,10 @@ class KafkaDataProcessor:
                 result = json.loads(result)
                 # print("=", end="")
                 if isinstance(result, dict):
-                    self.prometheus.inc_pred_data(len(data["x"]))
-                    self.prometheus.inc_pred_req_suc()
-                    self.prometheus.obs_pred_time(process_time)
                     res = {"process_time": process_time, "result": result}
                     # print(f"RESULT FROM 2 {url}: {res}")
                     return res
-                # self.prometheus.inc_pred_req_err()
             except Exception as e:
-                self.prometheus.inc_pred_req_err()
                 print(f"Error: {str(e)}")
                 # print("URL :", url, data["station_code"])
                 # print(data)
