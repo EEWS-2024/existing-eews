@@ -5,7 +5,6 @@ from .pooler import Pooler
 from .myredis import MyRedis
 from .mongo import MongoDBClient
 from dependency_injector import containers, providers
-from .prometheus import Prometheus
 
 
 class KafkaContainer(containers.DeclarativeContainer):
@@ -24,9 +23,6 @@ class KafkaContainer(containers.DeclarativeContainer):
     pooler = providers.Singleton(Pooler)
     redis = providers.Singleton(MyRedis, config=config.redis)
     consumer = providers.Singleton(Consumer, config.kafka_config)
-    prometheus = providers.Singleton(
-        Prometheus, addr=config.prometheus.addr, port=config.prometheus.port
-    )
     data_processor = providers.Singleton(
         KafkaDataProcessor,
         consumer=consumer,
@@ -34,5 +30,4 @@ class KafkaContainer(containers.DeclarativeContainer):
         pooler=pooler,
         redis=redis,
         mongo=mongo,
-        prometheus=prometheus,
     )

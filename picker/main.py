@@ -36,15 +36,10 @@ if __name__ == "__main__":
                 "port": int(MONGO_PORT),
                 "collection": MONGO_COLLECTION,
             },
-            "prometheus": {
-                "addr": PROMETHEUS_ADDR,
-                "port": int(PROMETHEUS_PORT),
-            },
         },
         True,
     )
-    promethues = container.prometheus()
-    promethues.start()
+    
     data_processor = container.data_processor()
     print("=" * 20 + f"Consuming Data From {TOPIC_CONSUMER} Topic" + "=" * 20)
     data_processor.consume(TOPIC_CONSUMER)
