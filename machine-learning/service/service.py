@@ -49,6 +49,9 @@ redis_client = redis.Redis(
     db=settings.REDIS_DB_NUM,
 )
 
+@wave_arrival_detector.api(input=Text(), output=Text())
+def hello(_input: str) -> str:
+    return "Hello, World!"
 
 # Restart service ------------------------------------------------------------------------------------------------------
 @wave_arrival_detector.api(input=JSON(pydantic_model=InputDataRegister), output=Text())
