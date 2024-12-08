@@ -12,11 +12,11 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2485
 
-  old-eews-kafka-1:
+  old-eews-kafka:
     networks:
       - nginx-manager_customnetwork
     restart: always
-    container_name: old-eews-kafka-1
+    container_name: old-eews-kafka
     image: confluentinc/cp-kafka
     depends_on:
       - old-eews-zookeeper
@@ -27,8 +27,8 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "old-eews-zookeeper:2485"
-      KAFKA_LISTENERS: DOCKER://old-eews-kafka-1:9092,LOCAL://old-eews-kafka-1:2486,OUTSIDE://old-eews-kafka-1:2487
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka-1:9092,LOCAL://localhost:2486,OUTSIDE://34.23.119.16:2487
+      KAFKA_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://old-eews-kafka:2486,OUTSIDE://old-eews-kafka:2487
+      KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://localhost:2486,OUTSIDE://34.23.119.16:2487
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
     mem_limit: 1228m
@@ -81,7 +81,7 @@ services:
     container_name: old-eews-init-kafka
     image: confluentinc/cp-kafka:6.1.1
     depends_on:
-      - old-eews-kafka-1
+      - old-eews-kafka
       - old-eews-kafka-2
       - old-eews-kafka-3
       - old-eews-zookeeper
@@ -89,13 +89,13 @@ services:
     command: |
       "
       # blocks until kafka is reachable
-      kafka-topics --bootstrap-server old-eews-kafka-1:9092 --list
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --list
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server old-eews-kafka-1:9092 --create --if-not-exists --topic query --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
-      kafka-topics --bootstrap-server old-eews-kafka-1:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
-      kafka-topics --bootstrap-server old-eews-kafka-1:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
       echo -e 'Successfully created the following topics:'
-      kafka-topics --bootstrap-server old-eews-kafka-1:9092 --list
+      kafka-topics --bootstrap-server old-eews-kafka:9092 --list
       "
 
   old-eews-redis:
@@ -139,7 +139,7 @@ services:
       - old-eews-init-kafka
       - old-eews-producer
       - old-eews-zookeeper
-      - old-eews-kafka-1
+      - old-eews-kafka
     image: docker.io/slackingdjaeger/old-eews-queue:latest
     container_name: old-eews-queue
     mem_limit: 60m
@@ -242,13 +242,13 @@ services:
     networks:
       - nginx-manager_customnetwork
     depends_on:
-      - old-eews-kafka-1
+      - old-eews-kafka
       - old-eews-kafka-2
       - old-eews-kafka-3
     ports:
       - "2493:9000"
     environment:
-      KAFKA_BROKERCONNECT: "old-eews-kafka-1:9092,old-eews-kafka-2:9092,old-eews-kafka-3:9092"
+      KAFKA_BROKERCONNECT: "old-eews-kafka:9092,old-eews-kafka-2:9092,old-eews-kafka-3:9092"
       JVM_OPTS: "-Xms32M -Xmx64M"
 
 volumes:
