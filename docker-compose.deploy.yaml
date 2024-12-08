@@ -167,7 +167,6 @@ services:
       - old-eews-redis
     ports:
       - "2498:8100"
-    mem_limit: 7168m
 
   old-eews-nginx:
     pull_policy: "always"
