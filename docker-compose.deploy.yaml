@@ -67,7 +67,7 @@ services:
       - "2497:2497"
 
     environment:
-      KAFKA_BROKER_ID: 2
+      KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: "old-eews-zookeeper:2485"
       KAFKA_LISTENERS: DOCKER://old-eews-kafka-3:9092,LOCAL://old-eews-kafka-3:2496,OUTSIDE://old-eews-kafka-3:2497
       KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka-3:9092,LOCAL://localhost:2496,OUTSIDE://34.23.119.16:2497
