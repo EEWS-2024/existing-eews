@@ -265,13 +265,15 @@ services:
 
   old-eews-grafana:
     container_name: old-eews-grafana
-    image: grafana/grafana:latest
+    image: docker.io/slackingdjaeger/old-eews-grafana:latest
     ports:
       - "2500:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
       - nginx-manager_customnetwork
+    depends_on:
+      - old-eews-prometheus
 
 volumes:
   mongodb_data:

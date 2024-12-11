@@ -64,3 +64,9 @@ services:
       context: ./prometheus
       dockerfile: Dockerfile
     image: docker.io/slackingdjaeger/old-eews-prometheus:latest
+
+  old-eews-grafana:
+    build:
+      context: ./grafana
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-grafana:latest
