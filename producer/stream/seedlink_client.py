@@ -3,7 +3,8 @@ from stream.producer import KafkaProducer
 from obspy.clients.seedlink import EasySeedLinkClient
 from obspy import Trace
 import json
-from datetime import datetime, time
+from datetime import datetime
+import time
 from obspy.clients.seedlink.slpacket import SLPacket
 from stream.const import StreamMode
 from utils.redis_client import RedisSingleton
