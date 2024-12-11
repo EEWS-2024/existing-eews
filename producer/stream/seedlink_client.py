@@ -3,7 +3,7 @@ from stream.producer import KafkaProducer
 from obspy.clients.seedlink import EasySeedLinkClient
 from obspy import Trace
 import json
-from datetime import datetime
+from datetime import datetime, time
 from obspy.clients.seedlink.slpacket import SLPacket
 from stream.const import StreamMode
 from utils.redis_client import RedisSingleton
@@ -29,8 +29,10 @@ class SeedlinkClient(StreamClient, EasySeedLinkClient):
         # Start the collection loop
         print("Starting collection on:", datetime.utcnow())
         while True:
+            start_time = time.time()
             arrive_time = datetime.utcnow()
             data = self.conn.collect()
+            print(f"Data collection latency: {time.time() - start_time} seconds")
             if data == SLPacket.SLTERMINATE:
                 self.on_terminate()
                 break
