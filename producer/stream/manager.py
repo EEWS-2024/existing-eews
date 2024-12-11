@@ -1,3 +1,4 @@
+from stream.prometheus_metric import start_prometheus_server
 from stream.producer import KafkaProducer, kafkaProducer
 from stream.fdsnws_client import FdsnwsClient
 from stream.seedlink_client import SeedlinkClient
@@ -11,6 +12,7 @@ class StreamManager:
     def __init__(
         self, producer: KafkaProducer, fdsnws_server: str, seedlink_server: str
     ):
+        start_prometheus_server()
         self.producer = producer
         self.fdsnws_server = fdsnws_server
         self.seedlink_server = seedlink_server

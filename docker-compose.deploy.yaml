@@ -129,6 +129,7 @@ services:
     container_name: old-eews-producer
     ports:
       - "2488:8000"
+      - "2501:8001"
 
   old-eews-queue:
     pull_policy: "always"
@@ -251,6 +252,26 @@ services:
     environment:
       KAFKA_BROKERCONNECT: "old-eews-kafka:9092,old-eews-kafka-2:9092,old-eews-kafka-3:9092"
       JVM_OPTS: "-Xms32M -Xmx64M"
+
+  old-eews-prometheus:
+    container_name: old-eews-prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "2499:9090"
+    networks:
+      - nginx-manager_customnetwork
+
+  old-eews-grafana:
+    container_name: old-eews-grafana
+    image: grafana/grafana:latest
+    ports:
+      - "2500:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - nginx-manager_customnetwork
 
 volumes:
   mongodb_data:
