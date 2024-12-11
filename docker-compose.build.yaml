@@ -58,3 +58,9 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     image: docker.io/slackingdjaeger/old-eews-nginx:latest
+
+  old-eews-prometheus:
+    build:
+      context: ./prometheus
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/old-eews-prometheus:latest

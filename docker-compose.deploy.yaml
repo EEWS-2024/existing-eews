@@ -255,13 +255,13 @@ services:
 
   old-eews-prometheus:
     container_name: old-eews-prometheus
-    image: prom/prometheus:latest
-    volumes:
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    image: docker.io/slackingdjaeger/old-eews-prometheus:latest
     ports:
       - "2499:9090"
     networks:
       - nginx-manager_customnetwork
+    depends_on:
+      - old-eews-producer
 
   old-eews-grafana:
     container_name: old-eews-grafana
