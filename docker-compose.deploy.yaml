@@ -269,6 +269,7 @@ services:
     ports:
       - "2500:3000"
     environment:
+      - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
       - nginx-manager_customnetwork
