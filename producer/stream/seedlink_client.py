@@ -1,8 +1,8 @@
 from typing import Optional, Any
 
-from prometheus_metric import EXECUTION_TIME, THROUGHPUT
-from client import StreamClient
-from const import StreamMode
+from .prometheus_metric import EXECUTION_TIME, THROUGHPUT
+from .client import StreamClient
+from .const import StreamMode
 from .producer import KafkaProducer
 from obspy.clients.seedlink import EasySeedLinkClient
 from obspy import Trace
