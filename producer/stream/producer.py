@@ -2,14 +2,13 @@ import os
 from dotenv import load_dotenv
 from collections.abc import Callable
 from confluent_kafka import Producer
-from utils.helper import get_current_utc_datetime
 from typing import Any, Dict
 from typing import Optional
 import logging
 import pickle
 import json
-from stream.const import StreamMode
-from utils.redis_client import RedisSingleton
+from producer.stream.const import StreamMode
+from producer.utils.redis_client import RedisSingleton
 
 load_dotenv()
 
@@ -22,9 +21,6 @@ if not TOPIC_NAME:
 
 DEFAULT_PRODUCER_CONFIG = {
     "bootstrap.servers": BOOTSTRAP_SERVERS,
-    # 'compression.type': 'lz4',
-    # 'linger.ms': 100,
-    # 'batch.size': 131072, # 128 KB
 }
 
 
@@ -35,6 +31,7 @@ class KafkaProducer:
         value_serializer: Optional[Callable[[object], bytes]] = None,
         extra_config: Optional[Dict] = None,
     ):
+        self.stations = []
         logging.debug("Create producer")
 
         if extra_config is None:
@@ -58,12 +55,11 @@ class KafkaProducer:
 
         logging.debug("Finish creating producer")
 
-    def startTrace(self):
+    def start_trace(self):
         stats: str = RedisSingleton().r.get("ENABLED_STATION_CODES")
         self.stations = set(stats.split(","))
         for i in range(0, self.partitions):
             self.producer.produce(
-                # topic=self.topic_name,
                 self.topic_name,
                 value=self.value_serializer(json.dumps({"type": "start"})),
                 partition=i,
@@ -72,10 +68,9 @@ class KafkaProducer:
         self.producer.flush()
         print("=" * 20, "Start Trace", "=" * 20)
 
-    def stopTrace(self):
+    def stop_trace(self):
         for i in range(0, self.partitions):
             self.producer.produce(
-                # topic=self.topic_name,
                 self.topic_name,
                 value=self.value_serializer(json.dumps({"type": "stop"})),
                 partition=i,
@@ -89,20 +84,17 @@ class KafkaProducer:
         value,
         key: Optional[Any] = None,
         mode=StreamMode.IDLE,
-        callback_function: Optional[Callable[[str, str], None]] = None,
     ):
         if mode == self.current_mode and key in self.stations:
             self.producer.produce(
-                # topic=self.topic_name,
                 self.topic_name,
                 value=self.value_serializer(value),
                 key=key,
             )
-            # if key == "BKB" and value["channel"] == "BHE":
-            #     print(value["starttime"], "-", value["endtime"])
+
         self.producer.flush()
 
-    def log_on_kafka_message_delivery(self, error: Optional[str], message: str):
+    def log_on_kafka_message_delivery(self, error: Optional[str], message):
         if error is not None:
             logging.error(
                 f"Failed to produce message: {message.value()}, topic: {self.topic_name} error: {error}"

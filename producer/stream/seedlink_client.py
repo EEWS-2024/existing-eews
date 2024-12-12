@@ -1,17 +1,18 @@
-from stream.prometheus_metric import LATENCY, THROUGHPUT
-from stream.client import StreamClient, StreamMode
-from stream.producer import KafkaProducer
+from typing import Optional, Any
+
+from producer.stream.prometheus_metric import EXECUTION_TIME, THROUGHPUT
+from producer.stream.client import StreamClient
+from producer.stream.const import StreamMode
+from producer.stream.producer import KafkaProducer
 from obspy.clients.seedlink import EasySeedLinkClient
 from obspy import Trace
 import json
-from datetime import datetime
+from datetime import datetime, UTC
 import time
 from obspy.clients.seedlink.slpacket import SLPacket
-from stream.const import StreamMode
-from utils.redis_client import RedisSingleton
 
 
-class SeedlinkClient(StreamClient, EasySeedLinkClient):
+class SeedLinkClient(StreamClient, EasySeedLinkClient):
     def __init__(self, producer: KafkaProducer, server_url: str):
         self.server_url = server_url
         StreamClient.__init__(self, mode=StreamMode.LIVE, producer=producer)
@@ -29,12 +30,12 @@ class SeedlinkClient(StreamClient, EasySeedLinkClient):
             )
         self.__streaming_started = True
         # Start the collection loop
-        print("Starting collection on:", datetime.utcnow())
+        print("Starting collection on:", datetime.now(UTC))
         while True:
             start_time = time.time()
-            arrive_time = datetime.utcnow()
             data = self.conn.collect()
-            
+            arrive_time = datetime.now(UTC)
+
             if data == SLPacket.SLTERMINATE:
                 self.on_terminate()
                 break
@@ -46,25 +47,23 @@ class SeedlinkClient(StreamClient, EasySeedLinkClient):
             packet_type = data.get_type()
             if packet_type not in (SLPacket.TYPE_SLINF, SLPacket.TYPE_SLINFT):
                 trace = data.get_trace()
-                self.on_data(trace, arrive_time=arrive_time)
+                self.on_data_arrive(trace, arrive_time)
                 THROUGHPUT.inc()
 
-            LATENCY.observe(time.time() - start_time)
+            EXECUTION_TIME.observe(time.time() - start_time)
 
-
-    def startStreaming(self):
-        self.producer.startTrace()
+    def start_streaming(self, start_time: Optional[Any]= None, end_time: Optional[Any]= None):
+        self.producer.start_trace()
         print("-" * 20, "Streaming miniseed from seedlink server", "-" * 20)
         if not self.__streaming_started:
             self.run()
 
-    def stopStreaming(self):
-        self.producer.stopTrace()
+    def stop_streaming(self):
+        self.producer.stop_trace()
         self.close()
         print("-" * 20, "Stopping miniseed", "-" * 20)
 
-    def on_data(self, trace: Trace, arrive_time):
-        arrive_time = datetime.utcnow()
-        msg = self._extract_values(trace, arrive_time)
+    def on_data_arrive(self, trace: Trace, arrive_time: datetime):
+        msg = self._map_values(trace, arrive_time)
         self.producer.produce_message(json.dumps(msg), msg["station"], StreamMode.LIVE)
 

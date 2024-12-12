@@ -1,11 +1,8 @@
-from stream.prometheus_metric import start_prometheus_server
-from stream.producer import KafkaProducer, kafkaProducer
-from stream.fdsnws_client import FdsnwsClient
-from stream.seedlink_client import SeedlinkClient
-
-# from stream.file_client import FileClient
-from stream.const import StreamMode
-from utils.redis_client import RedisSingleton
+from producer.stream.prometheus_metric import start_prometheus_server
+from producer.stream.producer import KafkaProducer, kafkaProducer
+from producer.stream.fdsnws_client import FdsnwsClient
+from producer.stream.seedlink_client import SeedLinkClient
+from producer.stream.const import StreamMode
 
 
 class StreamManager:
@@ -17,8 +14,7 @@ class StreamManager:
         self.fdsnws_server = fdsnws_server
         self.seedlink_server = seedlink_server
         self.fdsnws = FdsnwsClient(self.producer, base_url=self.fdsnws_server)
-        self.seedlink = SeedlinkClient(self.producer, server_url=self.seedlink_server)
-        # self.fileclient = FileClient(self.producer)
+        self.seedlink = SeedLinkClient(self.producer, server_url=self.seedlink_server)
 
     def start(self, mode: StreamMode, *args, **kwargs):
         if self.fdsnws.blocked:
@@ -27,13 +23,13 @@ class StreamManager:
         if mode == StreamMode.PLAYBACK:
             try:
                 if self.producer.current_mode == StreamMode.LIVE:
-                    self.seedlink.stopStreaming()
+                    self.seedlink.stop_streaming()
                 self.producer.current_mode = StreamMode.PLAYBACK
-                self.fdsnws.startStreaming(*args, **kwargs)
+                self.fdsnws.start_streaming(*args, **kwargs)
             except Exception as err:
                 print(err)
             finally:
-                self.fdsnws.stopStreaming()
+                self.fdsnws.stop_streaming()
                 self.producer.current_mode = StreamMode.IDLE
 
         if mode == StreamMode.FILE:
@@ -43,16 +39,15 @@ class StreamManager:
             except Exception as err:
                 print(err)
             finally:
-                # self.fileclient.stopStreaming()
                 self.producer.current_mode = StreamMode.IDLE
 
         elif mode == StreamMode.LIVE and self.producer.current_mode == StreamMode.IDLE:
             self.producer.current_mode = StreamMode.LIVE
-            self.seedlink.startStreaming()
+            self.seedlink.start_streaming()
 
         elif mode == StreamMode.IDLE:  # stop live mode
             self.producer.current_mode = StreamMode.IDLE
-            self.seedlink.stopStreaming()
+            self.seedlink.stop_streaming()
         print(self.producer.current_mode)
 
 

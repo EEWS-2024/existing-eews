@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
-from stream.producer import KafkaProducer
+from datetime import datetime, UTC
+from typing import Optional, Any
+
+from producer.stream.producer import KafkaProducer
+from producer.utils.redis_client import RedisSingleton
+from producer.stream.const import StreamMode
 from obspy import Trace
-from utils.redis_client import RedisSingleton
-from datetime import datetime
-from stream.const import StreamMode
+
 class StreamClient(ABC):
     def __init__(self, mode: StreamMode, producer: KafkaProducer):
         self.mode: StreamMode = mode
@@ -11,20 +14,18 @@ class StreamClient(ABC):
         redis = RedisSingleton()
         stats: str = redis.r.get("ENABLED_STATION_CODES")
         print(redis.r.get("ENABLED_STATION_CODES"))
-        stats = stats.split(",")
-        # self.stations: set = set(['BBJI','BKB','BKNI','BNDI','CISI','FAKI','GENI','GSI','JAGI','LHMI','LUWI','MMRI','MNAI','PLAI','PMBI','PMBT','SANI','SAUI','SMRI','TNTI','TOLI','TOLI2','UGM','YOGI'])
-        # self.stations: set = set(['JAGI', 'SMRI', 'BBJI'])
-        self.stations: set = set(stats)
+        self.stations: set = set(stats.split(","))
 
     @abstractmethod
-    def startStreaming():
+    def start_streaming(self, start_time: Optional[Any], end_time: Optional[Any]):
         pass
 
     @abstractmethod
-    def stopStreaming():
+    def stop_streaming(self):
         pass
 
-    def _extract_values(self, trace: Trace, arrive_time):
+    @staticmethod
+    def _map_values(trace: Trace, arrive_time):
         msg = {
             "type":"trace",
             "network": trace.stats.network,
@@ -39,6 +40,7 @@ class StreamClient(ABC):
             "data": trace.data.tolist(),
             "len": len(trace.data.tolist()),
             "sampling_rate": trace.stats.sampling_rate,
-            "eews_producer_time":[arrive_time.isoformat(), datetime.utcnow().isoformat()]
+            "eews_producer_time":[arrive_time.isoformat(), datetime.now(UTC).isoformat()],
+            "published_at": datetime.now(UTC).isoformat(),
         }
         return msg
