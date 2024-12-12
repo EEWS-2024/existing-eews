@@ -265,7 +265,7 @@ services:
 
   old-eews-grafana:
     container_name: old-eews-grafana
-    image: docker.io/slackingdjaeger/old-eews-grafana:latest
+    image: grafana/grafana:latest
     ports:
       - "2500:3000"
     environment:
@@ -275,7 +275,12 @@ services:
       - nginx-manager_customnetwork
     depends_on:
       - old-eews-prometheus
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - prometheus.yml:/etc/grafana/provisioning/datasources
 
 volumes:
   mongodb_data:
   redis_data:
+  grafana-data:
+    driver: local
