@@ -5,7 +5,7 @@ import logging
 import json
 from datetime import datetime, UTC
 from .const import StreamMode
-from producer.utils.redis_client import RedisSingleton
+from utils.redis_client import RedisSingleton
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

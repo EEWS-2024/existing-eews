@@ -3,7 +3,7 @@ from datetime import datetime, UTC
 from typing import Optional, Any
 
 from .producer import KafkaProducer
-from producer.utils.redis_client import RedisSingleton
+from utils.redis_client import RedisSingleton
 from .const import StreamMode
 from obspy import Trace
 
