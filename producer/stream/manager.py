@@ -1,8 +1,8 @@
-from producer.stream.prometheus_metric import start_prometheus_server
-from producer.stream.producer import KafkaProducer, kafkaProducer
-from producer.stream.fdsnws_client import FdsnwsClient
-from producer.stream.seedlink_client import SeedLinkClient
-from producer.stream.const import StreamMode
+from prometheus_metric import start_prometheus_server
+from .producer import KafkaProducer, kafkaProducer
+from fdsnws_client import FdsnwsClient
+from seedlink_client import SeedLinkClient
+from const import StreamMode
 
 
 class StreamManager:

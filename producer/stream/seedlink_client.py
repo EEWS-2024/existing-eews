@@ -1,9 +1,9 @@
 from typing import Optional, Any
 
-from producer.stream.prometheus_metric import EXECUTION_TIME, THROUGHPUT
-from producer.stream.client import StreamClient
-from producer.stream.const import StreamMode
-from producer.stream.producer import KafkaProducer
+from prometheus_metric import EXECUTION_TIME, THROUGHPUT
+from client import StreamClient
+from const import StreamMode
+from .producer import KafkaProducer
 from obspy.clients.seedlink import EasySeedLinkClient
 from obspy import Trace
 import json

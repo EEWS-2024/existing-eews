@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 from datetime import datetime, UTC
 from typing import Optional, Any
 
-from producer.stream.producer import KafkaProducer
-from producer.utils.redis_client import RedisSingleton
-from producer.stream.const import StreamMode
+from .producer import KafkaProducer
+from ..utils.redis_client import RedisSingleton
+from .const import StreamMode
 from obspy import Trace
 
 class StreamClient(ABC):

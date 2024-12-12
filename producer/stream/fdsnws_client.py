@@ -1,11 +1,11 @@
-from producer.stream.client import StreamClient
-from producer.stream.producer import KafkaProducer
+from .client import StreamClient
+from .producer import KafkaProducer
 from obspy.clients.fdsn import Client
 import logging
 import json
 from datetime import datetime, UTC
-from producer.stream.const import StreamMode
-from producer.utils.redis_client import RedisSingleton
+from .const import StreamMode
+from ..utils.redis_client import RedisSingleton
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
