@@ -277,7 +277,7 @@ services:
       - old-eews-prometheus
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./prometheus.yml:/etc/grafana/provisioning/datasources
+      - ./prometheus.yml:/etc/grafana/provisioning/datasources/prometheus.yml
 
 volumes:
   mongodb_data:
