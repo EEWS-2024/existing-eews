@@ -256,6 +256,7 @@ services:
       JVM_OPTS: "-Xms32M -Xmx64M"
 
   old-eews-prometheus:
+    pull_policy: "always"
     container_name: old-eews-prometheus
     image: docker.io/slackingdjaeger/old-eews-prometheus:latest
     ports:
