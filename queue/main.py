@@ -2,6 +2,8 @@ import os
 from app.container import KafkaContainer
 from dotenv import load_dotenv
 
+from app.prometheus_metric import start_prometheus_server
+
 load_dotenv()
 
 BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "old-eews-kafka:9092")
@@ -10,6 +12,7 @@ TOPIC_CONSUMER = os.getenv("TOPIC_CONSUMER", "query")
 
 if __name__ == "__main__":
     try:
+        start_prometheus_server()
         container = KafkaContainer()
         container.config.from_dict(
             {
