@@ -1,15 +1,18 @@
 import json
 import pickle
-from datetime import datetime, timedelta
+import time
+from datetime import datetime, timedelta, UTC
 from typing import List, Dict, Any
 import copy
-from confluent_kafka import Consumer, Producer
+from confluent_kafka import Consumer
 from .missing_data_handler import MissingDataHandler
+from .producer import KafkaProducer
+from .prometheus_metric import EXECUTION_TIME, LATENCY, THROUGHPUT
 
 
 class KafkaDataProcessor:
     def __init__(
-        self, consumer: Consumer, producer: Producer, data_handler: MissingDataHandler
+        self, consumer: Consumer, producer: KafkaProducer, data_handler: MissingDataHandler
     ):
         self.consumer = consumer
         self.data_handler = data_handler
@@ -21,12 +24,11 @@ class KafkaDataProcessor:
         i = 1
         show_nf = True
         while True:
-            print("is it running on " + topic)
+            start_time = time.time()
+
             msg = self.consumer.poll(10)
             self.partitions = self.consumer.assignment()
 
-            print(f"message:{msg}")
-            
             if msg is None:
                 if show_nf:
                     print("No message received :(")
@@ -39,6 +41,9 @@ class KafkaDataProcessor:
             show_nf = True
             value = pickle.loads(msg.value())
             value = json.loads(value)
+
+            LATENCY.observe(value["published_at"] - datetime.now(UTC))
+
             logvalue = copy.copy(value)
             logvalue["data"] = None
             if value["type"] == "start":
@@ -50,7 +55,10 @@ class KafkaDataProcessor:
                 self._flush(sampling_rate=20)
             if value["type"] == "trace":
                 i += 1
-                self.__process_received_data(value, arrive_time=datetime.utcnow())
+                self.__process_received_data(value, arrive_time=datetime.now(UTC))
+            EXECUTION_TIME.observe(time.time() - start_time)
+            THROUGHPUT.inc()
+
 
     def __process_received_data(self, value: Dict[str, Any], arrive_time: datetime):
         station = value["station"]
@@ -58,22 +66,8 @@ class KafkaDataProcessor:
         eews_producer_time = value["eews_producer_time"]
         data = value["data"]
         start_time = datetime.fromisoformat(value["starttime"])
-        end_time = datetime.fromisoformat(value["endtime"])
         sampling_rate = value["sampling_rate"]
-        # if station == "BKB" and channel == "BHE":
-        #     print("Received ", station, channel)
-        #     print("from message: ", value['starttime'])
 
-        # TODO: Comment this
-        # self.producer.produce(
-        #     station,
-        #     channel,
-        #     data,
-        #     start_time,
-        #     end_time,
-        #     eews_producer_time=eews_producer_time,
-        #     arrive_time=arrive_time,
-        # )
 
         self.data_handler.handle_missing_data(
             station, channel, start_time, sampling_rate
@@ -98,10 +92,6 @@ class KafkaDataProcessor:
         eews_producer_time,
         arrive_time: datetime,
     ):
-        # if station not in self.data_handler.data_pool:
-        #     self.data_handler.data_pool[station] = {}
-        # if channel not in self.data_handler.data_pool[station]:
-        #     self.data_handler.data_pool[station][channel] = []
 
         current_time = start_time
         if (
@@ -151,9 +141,8 @@ class KafkaDataProcessor:
         )
 
     def _start(self):
-        # print("=" * 20, "START", "=" * 20)
         for i in self.partitions:
-            self.producer.startTrace(i.partition)
+            self.producer.start_trace(i.partition)
         self.data_handler.reset_state()
 
     def _flush(self, sampling_rate):
@@ -169,4 +158,4 @@ class KafkaDataProcessor:
                 )
         print("=" * 20, "END", "=" * 20)
         for i in self.partitions:
-            self.producer.stopTrace(i.partition)
+            self.producer.stop_trace(i.partition)

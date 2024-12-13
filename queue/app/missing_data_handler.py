@@ -1,10 +1,10 @@
 from datetime import datetime
-from typing import Dict
+from typing import Dict, List
 
 
 class MissingDataHandler:
     def __init__(self):
-        self.data_pool: Dict[str, Dict[str, int]] = {}
+        self.data_pool: Dict[str, Dict[str, List[int]]] = {}
         self.last_processed_time: Dict[str, Dict[str, datetime]] = {}
         self.station_first_start_time: Dict[str, datetime] = {}
 
@@ -36,11 +36,7 @@ class MissingDataHandler:
             and channel in self.last_processed_time[station]
         ):
             time_diff = start_time - self.last_processed_time[station][channel]
-            # if station == "BKB" and channel == "BHE":
-            #     print(start_time)
-            #     print(self.last_processed_time[station][channel])
-            #     print(time_diff)
-            #     print("-"*20)
+
             missing_samples = int(time_diff.total_seconds() * sampling_rate)
             if missing_samples > 0:
                 missing_data = [0] * missing_samples

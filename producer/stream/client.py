@@ -41,6 +41,6 @@ class StreamClient(ABC):
             "len": len(trace.data.tolist()),
             "sampling_rate": trace.stats.sampling_rate,
             "eews_producer_time":[arrive_time.isoformat(), datetime.now(UTC).isoformat()],
-            "published_at": datetime.now(UTC).isoformat(),
+            "published_at": datetime.now(UTC),
         }
         return msg

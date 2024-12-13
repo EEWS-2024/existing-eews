@@ -3,7 +3,6 @@ import json
 import os
 from confluent_kafka import Producer
 from dotenv import load_dotenv
-import copy
 
 load_dotenv()
 
@@ -40,20 +39,11 @@ class KafkaProducer:
             "eews_queue_time": [arrive_time.isoformat(), datetime.utcnow().isoformat()],
             "type": "trace",
         }
-        # if station == "BKB" and channel == "BHE":
-        #     print(("=" * 20) + f"{station}____{channel}" + ("="*20))
-        #     print('packet time: ', [data['starttime'], data['endtime']])
-        #     print('eews_producer_time: ', data['eews_producer_time'])
-        #     print('eews_queue_time: ', data['eews_queue_time'])
-        # log_data = copy.deepcopy(data)
-        # log_data["data"] = None
-        # print(("=" * 20) + f"{station}____{channel}" + ("=" * 20))
-        # print(log_data)
-        # print(("=" * 20) + f"{station}____{channel}" + ("="*20))
+
         print("Producing ", station, channel, len(data))
         self.producer.produce(TOPIC_PRODUCER, key=station, value=json.dumps(data))
 
-    def startTrace(self, partition):
+    def start_trace(self, partition):
         self.producer.produce(
             topic=TOPIC_PRODUCER,
             key="start",
@@ -61,9 +51,8 @@ class KafkaProducer:
             partition=int(partition),
         )
         self.producer.flush()
-        # print("=" * 20, "Start Trace ", partition, "=" * 20)
 
-    def stopTrace(self, partition):
+    def stop_trace(self, partition):
         self.producer.produce(
             topic=TOPIC_PRODUCER,
             key="stop",
@@ -71,4 +60,3 @@ class KafkaProducer:
             partition=int(partition),
         )
         self.producer.flush()
-        # print("=" * 20, "Stop Trace ", partition, "=" * 20)

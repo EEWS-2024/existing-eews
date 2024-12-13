@@ -10,9 +10,7 @@ TOPIC_CONSUMER = os.getenv("TOPIC_CONSUMER", "query")
 
 if __name__ == "__main__":
     try:
-        print("starting")
         container = KafkaContainer()
-        print("log container")
         container.config.from_dict(
             {
                 'bootstrap_servers': BOOTSTRAP_SERVERS,
@@ -22,7 +20,6 @@ if __name__ == "__main__":
                     'auto.offset.reset': 'latest',
                 }
             }, True)
-        print(container.config)
         data_processor = container.data_processor()
         print("=" * 20 + f"Consuming Data From {TOPIC_CONSUMER} Topic" + "=" * 20)
         data_processor.consume(TOPIC_CONSUMER)

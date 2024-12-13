@@ -144,6 +144,8 @@ services:
     image: docker.io/slackingdjaeger/old-eews-queue:latest
     container_name: old-eews-queue
     mem_limit: 60m
+    ports:
+      - "2502:8002"
 
   old-eews-picker:
     pull_policy: "always"
