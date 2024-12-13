@@ -7,13 +7,14 @@ import copy
 from confluent_kafka import Consumer
 from .missing_data_handler import MissingDataHandler
 from .producer import KafkaProducer
-from .prometheus_metric import EXECUTION_TIME, LATENCY, THROUGHPUT
+from .prometheus_metric import EXECUTION_TIME, LATENCY, THROUGHPUT, start_prometheus_server
 
 
 class KafkaDataProcessor:
     def __init__(
         self, consumer: Consumer, producer: KafkaProducer, data_handler: MissingDataHandler
     ):
+        start_prometheus_server()
         self.consumer = consumer
         self.data_handler = data_handler
         self.producer = producer
