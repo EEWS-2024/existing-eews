@@ -42,7 +42,8 @@ class KafkaDataProcessor:
             value = pickle.loads(msg.value())
             value = json.loads(value)
 
-            LATENCY.observe(value["published_at"] - datetime.now(UTC))
+            if "published_at" in value:
+                LATENCY.observe(time.time() - value["published_at"])
 
             logvalue = copy.copy(value)
             logvalue["data"] = None
