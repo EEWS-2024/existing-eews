@@ -101,7 +101,6 @@ class KafkaDataProcessor:
             return
 
         if not has_initiated and is_ready_to_init:
-            # print("init ", station, channel)
             self.__init_station(station)
             return
 
@@ -111,9 +110,7 @@ class KafkaDataProcessor:
             self.__predict(station)
 
     def __init_station(self, station: str) -> None:
-        stats_init = self.pooler.initiated_stations
-        # print(f"INITIATED STATIONS: {stats_init}")
-        time = self.pooler.get_station_time(station)
+        station_time = self.pooler.get_station_time(station)
         data = self.pooler.get_data_to_init(station)
         data = [list(x) for x in zip(*data)]
 
@@ -122,7 +119,7 @@ class KafkaDataProcessor:
             PRED_URL,
             {
                 "station_code": station,
-                "begin_time": time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                "begin_time": station_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 "x": data,
             },
         )
@@ -240,10 +237,8 @@ class KafkaDataProcessor:
         for i in range(retry):
             start_time = datetime.now()
             try:
-                # print(f"RETRY {i + 1}")
                 response = requests.post(url, data=json.dumps(data), timeout=timeout)
                 if response.status_code != 200:
-                    # print(response.status_code, response.reason)
                     print("Error: ", response.json())
                 if isPred:
                     print(f"REQUEST TO {url}, retry {i}")
@@ -252,19 +247,14 @@ class KafkaDataProcessor:
                 process_time = (end_time - start_time).total_seconds()
                 if response.text == "OK":
                     res = {"process_time": process_time, "result": {}}
-                    # print(f"RESULT FROM 1 {url}: {res}")
                     return res
                 result = json.loads(response.text)
                 result = json.loads(result)
-                # print("=", end="")
                 if isinstance(result, dict):
                     res = {"process_time": process_time, "result": result}
-                    # print(f"RESULT FROM 2 {url}: {res}")
                     return res
             except Exception as e:
                 print(f"Error: {str(e)}")
-                # print("URL :", url, data["station_code"])
-                # print(data)
                 t.sleep(1)
                 continue
         return None

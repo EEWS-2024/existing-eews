@@ -2,7 +2,7 @@ import os
 from app.container import KafkaContainer
 from dotenv import load_dotenv
 
-from picker.app.prometheus_metric import start_prometheus_server
+from app.prometheus_metric import start_prometheus_server
 
 load_dotenv()
 
