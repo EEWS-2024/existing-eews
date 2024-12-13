@@ -266,6 +266,7 @@ services:
     depends_on:
       - old-eews-producer
       - old-eews-queue
+      - old-eews-picker
 
   old-eews-grafana:
     container_name: old-eews-grafana

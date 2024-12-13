@@ -1,7 +1,8 @@
 import os
 from app.container import KafkaContainer
 from dotenv import load_dotenv
-import time
+
+from picker.app.prometheus_metric import start_prometheus_server
 
 load_dotenv()
 
@@ -17,6 +18,7 @@ PROMETHEUS_ADDR = os.getenv("PROMETHEUS_ADDR", "0.0.0.0")
 PROMETHEUS_PORT = os.getenv("PROMETHEUS_PORT", "8012")
 
 if __name__ == "__main__":
+    start_prometheus_server()
     container = KafkaContainer()
     container.config.from_dict(
         {

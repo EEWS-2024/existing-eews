@@ -1,4 +1,5 @@
 import json
+import time
 from datetime import datetime
 from typing import Dict, Any, List
 import copy
@@ -13,6 +14,8 @@ from .mongo import MongoDBClient
 import numpy as np
 from scipy.optimize import minimize
 import math
+
+from .prometheus_metric import LATENCY, EXECUTION_TIME, THROUGHPUT
 
 load_dotenv()
 
@@ -48,6 +51,8 @@ class KafkaDataProcessor:
         show_nf = True
         while True:
             try:
+                start_time = time.time()
+
                 msg = self.consumer.poll(0.1)
                 if msg is None:
                     if show_nf:
@@ -60,31 +65,25 @@ class KafkaDataProcessor:
 
                 show_nf = True
                 value = json.loads(msg.value())
+
+                if "published_at" in value:
+                    LATENCY.observe(time.time() - value["published_at"])
+
                 logvalue = copy.copy(value)
                 logvalue["data"] = None
-                # # TODO: Comment this
-                # if value["station"] != 'PLAI':
-                #     continue
+
                 if "type" in value and value["type"] == "start":
                     self.pooler.reset()
                     continue
                 if "type" in value and value["type"] != "trace":
                     continue
 
-                # print(("=" * 30) + "START" + ("=" * 30), end="\n")
-                # print(f"RECEIVED MESSAGE: {logvalue}", end="\n")
-                start_time = datetime.now()
-                len_data = len(value["data"])
-
                 self.__process_received_data(value)
 
-                end_time = datetime.now()
-                process_time = (end_time - start_time).total_seconds()
-                # print(("=" * 30) + "END" + ("=" * 30), end="\n")
+                EXECUTION_TIME.observe(time.time() - start_time)
+                THROUGHPUT.inc()
             except Exception as e:
                 print(f"Error: {str(e)}")
-                # print(e)
-                # print(("="*30) + "END" + ("="*30), end="\n")
                 continue
 
     def __process_received_data(self, value: Dict[str, Any]):

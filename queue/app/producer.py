@@ -1,4 +1,5 @@
-from datetime import datetime
+import time
+from datetime import datetime, UTC
 import json
 import os
 from confluent_kafka import Producer
@@ -21,12 +22,12 @@ class KafkaProducer:
         start_time,
         end_time,
         eews_producer_time=None,
-        arrive_time=datetime.utcnow(),
+        arrive_time=datetime.now(UTC),
     ):
         if eews_producer_time is None:
             eews_producer_time = [
                 arrive_time.isoformat(),
-                datetime.utcnow().isoformat(),
+                datetime.now(UTC).isoformat(),
             ]
         data = {
             "station": station,
@@ -36,8 +37,9 @@ class KafkaProducer:
             "data": data,
             "len": len(data),
             "eews_producer_time": eews_producer_time,
-            "eews_queue_time": [arrive_time.isoformat(), datetime.utcnow().isoformat()],
+            "eews_queue_time": [arrive_time.isoformat(), datetime.now(UTC).isoformat()],
             "type": "trace",
+            "published_at": time.time(),
         }
 
         print("Producing ", station, channel, len(data))
