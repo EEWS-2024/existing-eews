@@ -5,74 +5,72 @@ networks:
 services:
   old-eews-zookeeper:
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.60
     restart: always
     image: confluentinc/cp-zookeeper
     container_name: old-eews-zookeeper
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2485
+      ZOOKEEPER_CLIENT_PORT: 2182
 
   old-eews-kafka:
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.61
     restart: always
     container_name: old-eews-kafka
     image: confluentinc/cp-kafka
     depends_on:
       - old-eews-zookeeper
     ports:
-      - "2486:2486"
-      - "2487:2487"
-
+      - "9100:9100"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: "old-eews-zookeeper:2485"
-      KAFKA_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://old-eews-kafka:2486,OUTSIDE://old-eews-kafka:2487
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka:9092,LOCAL://localhost:2486,OUTSIDE://34.23.119.16:2487
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.60:2182"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9100
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.52:9092,OUTSIDE://85.209.163.202:9100
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     mem_limit: 1228m
 
   old-eews-kafka-2:
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.62
     restart: always
     container_name: old-eews-kafka-2
     image: confluentinc/cp-kafka
     depends_on:
       - old-eews-zookeeper
     ports:
-      - "2494:2494"
-      - "2495:2495"
-
+      - "9101:9101"
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: "old-eews-zookeeper:2485"
-      KAFKA_LISTENERS: DOCKER://old-eews-kafka-2:9092,LOCAL://old-eews-kafka-2:2494,OUTSIDE://old-eews-kafka-2:2495
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka-2:9092,LOCAL://localhost:2494,OUTSIDE://34.23.119.16:2495
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.60:2182"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9101
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.52:9092,OUTSIDE://85.209.163.202:9101
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     mem_limit: 1228m
 
   old-eews-kafka-3:
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.63
     restart: always
     container_name: old-eews-kafka-3
     image: confluentinc/cp-kafka
     depends_on:
       - old-eews-zookeeper
     ports:
-      - "2496:2496"
-      - "2497:2497"
-
+      - "9101:9101"
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: "old-eews-zookeeper:2485"
-      KAFKA_LISTENERS: DOCKER://old-eews-kafka-3:9092,LOCAL://old-eews-kafka-3:2496,OUTSIDE://old-eews-kafka-3:2497
-      KAFKA_ADVERTISED_LISTENERS: DOCKER://old-eews-kafka-3:9092,LOCAL://localhost:2496,OUTSIDE://34.23.119.16:2497
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER:PLAINTEXT,LOCAL:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.60:2182"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9102
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.52:9092,OUTSIDE://85.209.163.202:9102
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     mem_limit: 1228m
 
   old-eews-init-kafka:
@@ -100,11 +98,14 @@ services:
 
   old-eews-redis:
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.64
     image: redis
     container_name: old-eews-redis
     volumes:
       - redis_data:/data
+    ports:
+      - "6380:6379"
 
   old-eews-seeder:
     pull_policy: "always"
@@ -118,7 +119,8 @@ services:
   old-eews-producer:
     pull_policy: "always"
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.65
     restart: always
     depends_on:
       old-eews-init-kafka:
@@ -128,13 +130,14 @@ services:
     image: docker.io/slackingdjaeger/old-eews-producer:latest
     container_name: old-eews-producer
     ports:
-      - "2488:8000"
-      - "2501:8001"
+      - "8000:8000"
+      - "8001:8001"
 
   old-eews-queue:
     pull_policy: "always"
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.66
     restart: always
     depends_on:
       - old-eews-init-kafka
@@ -145,12 +148,13 @@ services:
     container_name: old-eews-queue
     mem_limit: 60m
     ports:
-      - "2502:8002"
+      - "8002:8002"
 
   old-eews-picker:
     pull_policy: "always"
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.67
     restart: always
     depends_on:
       - old-eews-nginx
@@ -162,19 +166,21 @@ services:
   old-eews-ml:
     pull_policy: "always"
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.68
     restart: always
     image: docker.io/slackingdjaeger/old-eews-ml:latest
     container_name: old-eews-ml
     depends_on:
       - old-eews-redis
     ports:
-      - "2498:8100"
+      - "8100:8100"
 
   old-eews-nginx:
     pull_policy: "always"
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.69
     image: docker.io/slackingdjaeger/old-eews-nginx:latest
     container_name: old-eews-nginx
     depends_on:
@@ -183,7 +189,8 @@ services:
   old-eews-ws-rest:
     pull_policy: "always"
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.70
     restart: always
     depends_on:
       - old-eews-producer
@@ -191,101 +198,48 @@ services:
     image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
     container_name: old-eews-ws-rest
     ports:
-      - "2489:8080"
+      - "8081:8080"
 
   old-eews-frontend:
     pull_policy: "always"
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.71
     depends_on:
       - old-eews-ws-rest
     image: docker.io/slackingdjaeger/old-eews-frontend:latest
     container_name: old-eews-frontend
     ports:
-      - "2490:3000"
+      - "3001:3000"
 
   old-eews-mongo:
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.72
     image: mongo:latest
     container_name: old-eews-mongo
     volumes:
       - mongodb_data:/data/db
-
-  old-eews-redis-admin:
-    image: rediscommander/redis-commander:latest
-    container_name: old-eews-redis-admin
-    networks:
-      - nginx-manager_customnetwork
-    environment:
-      - REDIS_HOSTS=local:old-eews-redis:6379
     ports:
-      - "2491:8081"
-
-  # MongoDB Admin (Mongo Express)
-  old-eews-mongo-admin:
-    image: mongo-express:latest
-    container_name: old-eews-mongo-admin
-    networks:
-      - nginx-manager_customnetwork
-    depends_on:
-      - old-eews-mongo
-    environment:
-      ME_CONFIG_MONGODB_SERVER: old-eews-mongo
-      ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: password
-    ports:
-      - "2492:8081"
+        - "27018:27017"
 
   # Kafdrop (Kafka Web UI)
   old-eews-kafdrop:
     image: obsidiandynamics/kafdrop:latest
     container_name: old-eews-kafdrop
     networks:
-      - nginx-manager_customnetwork
+      nginx-manager_customnetwork:
+        ipv4_address: 172.20.0.75
     depends_on:
       - old-eews-kafka
       - old-eews-kafka-2
       - old-eews-kafka-3
     ports:
-      - "2493:9000"
+      - "9002:9000"
     environment:
-      KAFKA_BROKERCONNECT: "old-eews-kafka:9092,old-eews-kafka-2:9092,old-eews-kafka-3:9092"
+      KAFKA_BROKERCONNECT: "172.20.0.61:9092,172.20.0.62:9092,172.20.0.63:9092"
       JVM_OPTS: "-Xms32M -Xmx64M"
-
-  old-eews-prometheus:
-    pull_policy: "always"
-    container_name: old-eews-prometheus
-    image: docker.io/slackingdjaeger/old-eews-prometheus:latest
-    ports:
-      - "2499:9090"
-    networks:
-      - nginx-manager_customnetwork
-    depends_on:
-      - old-eews-producer
-      - old-eews-queue
-      - old-eews-picker
-
-  old-eews-grafana:
-    container_name: old-eews-grafana
-    image: grafana/grafana:latest
-    ports:
-      - "2500:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    networks:
-      - nginx-manager_customnetwork
-    depends_on:
-      - old-eews-prometheus
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./prometheus.yml:/etc/grafana/provisioning/datasources/prometheus.yml
 
 volumes:
   mongodb_data:
   redis_data:
-  grafana-data:
-    driver: local
