@@ -47,7 +47,7 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
             packet_type = data.get_type()
             if packet_type not in (SLPacket.TYPE_SLINF, SLPacket.TYPE_SLINFT):
                 trace = data.get_trace()
-                if trace.stats.station in ["BHZ", "BHN", "BHE"]:
+                if trace.stats.channel in ["BHZ", "BHN", "BHE"]:
                     self.on_data_arrive(trace, arrive_time)
                 THROUGHPUT.inc()
 
