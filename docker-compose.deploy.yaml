@@ -63,7 +63,7 @@ services:
     depends_on:
       - old-eews-zookeeper
     ports:
-      - "9101:9101"
+      - "9102:9102"
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: "172.20.0.60:2182"
