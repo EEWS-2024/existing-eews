@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-REDIS_HOST = os.getenv('REDIS_HOST', "old-eews-redis")
+REDIS_HOST = os.getenv('REDIS_HOST', "172.20.0.64")
 REDIS_PORT = os.getenv('REDIS_PORT', "6379")
 
 

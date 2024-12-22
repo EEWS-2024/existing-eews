@@ -19,7 +19,7 @@ from .prometheus_metric import LATENCY, EXECUTION_TIME, THROUGHPUT
 
 load_dotenv()
 
-ML_URL = os.getenv("ML_URL", "http://old-eews-nginx:80")
+ML_URL = os.getenv("ML_URL", "http://172.20.0.69:80")
 # PRED_URL = os.getenv("PRED_URL", "http://localhost:3000/predict")
 PRED_URL = f"{ML_URL}/predict"
 # INIT_URL = os.getenv("INIT_URL", "http://localhost:3000/restart")
