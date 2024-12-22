@@ -1,3 +1,5 @@
+import time
+
 from .client import StreamClient
 from .producer import KafkaProducer
 from obspy.clients.fdsn import Client
@@ -29,7 +31,7 @@ class FdsnwsClient(StreamClient, Client):
         res = self._bulk(start_time, end_time)
         arrive_time = datetime.now(UTC)
         for trace in res:
-            msg = self._map_values(trace, arrive_time=arrive_time)
+            msg = self._map_values(trace, arrive_time=arrive_time, process_start_time=time.time())
             self.producer.produce_message(json.dumps(msg), msg["station"], StreamMode.PLAYBACK)
         return result
     

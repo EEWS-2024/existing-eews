@@ -5,6 +5,8 @@ from typing import Dict, Any, List
 import copy
 import time as t
 import os
+
+import psutil
 from confluent_kafka import Consumer, Producer
 import requests
 from dotenv import load_dotenv
@@ -46,12 +48,44 @@ class KafkaDataProcessor:
         self.redis = redis
         self.mongo = mongo
 
+        self.experiment_attempt = 0
+        self.experiment_execution_times = []
+        self.experiment_processed_data = []
+        self.experiment_latencies = []
+        self.experiment_success_times = []
+        self.cpu_usages = []  # Add this line
+        self.memory_usages = []  # Add this line
+
+    def save_experiment(self):
+        experiment_execution_time = self.experiment_execution_times[1:] if self.experiment_attempt == 0 else self.experiment_execution_times
+
+        stats_data = {
+            "execution_times": experiment_execution_time,
+            "processed_data": self.experiment_processed_data,
+            "latencies": self.experiment_latencies,
+            "success_times": self.experiment_success_times,
+            "cpu_usages": self.cpu_usages,  # Add this line
+            "memory_usages": self.memory_usages  # Add this line
+        }
+        with open(f"./out/experiment_stats_{self.experiment_attempt}.json", "w") as f:
+            json.dump(stats_data, f, indent=4)
+
+        self.experiment_execution_times = []
+        self.experiment_processed_data = []
+        self.experiment_latencies =[]
+        self.experiment_success_times = []
+        self.cpu_usages = []  # Add this line
+        self.memory_usages = []  # Add this line
+
     def consume(self, topic: str):
         self.consumer.subscribe([topic])
         show_nf = True
+
+        service_start_time = time.time()
+        experiment_data_count = 0
         while True:
             try:
-                start_time = time.time()
+                experiment_start_time = time.time()
 
                 msg = self.consumer.poll(0.1)
                 if msg is None:
@@ -66,9 +100,6 @@ class KafkaDataProcessor:
                 show_nf = True
                 value = json.loads(msg.value())
 
-                if "published_at" in value:
-                    LATENCY.observe(time.time() - value["published_at"])
-
                 logvalue = copy.copy(value)
                 logvalue["data"] = None
 
@@ -78,9 +109,23 @@ class KafkaDataProcessor:
                 if "type" in value and value["type"] != "trace":
                     continue
 
+                self.experiment_latencies.append(time.time() - value['published_at'])
                 self.__process_received_data(value)
+                experiment_data_count += len(value["data"])
+                if time.time() - experiment_start_time >= 1:
+                    self.experiment_processed_data.append(experiment_data_count)
+                    experiment_data_count = 0
 
-                EXECUTION_TIME.observe(time.time() - start_time)
+                end_time = time.time()
+                self.experiment_execution_times.append(end_time - experiment_start_time)
+                self.cpu_usages.append(psutil.cpu_percent())  # Add this line
+                self.memory_usages.append(psutil.virtual_memory().percent)
+
+                if end_time - service_start_time >= 900.0:
+                    self.save_experiment()
+                    self.experiment_attempt += 1
+                    service_start_time = time.time()
+
                 THROUGHPUT.inc()
             except Exception as e:
                 print(f"Error: {str(e)}")
@@ -107,7 +152,7 @@ class KafkaDataProcessor:
         is_ready_to_predict = self.pooler.is_ready_to_predict(station)
 
         if is_ready_to_predict:
-            self.__predict(station)
+            self.__predict(station, value["process_start_time"])
 
     def __init_station(self, station: str) -> None:
         station_time = self.pooler.get_station_time(station)
@@ -129,13 +174,13 @@ class KafkaDataProcessor:
         else:
             self.pooler.reset_ps(station)
 
-    def __predict(self, station: str) -> None:
-        time = self.pooler.get_station_time(station)
+    def __predict(self, station: str, process_start_time: float) -> None:
+        station_time = self.pooler.get_station_time(station)
         data = self.pooler.get_data_to_predict(station)
         data_t = [list(x) for x in zip(*data)]
         # self.pooler.print_ps_info(station)
 
-        begin_time = time.strftime("%Y-%m-%d %H:%M:%S.%f")
+        begin_time = station_time.strftime("%Y-%m-%d %H:%M:%S.%f")
         # print(f"BEGIN TIME: {time}, FORMATEDD: {begin_time}")
         # # TODO: Comment this
         # if True:
@@ -147,7 +192,7 @@ class KafkaDataProcessor:
             PRED_URL,
             {
                 "station_code": station,
-                "begin_time": time.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                "begin_time": station_time.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 "x": data_t,
             },
         )
@@ -182,14 +227,14 @@ class KafkaDataProcessor:
 
         if not prev_p_time_exists and not prev_s_time_exists and p_arr and s_arr:
             self.pooler.set_caches(station, data, True)
-            self.__pred_stats(station, time)
+            self.__pred_stats(station, station_time, process_start_time)
             return
 
         if prev_p_time_exists and not prev_s_time_exists:
-            diff_secs = (time - self.pooler.station_p_time[station]).total_seconds()
+            diff_secs = (station_time - self.pooler.station_p_time[station]).total_seconds()
             if (diff_secs >= 60 and not s_arr) or s_arr:
                 self.pooler.set_caches(station, data, True)
-                self.__pred_stats(station, time)
+                self.__pred_stats(station, station_time, process_start_time)
                 return
 
         if not prev_p_time_exists and p_arr:
@@ -200,7 +245,7 @@ class KafkaDataProcessor:
 
         self.pooler.set_caches(station, data)
 
-    def __pred_stats(self, station: str, time: datetime):
+    def __pred_stats(self, station: str, wf_time: datetime, process_start_time: float):
         data_cache = self.pooler.get_cache(station)
         data_cache_t = self.__transpose(data_cache)
         res = self.__req(
@@ -218,7 +263,7 @@ class KafkaDataProcessor:
                 # print("X" * 40)
                 epic = self.__get_epic_ml(wf3)
                 payload = {
-                    "time": time.isoformat(),
+                    "time": wf_time.isoformat(),
                     **epic,
                     # **wf3[0],
                     # "location": self.__get_epic(wf3),
@@ -229,6 +274,7 @@ class KafkaDataProcessor:
                 self.producer.produce(payload)
                 self.redis.remove_3_waveform_dict(wf3)
                 self.mongo.create(payload)
+                self.experiment_success_times.append(time.time() - process_start_time)
                 print("SAVED TO MONGODB: ", payload)
 
         self.pooler.reset_ps(station)

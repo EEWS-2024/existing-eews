@@ -21,6 +21,7 @@ class KafkaProducer:
         data,
         start_time,
         end_time,
+        process_start_time: float,
         eews_producer_time=None,
         arrive_time=datetime.now(UTC),
     ):
@@ -40,6 +41,7 @@ class KafkaProducer:
             "eews_queue_time": [arrive_time.isoformat(), datetime.now(UTC).isoformat()],
             "type": "trace",
             "published_at": time.time(),
+            "process_start_time": process_start_time,
         }
 
         print("Producing ", station, channel, len(data))

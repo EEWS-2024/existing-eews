@@ -4,6 +4,8 @@ import time
 from datetime import datetime, timedelta, UTC
 from typing import List, Dict, Any
 import copy
+
+import psutil
 from confluent_kafka import Consumer
 from .missing_data_handler import MissingDataHandler
 from .producer import KafkaProducer
@@ -19,12 +21,41 @@ class KafkaDataProcessor:
         self.producer = producer
         self.partitions = []
 
+        self.experiment_attempt = 0
+        self.experiment_execution_times = []
+        self.experiment_processed_data = []
+        self.experiment_latencies = []
+        self.cpu_usages = []  # Add this line
+        self.memory_usages = []  # Add this line
+
+    def save_experiment(self):
+        experiment_execution_time = self.experiment_execution_times[1:] if self.experiment_attempt == 0 else self.experiment_execution_times
+
+        stats_data = {
+            "execution_times": experiment_execution_time,
+            "processed_data": self.experiment_processed_data,
+            "latencies": self.experiment_latencies,
+            "cpu_usages": self.cpu_usages,  # Add this line
+            "memory_usages": self.memory_usages  # Add this line
+        }
+        with open(f"./out/experiment_stats_{self.experiment_attempt}.json", "w") as f:
+            json.dump(stats_data, f, indent=4)
+
+        self.experiment_execution_times = []
+        self.experiment_processed_data = []
+        self.experiment_latencies =[]
+        self.cpu_usages = []  # Add this line
+        self.memory_usages = []  # Add this line
+
     def consume(self, topic: str):
         self.consumer.subscribe([topic])
         i = 1
         show_nf = True
+
+        service_start_time = time.time()
+        experiment_data_count = 0
         while True:
-            start_time = time.time()
+            experiment_start_time = time.time()
 
             msg = self.consumer.poll(10)
             self.partitions = self.consumer.assignment()
@@ -42,9 +73,6 @@ class KafkaDataProcessor:
             value = pickle.loads(msg.value())
             value = json.loads(value)
 
-            if "published_at" in value:
-                LATENCY.observe(time.time() - value["published_at"])
-
             logvalue = copy.copy(value)
             logvalue["data"] = None
             if value["type"] == "start":
@@ -56,10 +84,22 @@ class KafkaDataProcessor:
                 self._flush(sampling_rate=20)
             if value["type"] == "trace":
                 i += 1
+                self.experiment_latencies.append(time.time() - value['published_at'])
                 self.__process_received_data(value, arrive_time=datetime.now(UTC))
-            EXECUTION_TIME.observe(time.time() - start_time)
-            THROUGHPUT.inc()
+                experiment_data_count += len(value["data"])
+                if time.time() - experiment_start_time >= 1:
+                    self.experiment_processed_data.append(experiment_data_count)
+                    experiment_data_count = 0
 
+                end_time = time.time()
+                self.experiment_execution_times.append(end_time - experiment_start_time)
+                self.cpu_usages.append(psutil.cpu_percent())  # Add this line
+                self.memory_usages.append(psutil.virtual_memory().percent)
+
+            if time.time() - service_start_time >= 900.0:
+                self.save_experiment()
+                self.experiment_attempt += 1
+                service_start_time = time.time()
 
     def __process_received_data(self, value: Dict[str, Any], arrive_time: datetime):
         station = value["station"]
@@ -81,6 +121,7 @@ class KafkaDataProcessor:
             sampling_rate,
             eews_producer_time=eews_producer_time,
             arrive_time=arrive_time,
+            process_start_time=value["process_start_time"],
         )
 
     def __store_data(
@@ -92,6 +133,7 @@ class KafkaDataProcessor:
         sampling_rate: float,
         eews_producer_time,
         arrive_time: datetime,
+        process_start_time: float,
     ):
 
         current_time = start_time
@@ -117,6 +159,7 @@ class KafkaDataProcessor:
                 current_time + time_to_add,
                 eews_producer_time=eews_producer_time,
                 arrive_time=arrive_time,
+                process_start_time=process_start_time
             )
             current_time = current_time + time_to_add
 
@@ -129,6 +172,7 @@ class KafkaDataProcessor:
         end_time: datetime,
         eews_producer_time,
         arrive_time: datetime,
+        process_start_time: float
     ):
         self.data_handler.update_last_processed_time(station, channel, end_time)
         self.producer.produce(
@@ -139,6 +183,7 @@ class KafkaDataProcessor:
             end_time,
             eews_producer_time=eews_producer_time,
             arrive_time=arrive_time,
+            process_start_time=process_start_time
         )
 
     def _start(self):

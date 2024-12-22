@@ -26,7 +26,7 @@ class StreamClient(ABC):
         pass
 
     @staticmethod
-    def _map_values(trace: Trace, arrive_time):
+    def _map_values(trace: Trace, arrive_time, process_start_time):
         msg = {
             "type":"trace",
             "network": trace.stats.network,
@@ -43,5 +43,6 @@ class StreamClient(ABC):
             "sampling_rate": trace.stats.sampling_rate,
             "eews_producer_time":[arrive_time.isoformat(), datetime.now(UTC).isoformat()],
             "published_at": time.time(),
+            "process_start_time": process_start_time
         }
         return msg
