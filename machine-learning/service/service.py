@@ -145,7 +145,7 @@ def predict(input_data: json) -> json:
 
     # ### S WAVE DETECTION ###
     s_arrival_detected: bool = False
-    s_arrival_time: datetime = ""
+    s_arrival_time: datetime = datetime(1970, 1, 1)
     s_arr_id = None
     new_s_event = False
     # prediction_s = np.array([])
@@ -353,7 +353,10 @@ def examine_prediction(
         .split("~")
     )
     le_id: int = int(le_id)
-    le_time: datetime = datetime.strptime(le_time, settings.DATETIME_FORMAT)
+    try:
+        le_time = datetime.strptime(le_time, '%Y-%m-%d %H:%M:%S.%f')
+    except ValueError:
+        le_time = datetime.strptime(le_time, '%Y-%m-%d %H:%M:%S')
     le_count: int = int(le_count)
 
     is_new_earthquake = False
