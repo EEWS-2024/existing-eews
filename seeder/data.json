@@ -1,212 +1,242 @@
 [
     {
-        "code": "SLIT",
-        "long": "22.2905",
-        "lat": "57.6287",
-        "elevation": "15",
-        "name": "LEGMA"
+        "code": "KBU",
+        "long": "69.1347",
+        "lat": "34.5151",
+        "elevation": "1820",
+        "name": "GEOFON Station Kabul",
+        "channels": []
     },
     {
-        "code": "GHAR",
-        "long": "13.0885",
-        "lat": "32.1224",
-        "elevation": "650",
-        "name": "Gharyan"
+        "code": "LHMI",
+        "long": "96.9472",
+        "lat": "5.2288",
+        "elevation": "3",
+        "name": "GEOFON Station Lhokseumave",
+        "channels": []
     },
     {
-        "code": "KAAM",
-        "long": "72.9949",
-        "lat": "0.4926",
-        "elevation": "1",
-        "name": "GEOFON Station Kaadhehdhoo"
+        "code": "MNAI",
+        "long": "102.9557",
+        "lat": "-4.3605",
+        "elevation": "154",
+        "name": "GEOFON Station Manna",
+        "channels": []
     },
     {
-        "code": "MATE",
-        "long": "16.7044",
-        "lat": "40.6491",
-        "elevation": "494",
-        "name": "Matera"
-    },
-    {
-        "code": "MHV",
-        "long": "37.7664",
-        "lat": "54.9595",
-        "elevation": "150",
-        "name": "Michnevo"
-    },
-    {
-        "code": "MORC",
-        "long": "17.5428",
-        "lat": "49.7766",
-        "elevation": "740",
-        "name": "Moravsky Beroun"
+        "code": "MALT",
+        "long": "38.4273",
+        "lat": "38.3134",
+        "elevation": "1120",
+        "name": "Malatya",
+        "channels": []
     },
     {
         "code": "HMDM",
         "long": "73.1822",
         "lat": "6.7731",
         "elevation": "1",
-        "name": "GEOFON Station Hanimaadhoo"
+        "name": "GEOFON Station Hanimaadhoo",
+        "channels": []
     },
     {
-        "code": "PVLZ",
-        "long": "-4.301",
-        "lat": "35.173",
-        "elevation": "90",
-        "name": "Penon de Velez-Gomera"
+        "code": "WLF",
+        "long": "6.1526",
+        "lat": "49.6646",
+        "elevation": "295",
+        "name": "Walferdange",
+        "channels": []
     },
     {
-        "code": "RUE",
-        "long": "13.78",
-        "lat": "52.4759",
-        "elevation": "40",
-        "name": "Ruedersdorf"
+        "code": "MAUI",
+        "long": "-156.2448",
+        "lat": "20.7668",
+        "elevation": "2060",
+        "name": "Haleakala",
+        "channels": []
     },
     {
-        "code": "TIRR",
-        "long": "28.4128",
-        "lat": "44.4581",
-        "elevation": "77",
-        "name": "Tirgusor"
+        "code": "GHAJ",
+        "long": "35.5665",
+        "lat": "31.3034",
+        "elevation": "-58",
+        "name": "GEOFON",
+        "channels": []
     },
     {
-        "code": "DAG",
-        "long": "-18.655",
-        "lat": "76.7713",
-        "elevation": "23",
-        "name": "Danmarkshavn"
+        "code": "MHV",
+        "long": "37.7664",
+        "lat": "54.9595",
+        "elevation": "150",
+        "name": "Michnevo",
+        "channels": []
     },
     {
-        "code": "KIBK",
-        "long": "38.0433",
-        "lat": "-2.3591",
-        "elevation": "790",
-        "name": "Kibwezi"
+        "code": "BGIO",
+        "long": "35.0877",
+        "lat": "31.7219",
+        "elevation": "752",
+        "name": "Bar Giyyora",
+        "channels": []
     },
     {
-        "code": "KBS",
-        "long": "11.9385",
-        "lat": "78.9154",
-        "elevation": "87",
-        "name": "Ny Alesund"
+        "code": "CART",
+        "long": "-1.0012",
+        "lat": "37.5868",
+        "elevation": "65",
+        "name": "Cartagena",
+        "channels": []
+    },
+    {
+        "code": "ILTH",
+        "long": "-6.3362",
+        "lat": "54.0279",
+        "elevation": "21",
+        "name": "Belurgan, Co Louth",
+        "channels": []
+    },
+    {
+        "code": "STU",
+        "long": "9.195",
+        "lat": "48.7719",
+        "elevation": "360",
+        "name": "Stuttgart",
+        "channels": []
     },
     {
         "code": "TNTI",
         "long": "127.3667",
         "lat": "0.7718",
         "elevation": "43",
-        "name": "GEOFON Station Ternate"
+        "name": "GEOFON Station Ternate",
+        "channels": []
     },
     {
-        "code": "PMBI",
-        "long": "104.6993",
-        "lat": "-2.9024",
-        "elevation": "25",
-        "name": "Palembang"
+        "code": "APEZ",
+        "long": "24.8859",
+        "lat": "34.9777",
+        "elevation": "435",
+        "name": "Moni Apezanon",
+        "channels": []
     },
     {
-        "code": "RIOB",
-        "long": "-67.747",
-        "lat": "-10.1501",
-        "elevation": "220",
-        "name": "Rio Branco"
-    },
-    {
-        "code": "PMG",
-        "long": "147.1597",
-        "lat": "-9.4047",
-        "elevation": "90",
-        "name": "Port Moresby"
-    },
-    {
-        "code": "VSU",
-        "long": "26.7347",
-        "lat": "58.462",
-        "elevation": "63",
-        "name": "Vasula"
+        "code": "HALK",
+        "long": "80.6806",
+        "lat": "6.0877",
+        "elevation": "120",
+        "name": "Hakmana",
+        "channels": []
     },
     {
         "code": "MALK",
         "long": "80.5425",
         "lat": "8.3968",
         "elevation": "113",
-        "name": "Mahakanadarawa"
+        "name": "Mahakanadarawa",
+        "channels": []
     },
     {
-        "code": "PMBT",
-        "long": "104.772",
-        "lat": "-2.927",
-        "elevation": "30",
-        "name": "Palembang, Sumatra"
-    },
-    {
-        "code": "ARPR",
-        "long": "38.3356",
-        "lat": "39.0929",
-        "elevation": "1537",
-        "name": "Arapgir"
-    },
-    {
-        "code": "PABE",
-        "long": "23.968",
-        "lat": "55.5052",
-        "elevation": "58",
-        "name": "Paberze"
-    },
-    {
-        "code": "DAMY",
-        "long": "44.3869",
-        "lat": "14.5613",
-        "elevation": "2488",
-        "name": "GEOFON Station Dhamar"
-    },
-    {
-        "code": "KWP",
-        "long": "22.7078",
-        "lat": "49.6305",
-        "elevation": "463",
-        "name": "Kalwaria Paclawska"
-    },
-    {
-        "code": "SAUI",
-        "long": "131.2988",
-        "lat": "-7.9826",
-        "elevation": "110",
-        "name": "Saumlaki, Tanimbar"
-    },
-    {
-        "code": "KARP",
-        "long": "27.1611",
-        "lat": "35.5471",
-        "elevation": "524",
-        "name": "Karpathos,Greece"
-    },
-    {
-        "code": "CSS",
-        "long": "33.331",
-        "lat": "34.9611",
-        "elevation": "396",
-        "name": "Mathiatis"
-    },
-    {
-        "code": "SOEI",
-        "long": "124.2672",
-        "lat": "-9.7553",
-        "elevation": "1047",
-        "name": "GEOFON Station Soe"
-    },
-    {
-        "code": "VAL",
-        "long": "-10.2442",
-        "lat": "51.9394",
-        "elevation": "14",
-        "name": "Valentia"
+        "code": "PLAI",
+        "long": "117.7765",
+        "lat": "-8.8275",
+        "elevation": "125",
+        "name": "Plampang, Sumbawa",
+        "channels": []
     },
     {
         "code": "SANT",
         "long": "25.4593",
         "lat": "36.3705",
         "elevation": "591",
-        "name": "Santorini"
+        "name": "Santorini",
+        "channels": []
+    },
+    {
+        "code": "PMBI",
+        "long": "104.6993",
+        "lat": "-2.9024",
+        "elevation": "25",
+        "name": "Palembang",
+        "channels": []
+    },
+    {
+        "code": "RUE",
+        "long": "13.78",
+        "lat": "52.4759",
+        "elevation": "40",
+        "name": "Ruedersdorf",
+        "channels": []
+    },
+    {
+        "code": "NPW",
+        "long": "96.1376",
+        "lat": "19.7785",
+        "elevation": "158",
+        "name": "Naypyitaw",
+        "channels": []
+    },
+    {
+        "code": "DAMY",
+        "long": "44.3869",
+        "lat": "14.5613",
+        "elevation": "2488",
+        "name": "GEOFON Station Dhamar",
+        "channels": []
+    },
+    {
+        "code": "SOEI",
+        "long": "124.2672",
+        "lat": "-9.7553",
+        "elevation": "1047",
+        "name": "GEOFON Station Soe",
+        "channels": []
+    },
+    {
+        "code": "LODK",
+        "long": "35.3616",
+        "lat": "3.4219",
+        "elevation": "665",
+        "name": "Lodwar",
+        "channels": []
+    },
+    {
+        "code": "KARN",
+        "long": "23.9174",
+        "lat": "35.4019",
+        "elevation": "420",
+        "name": "Karanos",
+        "channels": []
+    },
+    {
+        "code": "PUL",
+        "long": "30.317",
+        "lat": "59.767",
+        "elevation": "65",
+        "name": "Pulkovo",
+        "channels": []
+    },
+    {
+        "code": "VAL",
+        "long": "-10.2442",
+        "lat": "51.9394",
+        "elevation": "14",
+        "name": "Valentia",
+        "channels": []
+    },
+    {
+        "code": "VOI",
+        "long": "46.7933",
+        "lat": "-21.9065",
+        "elevation": "1158",
+        "name": "Vohitsoka",
+        "channels": []
+    },
+    {
+        "code": "KARP",
+        "long": "27.1611",
+        "lat": "35.5471",
+        "elevation": "524",
+        "name": "Karpathos,Greece",
+        "channels": []
     }
 ]
