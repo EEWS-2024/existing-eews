@@ -63,6 +63,7 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
         with open("out/in.json", "r") as f:
             messages = json.load(f)
         for msg in messages:
+            time.sleep(5)
             print(f"Processing message {msg['station']}")
             self.producer.produce_message(json.dumps(msg), msg["station"], StreamMode.LIVE)
 
