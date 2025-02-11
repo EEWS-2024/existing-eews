@@ -185,6 +185,8 @@ services:
     container_name: old-eews-nginx
     depends_on:
       - old-eews-ml
+    ports:
+      - "8111:80"
 
   old-eews-ws-rest:
     pull_policy: "always"
