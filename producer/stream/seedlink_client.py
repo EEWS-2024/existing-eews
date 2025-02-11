@@ -59,8 +59,6 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
             if packet_type not in (SLPacket.TYPE_SLINF, SLPacket.TYPE_SLINFT):
                 trace = data.get_trace()
                 if trace.stats.channel in ["BHZ", "BHN", "BHE"]:
-                    with open("out/dump.txt", "a", encoding="utf-8") as f:
-                        f.write(f"{trace.__dict__}\n")
                     self.on_data_arrive(trace, arrive_time, process_start_time)
                     experiment_data_count += len(trace.data.tolist())
                     if time.time() - experiment_start_time >= 1:
@@ -95,6 +93,8 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
 
     def on_data_arrive(self, trace: Trace, arrive_time: datetime, process_start_time: float):
         msg = self._map_values(trace, arrive_time, process_start_time)
+        with open("out/dump.txt", "a", encoding="utf-8") as f:
+            f.write(f"{msg}\n")
         self.producer.produce_message(json.dumps(msg), msg["station"], StreamMode.LIVE)
 
     def save_experiment(self):
