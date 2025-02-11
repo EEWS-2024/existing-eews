@@ -41,44 +41,30 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
         print("Starting collection on:", datetime.now(UTC))
         service_start_time = time.time()
         experiment_data_count = 0
-        while True:
-            experiment_start_time = time.time()
-            data = self.conn.collect()
-            arrive_time = datetime.now(UTC)
-            process_start_time = time.time()
-
-            if data == SLPacket.SLTERMINATE:
-                self.on_terminate()
-                break
-            elif data == SLPacket.SLERROR:
-                self.on_seedlink_error()
-                continue
-
-            assert isinstance(data, SLPacket)
-            packet_type = data.get_type()
-            if packet_type not in (SLPacket.TYPE_SLINF, SLPacket.TYPE_SLINFT):
-                trace = data.get_trace()
-                if trace.stats.channel in ["BHZ", "BHN", "BHE"]:
-                    self.on_data_arrive(trace, arrive_time, process_start_time)
-                    experiment_data_count += len(trace.data.tolist())
-                    if time.time() - experiment_start_time >= 1:
-                        self.experiment_processed_data.append(experiment_data_count)
-                        experiment_data_count = 0
-
-                THROUGHPUT.inc()
-
-            end_time = time.time()
-            self.experiment_execution_times.append(end_time - experiment_start_time)
-            self.experiment_cpu_usages.append(psutil.cpu_percent())  # Add this line
-            self.experiment_memory_usages.append(psutil.virtual_memory().percent)  # Add this line
-            if end_time - service_start_time >= 900.0:
-                self.save_experiment()
-                self.experiment_attempt += 1
-                service_start_time = time.time()
-                if self.experiment_attempt == 5:
-                    self.stop_streaming()
-                    break
-
+        # while True:
+        # experiment_start_time = time.time()
+        # data = self.conn.collect()
+        arrive_time = datetime.now(UTC)
+        process_start_time = time.time()
+        #
+        # if data == SLPacket.SLTERMINATE:
+        #     self.on_terminate()
+        #     break
+        # elif data == SLPacket.SLERROR:
+        #     self.on_seedlink_error()
+        #     continue
+        #
+        # assert isinstance(data, SLPacket)
+        # packet_type = data.get_type()
+        # if packet_type not in (SLPacket.TYPE_SLINF, SLPacket.TYPE_SLINFT):
+        #     trace = data.get_trace()
+        #     if trace.stats.channel in ["BHZ", "BHN", "BHE"]:
+        #         self.on_data_arrive(trace, arrive_time, process_start_time)
+        with open("out/in.json", "r") as f:
+            messages = json.load(f)
+        for msg in messages:
+            print(f"Processing message {msg['station']}")
+            self.producer.produce_message(json.dumps(msg), msg["station"], StreamMode.LIVE)
 
     def start_streaming(self, start_time: Optional[Any]= None, end_time: Optional[Any]= None):
         self.producer.start_trace()
@@ -93,8 +79,6 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
 
     def on_data_arrive(self, trace: Trace, arrive_time: datetime, process_start_time: float):
         msg = self._map_values(trace, arrive_time, process_start_time)
-        with open("out/dump.txt", "a", encoding="utf-8") as f:
-            f.write(f"{msg}\n")
         self.producer.produce_message(json.dumps(msg), msg["station"], StreamMode.LIVE)
 
     def save_experiment(self):
