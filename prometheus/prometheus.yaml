@@ -4,10 +4,10 @@ global:
 scrape_configs:
   - job_name: "scrape producer service"
     static_configs:
-      - targets: ["old-eews-producer:8001"]
+      - targets: ["demo-eews-producer:8001"]
   - job_name: "scrape queue service"
     static_configs:
-      - targets: [ "old-eews-queue:8002" ]
+      - targets: [ "demo-eews-queue:8002" ]
   - job_name: "scrape picker service"
     static_configs:
-      - targets: [ "old-eews-picker:8003" ]
+      - targets: [ "demo-eews-picker:8003" ]
