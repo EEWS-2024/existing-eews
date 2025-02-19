@@ -9,7 +9,7 @@ services:
         ipv4_address: 172.20.0.60
     restart: always
     image: confluentinc/cp-zookeeper
-    container_name: old-eews-zookeeper
+    container_name: demo-eews-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2182
 
@@ -18,7 +18,7 @@ services:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.61
     restart: always
-    container_name: old-eews-kafka
+    container_name: demo-eews-kafka
     image: confluentinc/cp-kafka
     depends_on:
       - old-eews-zookeeper
@@ -38,7 +38,7 @@ services:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.62
     restart: always
-    container_name: old-eews-kafka-2
+    container_name: demo-eews-kafka-2
     image: confluentinc/cp-kafka
     depends_on:
       - old-eews-zookeeper
@@ -58,7 +58,7 @@ services:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.63
     restart: always
-    container_name: old-eews-kafka-3
+    container_name: demo-eews-kafka-3
     image: confluentinc/cp-kafka
     depends_on:
       - old-eews-zookeeper
@@ -76,7 +76,7 @@ services:
   old-eews-init-kafka:
     networks:
       - nginx-manager_customnetwork
-    container_name: old-eews-init-kafka
+    container_name: demo-eews-init-kafka
     image: confluentinc/cp-kafka:6.1.1
     depends_on:
       - old-eews-kafka
@@ -101,7 +101,7 @@ services:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.64
     image: redis
-    container_name: old-eews-redis
+    container_name: demo-eews-redis
     volumes:
       - redis_data:/data
     ports:
@@ -114,7 +114,7 @@ services:
     depends_on:
       - old-eews-redis
     image: docker.io/slackingdjaeger/old-eews-seeder:latest
-    container_name: old-eews-seeder
+    container_name: demo-eews-seeder
 
   old-eews-producer:
     pull_policy: "always"
@@ -128,7 +128,7 @@ services:
       old-eews-seeder:
         condition: service_completed_successfully
     image: docker.io/slackingdjaeger/old-eews-producer:latest
-    container_name: old-eews-producer
+    container_name: demo-eews-producer
     ports:
       - "8000:8000"
       - "8001:8001"
@@ -145,7 +145,7 @@ services:
       - old-eews-zookeeper
       - old-eews-kafka
     image: docker.io/slackingdjaeger/old-eews-queue:latest
-    container_name: old-eews-queue
+    container_name: demo-eews-queue
     mem_limit: 60m
     ports:
       - "8002:8002"
@@ -161,7 +161,7 @@ services:
       - old-eews-mongo
       - old-eews-redis
     image: docker.io/slackingdjaeger/old-eews-picker:latest
-    container_name: old-eews-picker
+    container_name: demo-eews-picker
 
   old-eews-ml:
     pull_policy: "always"
@@ -170,7 +170,7 @@ services:
         ipv4_address: 172.20.0.68
     restart: always
     image: docker.io/slackingdjaeger/old-eews-ml:latest
-    container_name: old-eews-ml
+    container_name: demo-eews-ml
     depends_on:
       - old-eews-redis
     ports:
@@ -182,7 +182,7 @@ services:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.69
     image: docker.io/slackingdjaeger/old-eews-nginx:latest
-    container_name: old-eews-nginx
+    container_name: demo-eews-nginx
     depends_on:
       - old-eews-ml
 
@@ -196,7 +196,7 @@ services:
       - old-eews-producer
       - old-eews-seeder
     image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
-    container_name: old-eews-ws-rest
+    container_name: demo-eews-ws-rest
     ports:
       - "8081:8080"
 
@@ -208,7 +208,7 @@ services:
     depends_on:
       - old-eews-ws-rest
     image: docker.io/slackingdjaeger/old-eews-frontend:latest
-    container_name: old-eews-frontend
+    container_name: demo-eews-frontend
     ports:
       - "3001:3000"
 
@@ -217,7 +217,7 @@ services:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.72
     image: mongo:latest
-    container_name: old-eews-mongo
+    container_name: demo-eews-mongo
     volumes:
       - mongodb_data:/data/db
     ports:
@@ -226,7 +226,7 @@ services:
   # Kafdrop (Kafka Web UI)
   old-eews-kafdrop:
     image: obsidiandynamics/kafdrop:latest
-    container_name: old-eews-kafdrop
+    container_name: demo-eews-kafdrop
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.75
