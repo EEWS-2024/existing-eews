@@ -3,7 +3,7 @@ services:
     build:
       context: ./seeder
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-seeder:latest
+    image: docker.io/slackingdjaeger/demo-eews-seeder:latest
     env_file:
       - .seeder.env
 
@@ -11,7 +11,7 @@ services:
     build:
       context: ./producer
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-producer:latest
+    image: docker.io/slackingdjaeger/demo-eews-producer:latest
     env_file:
       - .producer.env
 
@@ -19,7 +19,7 @@ services:
     build:
       context: ./queue
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-queue:latest
+    image: docker.io/slackingdjaeger/demo-eews-queue:latest
     env_file:
       - .queue.env
 
@@ -27,7 +27,7 @@ services:
     build:
       context: ./picker
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-picker:latest
+    image: docker.io/slackingdjaeger/demo-eews-picker:latest
     env_file:
       - .picker.env
 
@@ -35,7 +35,7 @@ services:
     build:
       context: ./machine-learning
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-ml:latest
+    image: docker.io/slackingdjaeger/demo-eews-ml:latest
     env_file:
       - .ml.env
 
@@ -43,7 +43,7 @@ services:
     build:
       context: ./ws-rest
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
+    image: docker.io/slackingdjaeger/demo-eews-ws-rest:latest
     env_file:
       - .ws-rest.env
 
@@ -51,22 +51,22 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-frontend:latest
+    image: docker.io/slackingdjaeger/demo-eews-frontend:latest
 
-  old-eews-nginx:
+  demo-eews-nginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-nginx:latest
+    image: docker.io/slackingdjaeger/demo-eews-nginx:latest
 
-  old-eews-prometheus:
+  demo-eews-prometheus:
     build:
       context: ./prometheus
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-prometheus:latest
+    image: docker.io/slackingdjaeger/demo-eews-prometheus:latest
 
-  old-eews-grafana:
+  demo-eews-grafana:
     build:
       context: ./grafana
       dockerfile: Dockerfile
-    image: docker.io/slackingdjaeger/old-eews-grafana:latest
+    image: docker.io/slackingdjaeger/demo-eews-grafana:latest
