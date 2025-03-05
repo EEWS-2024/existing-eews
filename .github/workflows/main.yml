@@ -24,7 +24,7 @@ jobs:
       # Build and push Docker images
       - name: Build and push images
         run: |
-          docker compose -f docker-compose.build.yaml build --push
+          docker compose -f docker-compose.demo.yaml build --push
 
       - name: Install sshpass
         run: sudo apt-get install -y sshpass

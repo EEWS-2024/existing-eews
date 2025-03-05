@@ -1,0 +1,8 @@
+services:
+  eews-producer:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/demo-eews-producer:latest
+    env_file:
+      - .producer.env
