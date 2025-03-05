@@ -60,29 +60,12 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
                 trace = data.get_trace()
                 if trace.stats.channel in ["BHZ", "BHN", "BHE"]:
                     self.on_data_arrive(trace, arrive_time, process_start_time)
-                    experiment_data_count += len(trace.data.tolist())
-                    if time.time() - experiment_start_time >= 1:
-                        self.experiment_processed_data.append(experiment_data_count)
-                        experiment_data_count = 0
-
-                THROUGHPUT.inc()
-
-            end_time = time.time()
-            self.experiment_execution_times.append(end_time - experiment_start_time)
-            self.experiment_cpu_usages.append(psutil.cpu_percent())  # Add this line
-            self.experiment_memory_usages.append(psutil.virtual_memory().percent)  # Add this line
-            if end_time - service_start_time >= 900.0:
-                self.save_experiment()
-                self.experiment_attempt += 1
-                service_start_time = time.time()
-                if self.experiment_attempt == 5:
-                    self.stop_streaming()
-                    break
 
 
     def start_streaming(self, start_time: Optional[Any]= None, end_time: Optional[Any]= None):
         self.producer.start_trace()
         print("-" * 20, "Streaming miniseed from seedlink server", "-" * 20)
+        print('Streaming started', not self.__streaming_started)
         if not self.__streaming_started:
             self.run()
 
