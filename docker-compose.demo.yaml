@@ -1,4 +1,11 @@
 services:
+  eews-seeder:
+    build:
+      context: ./seeder
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/demo-eews-seeder:latest
+    env_file:
+      - .seeder.env
   eews-producer:
     build:
       context: ./producer
