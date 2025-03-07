@@ -16,7 +16,7 @@ logger.setLevel(logging.INFO)
 class FdsnwsClient(StreamClient, Client):
     def __init__(self, producer: KafkaProducer, base_url: str):
         StreamClient.__init__(self, mode=StreamMode.LIVE, producer=producer)
-        Client.__init__(self, base_url=base_url)
+        Client.__init__(self, base_url)
         self.stats = None
         self.blocked = False
 

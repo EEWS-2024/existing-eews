@@ -53,6 +53,6 @@ class StreamManager:
 
 streamManager = StreamManager(
     producer=kafkaProducer,
-    fdsnws_server="GEOFON",
+    fdsnws_server="GFZ",
     seedlink_server="geofon.gfz-potsdam.de:18000",
 )
