@@ -3,7 +3,9 @@ name: Build Picker Docker Images
 on:
   push:
     paths:
-      - 'picker/**'
+      - ".github/workflows/picker.yml"
+      - "picker/**"
+      - "docker/docker-compose.picker.yaml"
 
 jobs:
   build-and-deploy:

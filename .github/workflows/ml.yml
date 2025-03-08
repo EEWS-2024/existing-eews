@@ -3,7 +3,9 @@ name: Build ML Docker Images
 on:
   push:
     paths:
-      - 'machine-learning/**'
+      - ".github/workflows/ml.yml"
+      - "machine-learning/**"
+      - "docker/docker-compose.ml.yaml"
 
 jobs:
   build-and-deploy:

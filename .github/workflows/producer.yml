@@ -3,7 +3,9 @@ name: Build Producer Docker Images
 on:
   push:
     paths:
-      - 'producer/**'
+      - ".github/workflows/producer.yml"
+      - "producer/**"
+      - "docker/docker-compose.producer.yaml"
 
 jobs:
   build-and-deploy:

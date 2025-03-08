@@ -3,7 +3,9 @@ name: Build Queue Docker Images
 on:
   push:
     paths:
-      - 'queue/**'
+      - ".github/workflows/queue.yml"
+      - "queue/**"
+      - "docker/docker-compose.queue.yaml"
 
 jobs:
   build-and-deploy:

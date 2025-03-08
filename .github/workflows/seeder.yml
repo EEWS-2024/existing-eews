@@ -3,7 +3,9 @@ name: Build Seeder Docker Images
 on:
   push:
     paths:
-      - 'seeder/**'
+      - ".github/workflows/seeder.yml"
+      - "seeder/**"
+      - "docker/docker-compose.seeder.yaml"
 
 jobs:
   build-and-deploy:

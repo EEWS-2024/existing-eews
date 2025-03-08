@@ -3,7 +3,9 @@ name: Build WS Rest Docker Images
 on:
   push:
     paths:
-      - 'ws-rest/**'
+      - ".github/workflows/ws-rest.yml"
+      - "ws-rest/**"
+      - "docker/docker-compose.ws-rest.yaml"
 
 jobs:
   build-and-deploy:

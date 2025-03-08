@@ -3,7 +3,9 @@ name: Build Nginx Docker Images
 on:
   push:
     paths:
-      - 'nginx/**'
+      - ".github/workflows/nginx.yml"
+      - "nginx/**"
+      - "docker/docker-compose.nginx.yaml"
 
 jobs:
   build-and-deploy:

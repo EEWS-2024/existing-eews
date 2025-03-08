@@ -3,7 +3,9 @@ name: Build Frontend Docker Images
 on:
   push:
     paths:
-      - 'frontend/**'
+      - ".github/workflows/frontend.yml"
+      - "frontend/**"
+      - "docker/docker-compose.frontend.yaml"
 
 jobs:
   build-and-deploy:
