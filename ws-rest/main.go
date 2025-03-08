@@ -287,7 +287,7 @@ func GetPlayback(w http.ResponseWriter, r *http.Request) {
 	starttime := r.FormValue("start_time")
 	endtime := r.FormValue("end_time")
 	// Implement logic to make a GET request to another external service with the provided query parameters
-	// For example, make a GET request to localhost:3001/playback?starttime=xxx&endtime=yyy
+	// For example, make a GET request to localhost:3002/playback?starttime=xxx&endtime=yyy
 	// Use the "net/http" package to make the external request
 
 	playbackURL := fmt.Sprintf("%s?start_time=%s&end_time=%s", producerSvc, starttime, endtime)

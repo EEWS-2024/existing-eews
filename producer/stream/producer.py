@@ -12,7 +12,7 @@ from utils.redis_client import RedisSingleton
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = os.getenv('BOOTSTRAP_SERVERS', "172.20.0.61:9092")
+BOOTSTRAP_SERVERS = os.getenv('BOOTSTRAP_SERVERS', "172.20.0.77:9092")
 if not BOOTSTRAP_SERVERS:
     raise Exception("BOOTSTRAP_SERVER env is required")
 TOPIC_NAME = os.getenv('TOPIC_NAME', "query")

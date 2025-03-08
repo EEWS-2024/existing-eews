@@ -18,7 +18,7 @@ EARTHQUAKE_PICK_TIME_THRESHOLD = timedelta(seconds=6)
 S_WAVE_DETECTION_DURATION = timedelta(minutes=1)
 
 # Redis client
-REDIS_HOST = os.getenv("REDIS_HOST", "172.20.0.64")
+REDIS_HOST = os.getenv("REDIS_HOST", "172.20.0.80")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 REDIS_DB_NUM = 0
 REDIS_STATION_LIST_NAME = "station_set"

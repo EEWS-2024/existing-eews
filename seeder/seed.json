@@ -1,0 +1,978 @@
+[
+    {
+        "code": "BKB",
+        "lat": -1.1073,
+        "long": 116.9048,
+        "elevation": 110,
+        "name": "GEOFON Station Balikpapan",
+        "nearest_stations": "{JAGI,LUWI,PLAI,SMRI,TOLI,TOLI2}"
+    },
+    {
+        "code": "MARJ",
+        "lat": 32.5226,
+        "long": 20.8776,
+        "elevation": 650,
+        "name": "Al Marj",
+        "nearest_stations": "{APEZ,FODE,GVD,GVD,IMMV,KARN,KERA,KTHA,SIVA,SKD}"
+    },
+    {
+        "code": "SFJD",
+        "lat": 66.9961,
+        "long": -50.6208,
+        "elevation": 329,
+        "name": "Sondre Stromfjord",
+        "nearest_stations": "{SFJ,SUMG,SUMG,SUMG,SUMG,SUMG,SUMG}"
+    },
+    {
+        "code": "SFUC",
+        "lat": 36.637,
+        "long": -6.175,
+        "elevation": 88,
+        "name": "San Fernando",
+        "nearest_stations": "{CART,CEU,MAHO,MELI,MELI,MTE,PVLZ,SELV,SFS}"
+    },
+    {
+        "code": "LUWI",
+        "lat": -1.0418,
+        "long": 122.7717,
+        "elevation": 6,
+        "name": "GEOFON Station Lhokseumave",
+        "nearest_stations": "{BKB,BNDI,MMRI,SANI,SOEI,TNTI,TOLI,TOLI2}"
+    },
+    {
+        "code": "LHMI",
+        "lat": 5.2288,
+        "long": 96.9472,
+        "elevation": 3,
+        "name": "GEOFON Station Lhokseumave",
+        "nearest_stations": "{BKNI,GSI}"
+    },
+    {
+        "code": "CISI",
+        "lat": -7.5557,
+        "long": 107.8153,
+        "elevation": 544,
+        "name": "GEOFON Station Cisomped",
+        "nearest_stations": "{BBJI,JAGI,MNAI,PMBI,PMBT,SMRI,UGM,YOGI}"
+    },
+    {
+        "code": "GSI",
+        "lat": 1.3039,
+        "long": 97.5755,
+        "elevation": 107,
+        "name": "Gunungsitoli",
+        "nearest_stations": "{BKNI,LHMI,MNAI,PMBI,PMBT}"
+    },
+    {
+        "code": "DAG",
+        "lat": 76.7713,
+        "long": -18.655,
+        "elevation": 23,
+        "name": "Danmarkshavn",
+        "nearest_stations": "{KBS,KBS,SUMG,SUMG,SUMG,SUMG,SUMG,SUMG}"
+    },
+    {
+        "code": "MRNI",
+        "lat": 33.0118,
+        "long": 35.392,
+        "elevation": 918,
+        "name": "Mount Meron",
+        "nearest_stations": "{BALJ,BGIO,CSS,EIL,GHAJ,JER,KSDI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "SOEI",
+        "lat": -9.7553,
+        "long": 124.2672,
+        "elevation": 1047,
+        "name": "GEOFON Station Soe",
+        "nearest_stations": "{BNDI,LUWI,MMRI,PLAI,SANI,SAUI}"
+    },
+    {
+        "code": "PMBI",
+        "lat": -2.9024,
+        "long": 104.6993,
+        "elevation": 25,
+        "name": "Palembang",
+        "nearest_stations": "{BBJI,BKNI,CISI,GSI,MNAI,PMBT,SMRI,UGM,YOGI}"
+    },
+    {
+        "code": "APE",
+        "lat": 37.0727,
+        "long": 25.523,
+        "elevation": 608,
+        "name": "Apeiranthos,Naxos",
+        "nearest_stations": "{FODE,IMMV,KARP,KRIS,LAST,SANT,SANT,THERA,ZKR,ZKR}"
+    },
+    {
+        "code": "KIBK",
+        "lat": -2.3591,
+        "long": 38.0433,
+        "elevation": 790,
+        "name": "Kibwezi",
+        "nearest_stations": "{KMBO,KMBO,KMBO,LODK,NAI}"
+    },
+    {
+        "code": "TIRR",
+        "lat": 44.4581,
+        "long": 28.4128,
+        "elevation": 77,
+        "name": "Tirgusor",
+        "nearest_stations": "{APE,APE,ISP,KWP,MLR,PSZ,PSZ,PSZ,SANT,SANT}"
+    },
+    {
+        "code": "KWP",
+        "lat": 49.6305,
+        "long": 22.7078,
+        "elevation": 463,
+        "name": "Kalwaria Paclawska",
+        "nearest_stations": "{MLR,MORC,PABE,PBUR,PSZ,PSZ,PSZ,RUE,SUW,TIRR}"
+    },
+    {
+        "code": "GVD",
+        "lat": 34.8391,
+        "long": 24.0874,
+        "elevation": 170,
+        "name": "Gavdos",
+        "nearest_stations": "{APEZ,FODE,IMMV,KARN,KERA,KRIS,KTHA,LAST,SIVA,SKD}"
+    },
+    {
+        "code": "LID",
+        "lat": 54.5481,
+        "long": 13.3664,
+        "elevation": 1,
+        "name": "Liddow",
+        "nearest_stations": "{FALKS,FLT1,HLG,IBBN,MORC,PBUR,RGN,RUE,SLIT,SUW}"
+    },
+    {
+        "code": "WIN",
+        "lat": -22.5691,
+        "long": 17.0915,
+        "elevation": 1720,
+        "name": "GSN",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "TCA",
+        "lat": -31.3371,
+        "long": -64.5954,
+        "elevation": 1052,
+        "name": "Tanti",
+        "nearest_stations": "{SALTA}"
+    },
+    {
+        "code": "VSU",
+        "lat": 58.462,
+        "long": 26.7347,
+        "elevation": 63,
+        "name": "Vasula",
+        "nearest_stations": "{LID,MHV,PABE,PBUR,PUL,RGN,SLIT,SUW,TRTE}"
+    },
+    {
+        "code": "SELV",
+        "lat": 37.2383,
+        "long": -3.7277,
+        "elevation": 650,
+        "name": "Sierra Elvira",
+        "nearest_stations": "{CART,CEU,MAHO,MELI,MELI,MTE,PVLZ,SFS,SFUC}"
+    },
+    {
+        "code": "JAGI",
+        "lat": -8.4702,
+        "long": 114.1521,
+        "elevation": 171,
+        "name": "GEOFON Station Jajag",
+        "nearest_stations": "{BBJI,BKB,CISI,MMRI,PLAI,SMRI,UGM,YOGI}"
+    },
+    {
+        "code": "CEU",
+        "lat": 35.8987,
+        "long": -5.3731,
+        "elevation": 320,
+        "name": "Ceuta",
+        "nearest_stations": "{CART,MAHO,MELI,MELI,MTE,PVLZ,SELV,SFS,SFUC}"
+    },
+    {
+        "code": "PABE",
+        "lat": 55.5052,
+        "long": 23.968,
+        "elevation": 58,
+        "name": "Paberze",
+        "nearest_stations": "{KWP,LID,PBUR,PUL,RGN,RUE,SLIT,SUW,TRTE,VSU}"
+    },
+    {
+        "code": "RGN",
+        "lat": 54.5477,
+        "long": 13.3214,
+        "elevation": 15,
+        "name": "Ruegen",
+        "nearest_stations": "{FALKS,FLT1,HLG,IBBN,LID,MORC,PBUR,RUE,SLIT,SUW}"
+    },
+    {
+        "code": "MALT",
+        "lat": 38.3134,
+        "long": 38.4273,
+        "elevation": 1120,
+        "name": "Malatya",
+        "nearest_stations": "{ARPR,BALJ,BGIO,CSS,ISP,JER,KSDI,MRNI,SALP,UJAP}"
+    },
+    {
+        "code": "CART",
+        "lat": 37.5868,
+        "long": -1.0012,
+        "elevation": 65,
+        "name": "Cartagena",
+        "nearest_stations": "{CEU,MAHO,MELI,MELI,MTE,PVLZ,SELV,SFS,SFUC}"
+    },
+    {
+        "code": "BOAB",
+        "lat": 12.4493,
+        "long": -85.6659,
+        "elevation": 381,
+        "name": "INETER",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "ARPR",
+        "lat": 39.0929,
+        "long": 38.3356,
+        "elevation": 1537,
+        "name": "Arapgir",
+        "nearest_stations": "{BALJ,BGIO,CSS,ISP,JER,KSDI,MALT,MRNI,SALP,UJAP}"
+    },
+    {
+        "code": "SFS",
+        "lat": 36.4656,
+        "long": -6.2055,
+        "elevation": 21,
+        "name": "San Fernando",
+        "nearest_stations": "{CART,CEU,MAHO,MELI,MELI,MTE,PVLZ,SELV,SFUC}"
+    },
+    {
+        "code": "MNAI",
+        "lat": -4.3605,
+        "long": 102.9557,
+        "elevation": 154,
+        "name": "GEOFON Station Manna",
+        "nearest_stations": "{BBJI,BKNI,CISI,GSI,PMBI,PMBT,SMRI,UGM,YOGI}"
+    },
+    {
+        "code": "SOCY",
+        "lat": 12.5195,
+        "long": 53.9874,
+        "elevation": 804,
+        "name": "GEOFON Station Socotra",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "SALP",
+        "lat": 32.0686,
+        "long": 35.1914,
+        "elevation": 475,
+        "name": "Salfit",
+        "nearest_stations": "{BALJ,BGIO,CSS,EIL,GHAJ,JER,KSDI,MRNI,MSBI,UJAP}"
+    },
+    {
+        "code": "EIL",
+        "lat": 29.6699,
+        "long": 34.9512,
+        "elevation": 210,
+        "name": "Eilat",
+        "nearest_stations": "{BALJ,BGIO,CSS,GHAJ,JER,KSDI,MRNI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "FALKS",
+        "lat": 51.6819,
+        "long": 11.2655,
+        "elevation": 335,
+        "name": "Falkenstein",
+        "nearest_stations": "{FLT1,HLG,IBBN,LID,MORC,PSZ,RGN,RUE,STU,WLF}"
+    },
+    {
+        "code": "KARN",
+        "lat": 35.4019,
+        "long": 23.9174,
+        "elevation": 420,
+        "name": "Karanos",
+        "nearest_stations": "{APEZ,FODE,GVD,GVD,IMMV,KERA,KTHA,LAST,SIVA,SKD}"
+    },
+    {
+        "code": "STU",
+        "lat": 48.7719,
+        "long": 9.195,
+        "elevation": 360,
+        "name": "Stuttgart",
+        "nearest_stations": "{FALKS,FLT1,HLG,IBBN,LID,MORC,PSZ,RGN,RUE,WLF}"
+    },
+    {
+        "code": "MHV",
+        "lat": 54.9595,
+        "long": 37.7664,
+        "elevation": 150,
+        "name": "Michnevo",
+        "nearest_stations": "{PABE,PUL,SLIT,SUW,TRTE,VSU}"
+    },
+    {
+        "code": "ZKR",
+        "lat": 35.1147,
+        "long": 26.2169,
+        "elevation": 254,
+        "name": "Zakros",
+        "nearest_stations": "{APEZ,FODE,GVD,KARP,KRIS,LAST,SANT,SANT,SIVA,THERA}"
+    },
+    {
+        "code": "BALJ",
+        "lat": 32.0873,
+        "long": 35.64,
+        "elevation": 375,
+        "name": "GEOFON",
+        "nearest_stations": "{BGIO,CSS,EIL,GHAJ,JER,KSDI,MRNI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "TRTE",
+        "lat": 58.3786,
+        "long": 26.7205,
+        "elevation": 100,
+        "name": "Tartu",
+        "nearest_stations": "{LID,MHV,PABE,PBUR,PUL,RGN,SLIT,SUW,VSU}"
+    },
+    {
+        "code": "MALK",
+        "lat": 8.3968,
+        "long": 80.5425,
+        "elevation": 113,
+        "name": "Mahakanadarawa",
+        "nearest_stations": "{HALK,HALK,HMDM}"
+    },
+    {
+        "code": "PMG",
+        "lat": -9.4047,
+        "long": 147.1597,
+        "elevation": 90,
+        "name": "Port Moresby",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "NAI",
+        "lat": -1.2739,
+        "long": 36.8037,
+        "elevation": 1692,
+        "name": "Nairobi",
+        "nearest_stations": "{KIBK,KMBO,KMBO,KMBO,LODK}"
+    },
+    {
+        "code": "SNAA",
+        "lat": -71.6707,
+        "long": -2.8379,
+        "elevation": 846,
+        "name": "Sanae",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "THERA",
+        "lat": 36.367,
+        "long": 25.4753,
+        "elevation": 288,
+        "name": "Santorini",
+        "nearest_stations": "{APE,APE,FODE,KRIS,LAST,SANT,SANT,SIVA,ZKR,ZKR}"
+    },
+    {
+        "code": "TOLI",
+        "lat": 1.1214,
+        "long": 120.7944,
+        "elevation": 86,
+        "name": "GEOFON Station Tolitoli",
+        "nearest_stations": "{BKB,LUWI,SANI,TNTI,TOLI2}"
+    },
+    {
+        "code": "ISP",
+        "lat": 37.8433,
+        "long": 30.5093,
+        "elevation": 1100,
+        "name": "Isparta",
+        "nearest_stations": "{APE,APE,CSS,KARP,KRIS,SANT,SANT,THERA,ZKR,ZKR}"
+    },
+    {
+        "code": "IBBN",
+        "lat": 52.3063,
+        "long": 7.7592,
+        "elevation": 140,
+        "name": "Ibbenbueren",
+        "nearest_stations": "{DSB,FALKS,FLT1,HLG,LID,MORC,RGN,RUE,STU,WLF}"
+    },
+    {
+        "code": "SMRI",
+        "lat": -7.0492,
+        "long": 110.4407,
+        "elevation": 203,
+        "name": "GEOFON Station Semarang",
+        "nearest_stations": "{BBJI,BKB,CISI,JAGI,MNAI,PLAI,PMBI,PMBT,UGM,YOGI}"
+    },
+    {
+        "code": "SBV",
+        "lat": -13.4584,
+        "long": 49.9212,
+        "elevation": 65,
+        "name": "Sambava",
+        "nearest_stations": "{VOI}"
+    },
+    {
+        "code": "HALK",
+        "lat": 6.0877,
+        "long": 80.6806,
+        "elevation": 120,
+        "name": "Hakmana",
+        "nearest_stations": "{HMDM,MALK}"
+    },
+    {
+        "code": "IMMV",
+        "lat": 35.4606,
+        "long": 23.9811,
+        "elevation": 230,
+        "name": "Iera Moni Varipetrou",
+        "nearest_stations": "{APEZ,FODE,GVD,GVD,KARN,KERA,KTHA,LAST,SIVA,SKD}"
+    },
+    {
+        "code": "PBUR",
+        "lat": 56.0236,
+        "long": 21.9294,
+        "elevation": 126,
+        "name": "Paburge",
+        "nearest_stations": "{KWP,LID,PABE,PUL,RGN,RUE,SLIT,SUW,TRTE,VSU}"
+    },
+    {
+        "code": "NPW",
+        "lat": 19.7785,
+        "long": 96.1376,
+        "elevation": 158,
+        "name": "Naypyitaw",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "SANI",
+        "lat": -2.0496,
+        "long": 125.9881,
+        "elevation": 30,
+        "name": "Sanana, Moluccas",
+        "nearest_stations": "{BNDI,FAKI,LUWI,MMRI,SAUI,SOEI,TNTI,TOLI,TOLI2}"
+    },
+    {
+        "code": "PLAI",
+        "lat": -8.8275,
+        "long": 117.7765,
+        "elevation": 125,
+        "name": "Plampang, Sumbawa",
+        "nearest_stations": "{BKB,JAGI,MMRI,SMRI,SOEI,UGM,YOGI}"
+    },
+    {
+        "code": "GENI",
+        "lat": -2.5927,
+        "long": 140.1678,
+        "elevation": 47,
+        "name": "Genyem",
+        "nearest_stations": "{FAKI}"
+    },
+    {
+        "code": "HLG",
+        "lat": 54.1831,
+        "long": 7.883,
+        "elevation": 37,
+        "name": "Helgoland",
+        "nearest_stations": "{FALKS,FLT1,IBBN,LID,MORC,PBUR,RGN,RUE,STU,WLF}"
+    },
+    {
+        "code": "VAL",
+        "lat": 51.9394,
+        "long": -10.2442,
+        "elevation": 14,
+        "name": "Valentia",
+        "nearest_stations": "{DSB,ILTH}"
+    },
+    {
+        "code": "VOI",
+        "lat": -21.9065,
+        "long": 46.7933,
+        "elevation": 1158,
+        "name": "Vohitsoka",
+        "nearest_stations": "{SBV}"
+    },
+    {
+        "code": "PUL",
+        "lat": 59.767,
+        "long": 30.317,
+        "elevation": 65,
+        "name": "Pulkovo",
+        "nearest_stations": "{MHV,PABE,PBUR,SLIT,SUW,TRTE,VSU}"
+    },
+    {
+        "code": "TNTI",
+        "lat": 0.7718,
+        "long": 127.3667,
+        "elevation": 43,
+        "name": "GEOFON Station Ternate",
+        "nearest_stations": "{BNDI,FAKI,LUWI,SANI,TOLI,TOLI2}"
+    },
+    {
+        "code": "BNDI",
+        "lat": -4.5224,
+        "long": 129.9045,
+        "elevation": 16,
+        "name": "Bandaneira",
+        "nearest_stations": "{FAKI,LUWI,MMRI,SANI,SAUI,SOEI,TNTI}"
+    },
+    {
+        "code": "ILTH",
+        "lat": 54.0279,
+        "long": -6.3362,
+        "elevation": 21,
+        "name": "Belurgan, Co Louth",
+        "nearest_stations": "{DSB,HLG,IBBN,VAL,WLF}"
+    },
+    {
+        "code": "GHAJ",
+        "lat": 31.3034,
+        "long": 35.5665,
+        "elevation": -58,
+        "name": "GEOFON",
+        "nearest_stations": "{BALJ,BGIO,CSS,EIL,JER,KSDI,MRNI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "WLF",
+        "lat": 49.6646,
+        "long": 6.1526,
+        "elevation": 295,
+        "name": "Walferdange",
+        "nearest_stations": "{DSB,FALKS,FLT1,HLG,IBBN,LID,MORC,RGN,RUE,STU}"
+    },
+    {
+        "code": "SAUI",
+        "lat": -7.9826,
+        "long": 131.2988,
+        "elevation": 110,
+        "name": "Saumlaki, Tanimbar",
+        "nearest_stations": "{BNDI,FAKI,MMRI,SANI,SOEI}"
+    },
+    {
+        "code": "SALTA",
+        "lat": -24.2241,
+        "long": -66.34,
+        "elevation": 4000,
+        "name": "Salta",
+        "nearest_stations": "{LVC,LVC,TCA}"
+    },
+    {
+        "code": "KERA",
+        "lat": 35.3692,
+        "long": 23.5577,
+        "elevation": 240,
+        "name": "Keramoti",
+        "nearest_stations": "{APEZ,FODE,GVD,GVD,IMMV,KARN,KTHA,LAST,SIVA,SKD}"
+    },
+    {
+        "code": "FODE",
+        "lat": 35.3797,
+        "long": 24.9576,
+        "elevation": 50,
+        "name": "Fodele",
+        "nearest_stations": "{APEZ,GVD,GVD,IMMV,KARN,KRIS,LAST,SIVA,SKD,ZKR}"
+    },
+    {
+        "code": "PMBT",
+        "lat": -2.927,
+        "long": 104.772,
+        "elevation": 30,
+        "name": "Palembang, Sumatra",
+        "nearest_stations": "{BBJI,BKNI,CISI,GSI,MNAI,PMBI,SMRI,UGM,YOGI}"
+    },
+    {
+        "code": "MELI",
+        "lat": 35.2938,
+        "long": -2.935,
+        "elevation": 5,
+        "name": "Melilla",
+        "nearest_stations": "{CART,CEU,MAHO,MTE,PVLZ,SELV,SFS,SFUC}"
+    },
+    {
+        "code": "MAUI",
+        "lat": 20.7668,
+        "long": -156.2448,
+        "elevation": 2060,
+        "name": "Haleakala",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "UJAP",
+        "lat": 31.952,
+        "long": 35.4644,
+        "elevation": -200,
+        "name": "Al Uja",
+        "nearest_stations": "{BALJ,BGIO,CSS,EIL,GHAJ,JER,KSDI,MRNI,MSBI,SALP}"
+    },
+    {
+        "code": "KRIS",
+        "lat": 35.178,
+        "long": 25.503,
+        "elevation": 850,
+        "name": "Kristallenia",
+        "nearest_stations": "{APEZ,FODE,GVD,LAST,SANT,SANT,SIVA,THERA,ZKR,ZKR}"
+    },
+    {
+        "code": "APEZ",
+        "lat": 34.9777,
+        "long": 24.8859,
+        "elevation": 435,
+        "name": "Moni Apezanon",
+        "nearest_stations": "{FODE,GVD,GVD,IMMV,KARN,KRIS,LAST,SIVA,SKD,ZKR}"
+    },
+    {
+        "code": "KMBO",
+        "lat": -1.1271,
+        "long": 37.2525,
+        "elevation": 1940,
+        "name": "Kilima Mbogo",
+        "nearest_stations": "{KIBK,LODK,NAI}"
+    },
+    {
+        "code": "KBS",
+        "lat": 78.9154,
+        "long": 11.9385,
+        "elevation": 87,
+        "name": "Ny Alesund",
+        "nearest_stations": "{DAG}"
+    },
+    {
+        "code": "KBU",
+        "lat": 34.5151,
+        "long": 69.1347,
+        "elevation": 1820,
+        "name": "GEOFON Station Kabul",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "KARP",
+        "lat": 35.5471,
+        "long": 27.1611,
+        "elevation": 524,
+        "name": "Karpathos,Greece",
+        "nearest_stations": "{APEZ,FODE,KRIS,LAST,SANT,SANT,SIVA,THERA,ZKR,ZKR}"
+    },
+    {
+        "code": "MARCO",
+        "lat": 40.2972,
+        "long": 15.8063,
+        "elevation": 933,
+        "name": "Tramutola",
+        "nearest_stations": "{APE,IMMV,KARN,KERA,KTHA,MATE,PSZ,PSZ,PSZ,SKD}"
+    },
+    {
+        "code": "UGM",
+        "lat": -7.9125,
+        "long": 110.5231,
+        "elevation": 350,
+        "name": "Wanagama",
+        "nearest_stations": "{BBJI,CISI,JAGI,MNAI,PLAI,PMBI,PMBT,SMRI,YOGI}"
+    },
+    {
+        "code": "LVC",
+        "lat": -22.6127,
+        "long": -68.9111,
+        "elevation": 2930,
+        "name": "Calama",
+        "nearest_stations": "{SALTA}"
+    },
+    {
+        "code": "PVLZ",
+        "lat": 35.173,
+        "long": -4.301,
+        "elevation": 90,
+        "name": "Penon de Velez-Gomera",
+        "nearest_stations": "{CART,CEU,MAHO,MELI,MELI,MTE,SELV,SFS,SFUC}"
+    },
+    {
+        "code": "PSZ",
+        "lat": 47.9184,
+        "long": 19.8944,
+        "elevation": 940,
+        "name": "Piszkes",
+        "nearest_stations": "{FALKS,FLT1,KWP,MATE,MLR,MORC,RUE,STU,SUW,TIRR}"
+    },
+    {
+        "code": "SFJ",
+        "lat": 66.9967,
+        "long": -50.6156,
+        "elevation": 365,
+        "name": "Sondre Stromfjord",
+        "nearest_stations": "{SFJD,SFJD,SUMG,SUMG,SUMG,SUMG,SUMG,SUMG}"
+    },
+    {
+        "code": "SANT",
+        "lat": 36.3705,
+        "long": 25.4593,
+        "elevation": 591,
+        "name": "Santorini",
+        "nearest_stations": "{APE,APE,APEZ,FODE,KRIS,LAST,SIVA,THERA,ZKR,ZKR}"
+    },
+    {
+        "code": "KSDI",
+        "lat": 33.192,
+        "long": 35.659,
+        "elevation": 123,
+        "name": "Kfar Sold",
+        "nearest_stations": "{BALJ,BGIO,CSS,EIL,GHAJ,JER,MRNI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "MORC",
+        "lat": 49.7766,
+        "long": 17.5428,
+        "elevation": 740,
+        "name": "Moravsky Beroun",
+        "nearest_stations": "{FALKS,FLT1,KWP,LID,PSZ,PSZ,PSZ,RGN,RUE,SUW}"
+    },
+    {
+        "code": "GHAR",
+        "lat": 32.1224,
+        "long": 13.0885,
+        "elevation": 650,
+        "name": "Gharyan",
+        "nearest_stations": "{MARCO,MARCO,MARJ}"
+    },
+    {
+        "code": "RIOB",
+        "lat": -10.1501,
+        "long": -67.747,
+        "elevation": 220,
+        "name": "Rio Branco",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "MMRI",
+        "lat": -8.6357,
+        "long": 122.2376,
+        "elevation": 137,
+        "name": "GEOFON Station Maumere",
+        "nearest_stations": "{BNDI,JAGI,LUWI,PLAI,SANI,SAUI,SOEI}"
+    },
+    {
+        "code": "KTHA",
+        "lat": 36.2566,
+        "long": 23.0621,
+        "elevation": 360,
+        "name": "Kythira",
+        "nearest_stations": "{FODE,GVD,GVD,IMMV,KARN,KERA,SANT,SANT,SIVA,SKD}"
+    },
+    {
+        "code": "MAHO",
+        "lat": 39.8959,
+        "long": 4.2665,
+        "elevation": 15,
+        "name": "Mahon",
+        "nearest_stations": "{CART,CEU,MARCO,MARCO,MELI,MELI,PVLZ,SELV,SFS,SFUC}"
+    },
+    {
+        "code": "MSBI",
+        "lat": 31.3126,
+        "long": 35.358,
+        "elevation": -220,
+        "name": "Mazada",
+        "nearest_stations": "{BALJ,BGIO,CSS,EIL,GHAJ,JER,KSDI,MRNI,SALP,UJAP}"
+    },
+    {
+        "code": "SLIT",
+        "lat": 57.6287,
+        "long": 22.2905,
+        "elevation": 15,
+        "name": "LEGMA",
+        "nearest_stations": "{KWP,LID,PABE,PBUR,PUL,RGN,RUE,SUW,TRTE,VSU}"
+    },
+    {
+        "code": "MLR",
+        "lat": 45.4912,
+        "long": 25.9456,
+        "elevation": 1378,
+        "name": "Muntele Rosu",
+        "nearest_stations": "{APE,APE,ISP,KWP,MATE,MORC,PSZ,PSZ,PSZ,TIRR}"
+    },
+    {
+        "code": "BKNI",
+        "lat": 0.3262,
+        "long": 101.0396,
+        "elevation": 65,
+        "name": "GEOFON Station Bangkinang",
+        "nearest_stations": "{GSI,LHMI,MNAI,PMBI,PMBT}"
+    },
+    {
+        "code": "LAST",
+        "lat": 35.1611,
+        "long": 25.4786,
+        "elevation": 870,
+        "name": "Lasithi",
+        "nearest_stations": "{APEZ,FODE,GVD,GVD,KRIS,SANT,SIVA,THERA,ZKR,ZKR}"
+    },
+    {
+        "code": "BBJI",
+        "lat": -7.4626,
+        "long": 107.65,
+        "elevation": 615,
+        "name": "GEOFON Station Bungbulang, Garut",
+        "nearest_stations": "{CISI,JAGI,MNAI,PMBI,PMBT,SMRI,UGM,YOGI}"
+    },
+    {
+        "code": "BGIO",
+        "lat": 31.7219,
+        "long": 35.0877,
+        "elevation": 752,
+        "name": "Bar Giyyora",
+        "nearest_stations": "{BALJ,CSS,EIL,GHAJ,JER,KSDI,MRNI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "ACRG",
+        "lat": 5.6415,
+        "long": -0.2072,
+        "elevation": 75,
+        "name": "Accra",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "YOGI",
+        "lat": -7.8166,
+        "long": 110.2949,
+        "elevation": 160,
+        "name": "Yogyakarta",
+        "nearest_stations": "{BBJI,CISI,JAGI,MNAI,PLAI,PMBI,PMBT,SMRI,UGM}"
+    },
+    {
+        "code": "FAKI",
+        "lat": -2.9192,
+        "long": 132.2489,
+        "elevation": 136,
+        "name": "GEOFON Station Fak Fak",
+        "nearest_stations": "{BNDI,GENI,SANI,SAUI,TNTI}"
+    },
+    {
+        "code": "DAMY",
+        "lat": 14.5613,
+        "long": 44.3869,
+        "elevation": 2488,
+        "name": "GEOFON Station Dhamar",
+        "nearest_stations": "{}"
+    },
+    {
+        "code": "CSS",
+        "lat": 34.9611,
+        "long": 33.331,
+        "elevation": 396,
+        "name": "Mathiatis",
+        "nearest_stations": "{BALJ,BGIO,GHAJ,ISP,JER,KSDI,MRNI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "MTE",
+        "lat": 40.3997,
+        "long": -7.5442,
+        "elevation": 815,
+        "name": "Manteigas",
+        "nearest_stations": "{CART,CEU,MELI,MELI,PVLZ,SELV,SFS,SFUC}"
+    },
+    {
+        "code": "HMDM",
+        "lat": 6.7731,
+        "long": 73.1822,
+        "elevation": 1,
+        "name": "GEOFON Station Hanimaadhoo",
+        "nearest_stations": "{HALK,HALK,KAAM,MALK}"
+    },
+    {
+        "code": "TOLI2",
+        "lat": 1.1112,
+        "long": 120.7817,
+        "elevation": 51,
+        "name": "Tolitoli, Sulawesi",
+        "nearest_stations": "{BKB,LUWI,SANI,TNTI,TOLI}"
+    },
+    {
+        "code": "FLT1",
+        "lat": 52.3306,
+        "long": 11.2372,
+        "elevation": 100,
+        "name": "Temp GEOFON Station Flechtingen",
+        "nearest_stations": "{FALKS,HLG,IBBN,LID,MORC,PSZ,RGN,RUE,STU,WLF}"
+    },
+    {
+        "code": "LODK",
+        "lat": 3.4219,
+        "long": 35.3616,
+        "elevation": 665,
+        "name": "Lodwar",
+        "nearest_stations": "{KIBK,KMBO,KMBO,KMBO,NAI}"
+    },
+    {
+        "code": "SKD",
+        "lat": 35.412,
+        "long": 23.928,
+        "elevation": 306,
+        "name": "Skordalos",
+        "nearest_stations": "{APEZ,FODE,GVD,GVD,IMMV,KARN,KERA,KTHA,LAST,SIVA}"
+    },
+    {
+        "code": "MATE",
+        "lat": 40.6491,
+        "long": 16.7044,
+        "elevation": 494,
+        "name": "Matera",
+        "nearest_stations": "{IMMV,KARN,KERA,KTHA,MARCO,MARCO,PSZ,PSZ,PSZ,SKD}"
+    },
+    {
+        "code": "SUMG",
+        "lat": 72.5742,
+        "long": -38.4626,
+        "elevation": 3202,
+        "name": "Summit Camp",
+        "nearest_stations": "{DAG,SFJ,SFJD,SFJD}"
+    },
+    {
+        "code": "RUE",
+        "lat": 52.4759,
+        "long": 13.78,
+        "elevation": 40,
+        "name": "Ruedersdorf",
+        "nearest_stations": "{FALKS,FLT1,HLG,IBBN,LID,MORC,RGN,STU,SUW,WLF}"
+    },
+    {
+        "code": "SIVA",
+        "lat": 35.0175,
+        "long": 24.81,
+        "elevation": 95,
+        "name": "Sivas",
+        "nearest_stations": "{APEZ,FODE,GVD,GVD,IMMV,KARN,KERA,KRIS,LAST,SKD}"
+    },
+    {
+        "code": "JER",
+        "lat": 31.7719,
+        "long": 35.1972,
+        "elevation": 770,
+        "name": "Jerusalem",
+        "nearest_stations": "{BALJ,BGIO,CSS,EIL,GHAJ,KSDI,MRNI,MSBI,SALP,UJAP}"
+    },
+    {
+        "code": "SUW",
+        "lat": 54.0125,
+        "long": 23.1808,
+        "elevation": 152,
+        "name": "Suwalki",
+        "nearest_stations": "{KWP,LID,MORC,PABE,PBUR,RGN,RUE,SLIT,TRTE,VSU}"
+    },
+    {
+        "code": "DSB",
+        "lat": 53.2452,
+        "long": -6.3762,
+        "elevation": 236,
+        "name": "Dublin",
+        "nearest_stations": "{HLG,IBBN,ILTH,VAL,WLF}"
+    },
+    {
+        "code": "KAAM",
+        "lat": 0.4926,
+        "long": 72.9949,
+        "elevation": 1,
+        "name": "GEOFON Station Kaadhehdhoo",
+        "nearest_stations": "{HMDM}"
+    }
+]

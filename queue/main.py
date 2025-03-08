@@ -6,7 +6,7 @@ from app.prometheus_metric import start_prometheus_server
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "172.20.0.61:9092")
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "172.20.0.77:9092")
 TOPIC_CONSUMER = os.getenv("TOPIC_CONSUMER", "query")
 
 

@@ -6,12 +6,12 @@ from app.prometheus_metric import start_prometheus_server
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "172.20.0.61:9092")
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "172.20.0.77:9092")
 TOPIC_CONSUMER = os.getenv("BOOTSTRAP_SERVERS", "p_arrival")
-REDIS_HOST = os.getenv("REDIS_HOST", "172.20.0.64")
+REDIS_HOST = os.getenv("REDIS_HOST", "172.20.0.80")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 MONGO_DB = os.getenv("MONGO_DB", "eews")
-MONGO_HOST = os.getenv("MONGO_HOST", "172.20.0.72")
+MONGO_HOST = os.getenv("MONGO_HOST", "172.20.0.88")
 MONGO_PORT = os.getenv("MONGO_PORT", "27017")
 MONGO_COLLECTION = os.getenv("MONGO_COLLECTION", "parameters")
 PROMETHEUS_ADDR = os.getenv("PROMETHEUS_ADDR", "0.0.0.0")

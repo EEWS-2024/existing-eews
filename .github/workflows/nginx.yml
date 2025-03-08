@@ -2,8 +2,8 @@ name: Build Nginx Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'nginx/**'
 
 jobs:
   build-and-deploy:

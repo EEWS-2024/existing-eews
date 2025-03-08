@@ -2,8 +2,8 @@ name: Build WS Rest Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'ws-rest/**'
 
 jobs:
   build-and-deploy:

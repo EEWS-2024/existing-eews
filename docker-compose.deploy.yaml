@@ -6,72 +6,69 @@ services:
   main-eews-zookeeper:
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.60
+        ipv4_address: 172.20.0.76
     restart: always
     image: confluentinc/cp-zookeeper
     container_name: main-eews-zookeeper
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2182
+      ZOOKEEPER_CLIENT_PORT: 2183
 
   main-eews-kafka:
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.61
+        ipv4_address: 172.20.0.77
     restart: always
     container_name: main-eews-kafka
     image: confluentinc/cp-kafka
     depends_on:
       - main-eews-zookeeper
     ports:
-      - "9100:9100"
+      - "9103:9103"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.60:2182"
-      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9100
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.61:9092,OUTSIDE://85.209.163.202:9100
+      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.76:2183"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9103
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.77:9092,OUTSIDE://85.209.163.202:9103
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-    mem_limit: 1228m
 
   main-eews-kafka-2:
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.62
+        ipv4_address: 172.20.0.78
     restart: always
     container_name: main-eews-kafka-2
     image: confluentinc/cp-kafka
     depends_on:
       - main-eews-zookeeper
     ports:
-      - "9101:9101"
+      - "9104:9104"
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.60:2182"
-      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9101
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.62:9092,OUTSIDE://85.209.163.202:9101
+      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.76:2183"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9104
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.78:9092,OUTSIDE://85.209.163.202:9104
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-    mem_limit: 1228m
 
   main-eews-kafka-3:
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.63
+        ipv4_address: 172.20.0.79
     restart: always
     container_name: main-eews-kafka-3
     image: confluentinc/cp-kafka
     depends_on:
       - main-eews-zookeeper
     ports:
-      - "9102:9102"
+      - "9105:9105"
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.60:2182"
-      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9102
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.63:9092,OUTSIDE://85.209.163.202:9102
+      KAFKA_ZOOKEEPER_CONNECT: "172.20.0.76:2183"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9105
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://172.20.0.79:9092,OUTSIDE://85.209.163.202:9105
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-    mem_limit: 1228m
 
   main-eews-init-kafka:
     networks:
@@ -99,13 +96,13 @@ services:
   main-eews-redis:
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.64
+        ipv4_address: 172.20.0.80
     image: redis
     container_name: main-eews-redis
     volumes:
       - redis_data:/data
     ports:
-      - "6380:6379"
+      - "6381:6379"
 
   main-eews-seeder:
     pull_policy: "always"
@@ -120,7 +117,7 @@ services:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.65
+        ipv4_address: 172.20.0.81
     restart: always
     depends_on:
       main-eews-init-kafka:
@@ -130,14 +127,14 @@ services:
     image: docker.io/slackingdjaeger/main-eews-producer:latest
     container_name: main-eews-producer
     ports:
-      - "8000:8000"
-      - "8001:8001"
+      - "8003:8003"
+      - "8004:8004"
 
   main-eews-queue:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.66
+        ipv4_address: 172.20.0.82
     restart: always
     depends_on:
       - main-eews-init-kafka
@@ -148,13 +145,13 @@ services:
     container_name: main-eews-queue
     mem_limit: 60m
     ports:
-      - "8002:8002"
+      - "8005:8005"
 
   main-eews-picker:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.67
+        ipv4_address: 172.20.0.83
     restart: always
     depends_on:
       - main-eews-nginx
@@ -167,32 +164,32 @@ services:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.68
+        ipv4_address: 172.20.0.84
     restart: always
     image: docker.io/slackingdjaeger/main-eews-ml:latest
     container_name: main-eews-ml
     depends_on:
       - main-eews-redis
     ports:
-      - "8100:8100"
+      - "8007:8007"
 
   main-eews-nginx:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.69
+        ipv4_address: 172.20.0.85
     image: docker.io/slackingdjaeger/main-eews-nginx:latest
     container_name: main-eews-nginx
     depends_on:
       - main-eews-ml
     ports:
-      - "8111:80"
+      - "8008:80"
 
   main-eews-ws-rest:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.70
+        ipv4_address: 172.20.0.86
     restart: always
     depends_on:
       - main-eews-producer
@@ -200,30 +197,30 @@ services:
     image: docker.io/slackingdjaeger/main-eews-ws-rest:latest
     container_name: main-eews-ws-rest
     ports:
-      - "8081:8080"
+      - "8009:8080"
 
   main-eews-frontend:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.71
+        ipv4_address: 172.20.0.87
     depends_on:
       - main-eews-ws-rest
     image: docker.io/slackingdjaeger/main-eews-frontend:latest
     container_name: main-eews-frontend
     ports:
-      - "3001:3000"
+      - "3002:3000"
 
   main-eews-mongo:
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.72
+        ipv4_address: 172.20.0.88
     image: mongo:latest
     container_name: main-eews-mongo
     volumes:
       - mongodb_data:/data/db
     ports:
-        - "27018:27017"
+      - "27019:27017"
 
   # Kafdrop (Kafka Web UI)
   main-eews-kafdrop:
@@ -231,15 +228,15 @@ services:
     container_name: main-eews-kafdrop
     networks:
       nginx-manager_customnetwork:
-        ipv4_address: 172.20.0.75
+        ipv4_address: 172.20.0.89
     depends_on:
       - main-eews-kafka
       - main-eews-kafka-2
       - main-eews-kafka-3
     ports:
-      - "9002:9000"
+      - "9003:9000"
     environment:
-      KAFKA_BROKERCONNECT: "172.20.0.61:9092,172.20.0.62:9092,172.20.0.63:9092"
+      KAFKA_BROKERCONNECT: "172.20.0.77:9092,172.20.0.78:9092,172.20.0.79:9092"
       JVM_OPTS: "-Xms32M -Xmx64M"
 
 volumes:

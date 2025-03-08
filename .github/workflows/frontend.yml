@@ -2,8 +2,8 @@ name: Build Frontend Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'frontend/**'
 
 jobs:
   build-and-deploy:

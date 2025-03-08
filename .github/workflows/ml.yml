@@ -2,8 +2,8 @@ name: Build ML Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'machine-learning/**'
 
 jobs:
   build-and-deploy:

@@ -2,8 +2,8 @@ name: Build Picker Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'picker/**'
 
 jobs:
   build-and-deploy:

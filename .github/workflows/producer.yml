@@ -2,8 +2,8 @@ name: Build Producer Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'producer/**'
 
 jobs:
   build-and-deploy:

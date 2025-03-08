@@ -2,8 +2,8 @@ name: Build Queue Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'queue/**'
 
 jobs:
   build-and-deploy:

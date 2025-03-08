@@ -2,8 +2,8 @@ name: Build Seeder Docker Images
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'seeder/**'
 
 jobs:
   build-and-deploy:
