@@ -85,11 +85,9 @@ class KafkaDataProcessor:
     def consume(self, topic: str):
         print("CONSUMING", topic)
         with open("out/dump.json", "r", encoding="utf-8") as f:
-            lines = f.readlines()
-            for line in lines:
+            values = json.load(f)
+            for value in values:
                 try:
-                    value = json.loads(line)
-                    print(value)
                     self.__process_received_data(value)
                 except Exception as e:
                     print("outer error")
