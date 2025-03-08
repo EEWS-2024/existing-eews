@@ -232,7 +232,6 @@ class KafkaDataProcessor:
         for i in range(retry):
             start_time = datetime.now()
             try:
-                print(f"REQUEST TO {url}, retry {i}")
                 response = requests.post(url, data=json.dumps(data), timeout=timeout)
                 if response.status_code != 200:
                     print("Error: ", response.json())
