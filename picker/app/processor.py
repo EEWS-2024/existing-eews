@@ -74,6 +74,8 @@ class KafkaDataProcessor:
                 if "type" in value and value["type"] != "trace":
                     continue
 
+                with open("out/dump.txt", "a", encoding="utf-8") as f:
+                    f.write(f"{value}\n")
                 self.__process_received_data(value)
                
             except Exception as e:
