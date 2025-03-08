@@ -6,7 +6,6 @@ import copy
 import time as t
 import os
 
-import psutil
 from confluent_kafka import Consumer, Producer
 import requests
 from dotenv import load_dotenv
@@ -17,7 +16,6 @@ import numpy as np
 from scipy.optimize import minimize
 import math
 
-from .prometheus_metric import LATENCY, EXECUTION_TIME, THROUGHPUT
 
 load_dotenv()
 
@@ -48,45 +46,12 @@ class KafkaDataProcessor:
         self.redis = redis
         self.mongo = mongo
 
-        self.experiment_attempt = 0
-        self.experiment_execution_times = []
-        self.experiment_processed_data = []
-        self.experiment_latencies = []
-        self.experiment_success_times = []
-        self.cpu_usages = []  # Add this line
-        self.memory_usages = []  # Add this line
-
-    def save_experiment(self):
-        experiment_execution_time = self.experiment_execution_times[1:] if self.experiment_attempt == 0 else self.experiment_execution_times
-
-        stats_data = {
-            "execution_times": experiment_execution_time,
-            "processed_data": self.experiment_processed_data,
-            "latencies": self.experiment_latencies,
-            "success_times": self.experiment_success_times,
-            "cpu_usages": self.cpu_usages,  # Add this line
-            "memory_usages": self.memory_usages  # Add this line
-        }
-        with open(f"./out/experiment_stats_{self.experiment_attempt}.json", "w") as f:
-            json.dump(stats_data, f, indent=4)
-
-        self.experiment_execution_times = []
-        self.experiment_processed_data = []
-        self.experiment_latencies =[]
-        self.experiment_success_times = []
-        self.cpu_usages = []  # Add this line
-        self.memory_usages = []  # Add this line
-
     def consume(self, topic: str):
         self.consumer.subscribe([topic])
         show_nf = True
 
-        service_start_time = time.time()
-        experiment_data_count = 0
         while True:
             try:
-                experiment_start_time = time.time()
-
                 msg = self.consumer.poll(0.1)
                 if msg is None:
                     if show_nf:
@@ -94,6 +59,7 @@ class KafkaDataProcessor:
                     show_nf = False
                     continue
                 if msg.error():
+                    print('error here 1')
                     print(f"Error: {msg.error()}")
                     continue
 
@@ -109,25 +75,10 @@ class KafkaDataProcessor:
                 if "type" in value and value["type"] != "trace":
                     continue
 
-                self.experiment_latencies.append(time.time() - value['published_at'])
                 self.__process_received_data(value)
-                experiment_data_count += len(value["data"])
-                if time.time() - experiment_start_time >= 1:
-                    self.experiment_processed_data.append(experiment_data_count)
-                    experiment_data_count = 0
-
-                end_time = time.time()
-                self.experiment_execution_times.append(end_time - experiment_start_time)
-                self.cpu_usages.append(psutil.cpu_percent())  # Add this line
-                self.memory_usages.append(psutil.virtual_memory().percent)
-
-                if end_time - service_start_time >= 900.0:
-                    self.save_experiment()
-                    self.experiment_attempt += 1
-                    service_start_time = time.time()
-
-                THROUGHPUT.inc()
+               
             except Exception as e:
+                print('error here 2')
                 print(f"Error: {str(e)}")
                 continue
 
