@@ -1,0 +1,8 @@
+services:
+  eews-ws-rest:
+    build:
+      context: ../ws-rest
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/main-eews-ws-rest:latest
+    env_file:
+      - ./secrets/.ws-rest.env

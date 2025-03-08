@@ -1,0 +1,6 @@
+services:
+  demo-eews-nginx:
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/demo-eews-nginx:latest

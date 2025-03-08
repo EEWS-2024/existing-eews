@@ -1,0 +1,6 @@
+services:
+  eews-frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/main-eews-frontend:latest

@@ -3,25 +3,25 @@ networks:
     external: true
 
 services:
-  old-eews-zookeeper:
+  main-eews-zookeeper:
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.60
     restart: always
     image: confluentinc/cp-zookeeper
-    container_name: old-eews-zookeeper
+    container_name: main-eews-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2182
 
-  old-eews-kafka:
+  main-eews-kafka:
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.61
     restart: always
-    container_name: old-eews-kafka
+    container_name: main-eews-kafka
     image: confluentinc/cp-kafka
     depends_on:
-      - old-eews-zookeeper
+      - main-eews-zookeeper
     ports:
       - "9100:9100"
     environment:
@@ -33,15 +33,15 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     mem_limit: 1228m
 
-  old-eews-kafka-2:
+  main-eews-kafka-2:
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.62
     restart: always
-    container_name: old-eews-kafka-2
+    container_name: main-eews-kafka-2
     image: confluentinc/cp-kafka
     depends_on:
-      - old-eews-zookeeper
+      - main-eews-zookeeper
     ports:
       - "9101:9101"
     environment:
@@ -53,15 +53,15 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     mem_limit: 1228m
 
-  old-eews-kafka-3:
+  main-eews-kafka-3:
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.63
     restart: always
-    container_name: old-eews-kafka-3
+    container_name: main-eews-kafka-3
     image: confluentinc/cp-kafka
     depends_on:
-      - old-eews-zookeeper
+      - main-eews-zookeeper
     ports:
       - "9102:9102"
     environment:
@@ -73,169 +73,169 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
     mem_limit: 1228m
 
-  old-eews-init-kafka:
+  main-eews-init-kafka:
     networks:
       - nginx-manager_customnetwork
-    container_name: old-eews-init-kafka
+    container_name: main-eews-init-kafka
     image: confluentinc/cp-kafka:6.1.1
     depends_on:
-      - old-eews-kafka
-      - old-eews-kafka-2
-      - old-eews-kafka-3
-      - old-eews-zookeeper
+      - main-eews-kafka
+      - main-eews-kafka-2
+      - main-eews-kafka-3
+      - main-eews-zookeeper
     entrypoint: ["/bin/sh", "-c"]
     command: |
       "
       # blocks until kafka is reachable
-      kafka-topics --bootstrap-server old-eews-kafka:9092 --list
+      kafka-topics --bootstrap-server main-eews-kafka:9092 --list
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
-      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
-      kafka-topics --bootstrap-server old-eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server main-eews-kafka:9092 --create --if-not-exists --topic query --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server main-eews-kafka:9092 --create --if-not-exists --topic p_arrival --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
+      kafka-topics --bootstrap-server main-eews-kafka:9092 --create --if-not-exists --topic pick --replication-factor 3 --partitions 3 --config segment.bytes=150000 --config retention.bytes=3000000 --config retention.ms=120000
       echo -e 'Successfully created the following topics:'
-      kafka-topics --bootstrap-server old-eews-kafka:9092 --list
+      kafka-topics --bootstrap-server main-eews-kafka:9092 --list
       "
 
-  old-eews-redis:
+  main-eews-redis:
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.64
     image: redis
-    container_name: old-eews-redis
+    container_name: main-eews-redis
     volumes:
       - redis_data:/data
     ports:
       - "6380:6379"
 
-  old-eews-seeder:
+  main-eews-seeder:
     pull_policy: "always"
     networks:
       - nginx-manager_customnetwork
     depends_on:
-      - old-eews-redis
-    image: docker.io/slackingdjaeger/old-eews-seeder:latest
-    container_name: old-eews-seeder
+      - main-eews-redis
+    image: docker.io/slackingdjaeger/main-eews-seeder:latest
+    container_name: main-eews-seeder
 
-  old-eews-producer:
+  main-eews-producer:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.65
     restart: always
     depends_on:
-      old-eews-init-kafka:
+      main-eews-init-kafka:
         condition: service_completed_successfully
-      old-eews-seeder:
+      main-eews-seeder:
         condition: service_completed_successfully
-    image: docker.io/slackingdjaeger/old-eews-producer:latest
-    container_name: old-eews-producer
+    image: docker.io/slackingdjaeger/main-eews-producer:latest
+    container_name: main-eews-producer
     ports:
       - "8000:8000"
       - "8001:8001"
 
-  old-eews-queue:
+  main-eews-queue:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.66
     restart: always
     depends_on:
-      - old-eews-init-kafka
-      - old-eews-producer
-      - old-eews-zookeeper
-      - old-eews-kafka
-    image: docker.io/slackingdjaeger/old-eews-queue:latest
-    container_name: old-eews-queue
+      - main-eews-init-kafka
+      - main-eews-producer
+      - main-eews-zookeeper
+      - main-eews-kafka
+    image: docker.io/slackingdjaeger/main-eews-queue:latest
+    container_name: main-eews-queue
     mem_limit: 60m
     ports:
       - "8002:8002"
 
-  old-eews-picker:
+  main-eews-picker:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.67
     restart: always
     depends_on:
-      - old-eews-nginx
-      - old-eews-mongo
-      - old-eews-redis
-    image: docker.io/slackingdjaeger/old-eews-picker:latest
-    container_name: old-eews-picker
+      - main-eews-nginx
+      - main-eews-mongo
+      - main-eews-redis
+    image: docker.io/slackingdjaeger/main-eews-picker:latest
+    container_name: main-eews-picker
 
-  old-eews-ml:
+  main-eews-ml:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.68
     restart: always
-    image: docker.io/slackingdjaeger/old-eews-ml:latest
-    container_name: old-eews-ml
+    image: docker.io/slackingdjaeger/main-eews-ml:latest
+    container_name: main-eews-ml
     depends_on:
-      - old-eews-redis
+      - main-eews-redis
     ports:
       - "8100:8100"
 
-  old-eews-nginx:
+  main-eews-nginx:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.69
-    image: docker.io/slackingdjaeger/old-eews-nginx:latest
-    container_name: old-eews-nginx
+    image: docker.io/slackingdjaeger/main-eews-nginx:latest
+    container_name: main-eews-nginx
     depends_on:
-      - old-eews-ml
+      - main-eews-ml
     ports:
       - "8111:80"
 
-  old-eews-ws-rest:
+  main-eews-ws-rest:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.70
     restart: always
     depends_on:
-      - old-eews-producer
-      - old-eews-seeder
-    image: docker.io/slackingdjaeger/old-eews-ws-rest:latest
-    container_name: old-eews-ws-rest
+      - main-eews-producer
+      - main-eews-seeder
+    image: docker.io/slackingdjaeger/main-eews-ws-rest:latest
+    container_name: main-eews-ws-rest
     ports:
       - "8081:8080"
 
-  old-eews-frontend:
+  main-eews-frontend:
     pull_policy: "always"
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.71
     depends_on:
-      - old-eews-ws-rest
-    image: docker.io/slackingdjaeger/old-eews-frontend:latest
-    container_name: old-eews-frontend
+      - main-eews-ws-rest
+    image: docker.io/slackingdjaeger/main-eews-frontend:latest
+    container_name: main-eews-frontend
     ports:
       - "3001:3000"
 
-  old-eews-mongo:
+  main-eews-mongo:
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.72
     image: mongo:latest
-    container_name: old-eews-mongo
+    container_name: main-eews-mongo
     volumes:
       - mongodb_data:/data/db
     ports:
         - "27018:27017"
 
   # Kafdrop (Kafka Web UI)
-  old-eews-kafdrop:
+  main-eews-kafdrop:
     image: obsidiandynamics/kafdrop:latest
-    container_name: old-eews-kafdrop
+    container_name: main-eews-kafdrop
     networks:
       nginx-manager_customnetwork:
         ipv4_address: 172.20.0.75
     depends_on:
-      - old-eews-kafka
-      - old-eews-kafka-2
-      - old-eews-kafka-3
+      - main-eews-kafka
+      - main-eews-kafka-2
+      - main-eews-kafka-3
     ports:
       - "9002:9000"
     environment:
