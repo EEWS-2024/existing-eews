@@ -252,6 +252,8 @@ class KafkaDataProcessor:
                     res = {"process_time": process_time, "result": result}
                     return res
             except Exception as e:
+                print('error here 3')
+                print(e)
                 print(f"Error: {str(e)}")
                 t.sleep(1)
                 continue
