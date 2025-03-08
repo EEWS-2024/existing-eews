@@ -79,6 +79,7 @@ class KafkaDataProcessor:
                
             except Exception as e:
                 print('error here 2')
+                print(e)
                 print(f"Error: {str(e)}")
                 continue
 
