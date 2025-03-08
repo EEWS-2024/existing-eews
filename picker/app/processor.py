@@ -77,10 +77,16 @@ class KafkaDataProcessor:
                 with open("out/dump.txt", "a", encoding="utf-8") as f:
                     f.write(f"{value}\n")
                 self.__process_received_data(value)
-               
+
             except Exception as e:
                 print(f"Error: {str(e)}")
                 continue
+
+    # def consume(self, topic: str):
+    #     print("CONSUMING", topic)
+    #     with open("out/dump.txt", "", encoding="utf-8") as f:
+    #         f.write(f"{value}\n")
+    #     self.__process_received_data(value)
 
     def __process_received_data(self, value: Dict[str, Any]):
         station = value["station"]
