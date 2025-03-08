@@ -6,7 +6,7 @@ from app.prometheus_metric import start_prometheus_server
 
 load_dotenv()
 
-BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "172.20.0.77:9092")
+BOOTSTRAP_SERVERS = os.getenv("BOOTSTRAP_SERVERS", "172.20.0.77:9093")
 TOPIC_CONSUMER = os.getenv("BOOTSTRAP_SERVERS", "p_arrival")
 REDIS_HOST = os.getenv("REDIS_HOST", "172.20.0.80")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")

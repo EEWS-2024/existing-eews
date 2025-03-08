@@ -23,8 +23,8 @@ Sebelum memulai deployment, pastikan komputer Anda telah memenuhi persyaratan be
 
    ```yaml
    environment:
-     KAFKA_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://eews-kafka:19092,OUTSIDE://eews-kafka:29092
-     KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9092,LOCAL://localhost:19092,OUTSIDE://34.134.231.165:29092
+     KAFKA_LISTENERS: DOCKER://eews-kafka:9093,LOCAL://eews-kafka:19092,OUTSIDE://eews-kafka:29092
+     KAFKA_ADVERTISED_LISTENERS: DOCKER://eews-kafka:9093,LOCAL://localhost:19092,OUTSIDE://34.134.231.165:29092
    ```
 
    Ubah `34.134.231.165` dengan IP atau hostname dari komputer tempat Kafka akan dijalankan.
