@@ -46,47 +46,56 @@ class KafkaDataProcessor:
         self.redis = redis
         self.mongo = mongo
 
-    def consume(self, topic: str):
-        self.consumer.subscribe([topic])
-        show_nf = True
-
-        while True:
-            try:
-                msg = self.consumer.poll(0.1)
-                if msg is None:
-                    if show_nf:
-                        print("No message received")
-                    show_nf = False
-                    continue
-                if msg.error():
-                    print(f"Error: {msg.error()}")
-                    continue
-
-                show_nf = True
-                value = json.loads(msg.value())
-
-                logvalue = copy.copy(value)
-                logvalue["data"] = None
-
-                if "type" in value and value["type"] == "start":
-                    self.pooler.reset()
-                    continue
-                if "type" in value and value["type"] != "trace":
-                    continue
-
-                with open("out/dump.txt", "a", encoding="utf-8") as f:
-                    f.write(f"{value}\n")
-                self.__process_received_data(value)
-
-            except Exception as e:
-                print(f"Error: {str(e)}")
-                continue
-
     # def consume(self, topic: str):
-    #     print("CONSUMING", topic)
-    #     with open("out/dump.txt", "", encoding="utf-8") as f:
-    #         f.write(f"{value}\n")
-    #     self.__process_received_data(value)
+    #     self.consumer.subscribe([topic])
+    #     show_nf = True
+    #
+    #     while True:
+    #         try:
+    #             msg = self.consumer.poll(0.1)
+    #             if msg is None:
+    #                 if show_nf:
+    #                     print("No message received")
+    #                 show_nf = False
+    #                 continue
+    #             if msg.error():
+    #                 print(f"Error: {msg.error()}")
+    #                 continue
+    #
+    #             show_nf = True
+    #             value = json.loads(msg.value())
+    #
+    #             logvalue = copy.copy(value)
+    #             logvalue["data"] = None
+    #
+    #             if "type" in value and value["type"] == "start":
+    #                 self.pooler.reset()
+    #                 continue
+    #             if "type" in value and value["type"] != "trace":
+    #                 continue
+    #
+    #             with open("out/dump.txt", "a", encoding="utf-8") as f:
+    #                 f.write(f"{value}\n")
+    #             self.__process_received_data(value)
+    #
+    #         except Exception as e:
+    #             print(f"Error: {str(e)}")
+    #             continue
+
+    def consume(self, topic: str):
+        print("CONSUMING", topic)
+        with open("out/dump.json", "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            for line in lines:
+                try:
+                    value = json.loads(line)
+                    print(value)
+                    self.__process_received_data(value)
+                except Exception as e:
+                    print("outer error")
+                    print(e)
+                    print(f"Error: {str(e)}")
+                    continue
 
     def __process_received_data(self, value: Dict[str, Any]):
         station = value["station"]
