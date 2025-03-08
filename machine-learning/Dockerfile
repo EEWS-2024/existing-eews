@@ -19,8 +19,8 @@ WORKDIR /app/service
 # Build BentoML service
 RUN bentoml build
 
-EXPOSE 8100
+EXPOSE 8007
 
 # Run BentoML service
 # CMD bentoml build && bentoml serve service:wave_arrival_detector
-CMD bentoml serve service:wave_arrival_detector --port=8100
+CMD bentoml serve service:wave_arrival_detector --port=8007

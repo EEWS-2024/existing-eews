@@ -59,7 +59,6 @@ class KafkaDataProcessor:
                     show_nf = False
                     continue
                 if msg.error():
-                    print('error here 1')
                     print(f"Error: {msg.error()}")
                     continue
 
@@ -78,8 +77,6 @@ class KafkaDataProcessor:
                 self.__process_received_data(value)
                
             except Exception as e:
-                print('error here 2')
-                print(e)
                 print(f"Error: {str(e)}")
                 continue
 
@@ -235,6 +232,7 @@ class KafkaDataProcessor:
         for i in range(retry):
             start_time = datetime.now()
             try:
+                print(f"REQUEST TO {url}, retry {i}")
                 response = requests.post(url, data=json.dumps(data), timeout=timeout)
                 if response.status_code != 200:
                     print("Error: ", response.json())
@@ -252,8 +250,6 @@ class KafkaDataProcessor:
                     res = {"process_time": process_time, "result": result}
                     return res
             except Exception as e:
-                print('error here 3')
-                print(e)
                 print(f"Error: {str(e)}")
                 t.sleep(1)
                 continue
