@@ -154,6 +154,7 @@ services:
         ipv4_address: 172.20.0.83
     restart: always
     depends_on:
+      - main-eews-init-kafka
       - main-eews-nginx
       - main-eews-mongo
       - main-eews-redis
