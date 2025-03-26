@@ -1,9 +1,5 @@
-from time import process_time
 from typing import Optional, Any
 
-import psutil
-
-from .prometheus_metric import EXECUTION_TIME, THROUGHPUT
 from .client import StreamClient
 from .const import StreamMode
 from .producer import KafkaProducer
@@ -39,18 +35,17 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
         self.__streaming_started = True
         # Start the collection loop
         print("Starting collection on:", datetime.now(UTC))
-        service_start_time = time.time()
-        experiment_data_count = 0
         while True:
-            experiment_start_time = time.time()
             data = self.conn.collect()
             arrive_time = datetime.now(UTC)
             process_start_time = time.time()
 
             if data == SLPacket.SLTERMINATE:
+                print("Connection terminated")
                 self.on_terminate()
                 break
             elif data == SLPacket.SLERROR:
+                print("Connection error")
                 self.on_seedlink_error()
                 continue
 
@@ -60,28 +55,11 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
                 trace = data.get_trace()
                 if trace.stats.channel in ["BHZ", "BHN", "BHE"]:
                     self.on_data_arrive(trace, arrive_time, process_start_time)
-                    experiment_data_count += len(trace.data.tolist())
-                    if time.time() - experiment_start_time >= 1:
-                        self.experiment_processed_data.append(experiment_data_count)
-                        experiment_data_count = 0
-
-                THROUGHPUT.inc()
-
-            end_time = time.time()
-            self.experiment_execution_times.append(end_time - experiment_start_time)
-            self.experiment_cpu_usages.append(psutil.cpu_percent())  # Add this line
-            self.experiment_memory_usages.append(psutil.virtual_memory().percent)  # Add this line
-            if end_time - service_start_time >= 900.0:
-                self.save_experiment()
-                self.experiment_attempt += 1
-                service_start_time = time.time()
-                if self.experiment_attempt == 5:
-                    self.stop_streaming()
-                    break
 
     def start_streaming(self, start_time: Optional[Any]= None, end_time: Optional[Any]= None):
         self.producer.start_trace()
         print("-" * 20, "Streaming miniseed from seedlink server", "-" * 20)
+        print('Streaming started', not self.__streaming_started)
         if not self.__streaming_started:
             self.run()
 
@@ -93,21 +71,3 @@ class SeedLinkClient(StreamClient, EasySeedLinkClient):
     def on_data_arrive(self, trace: Trace, arrive_time: datetime, process_start_time: float):
         msg = self._map_values(trace, arrive_time, process_start_time)
         self.producer.produce_message(json.dumps(msg), msg["station"], StreamMode.LIVE)
-
-    def save_experiment(self):
-        experiment_execution_time = self.experiment_execution_times[1:] if self.experiment_attempt == 0 else self.experiment_execution_times
-
-        stats_data = {
-            "execution_times": experiment_execution_time,
-            "processed_data": self.experiment_processed_data,
-            "experiment_cpu_usages": self.experiment_cpu_usages,  # Add this line
-            "experiment_memory_usages": self.experiment_memory_usages  # Add this line
-        }
-        with open(f"./out/experiment_stats_{self.experiment_attempt}.json", "w") as f:
-            json.dump(stats_data, f, indent=4)
-
-        self.experiment_execution_times = []
-        self.experiment_processed_data = []
-        self.experiment_cpu_usages = []  # Add this line
-        self.experiment_memory_usages = []  # Add this line
-

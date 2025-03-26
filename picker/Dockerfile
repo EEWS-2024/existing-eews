@@ -4,6 +4,9 @@ FROM python:3.11
 WORKDIR /app
 COPY . /app
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 # Menginstal dependensi
 RUN pip install -r requirements.txt
 

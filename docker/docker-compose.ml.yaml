@@ -1,0 +1,8 @@
+services:
+  eews-ml:
+    build:
+      context: ../machine-learning
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/main-eews-ml:latest
+    env_file:
+      - ./secrets/.ml.env

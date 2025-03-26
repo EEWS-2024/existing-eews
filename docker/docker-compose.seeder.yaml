@@ -1,0 +1,8 @@
+services:
+  eews-seeder:
+    build:
+      context: ../seeder
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/main-eews-seeder:latest
+    env_file:
+      - ./secrets/.seeder.env

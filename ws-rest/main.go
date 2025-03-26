@@ -244,18 +244,22 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request, sigchan chan os.Si
 
 func GetLive(w http.ResponseWriter, _ *http.Request) {
 	producerSvc := os.Getenv("PRODUCER_SERVICE") + "/live"
+	fmt.Println((producerSvc))
 	resp, err := http.Get(producerSvc)
 	if err != nil {
+		fmt.Println("error 1")
+		fmt.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	defer resp.Body.Close()
-	fmt.Println((producerSvc))
 
 	// Process the response if needed and send it to the client
 	// Example: Forward the response from the external service
 	_, err = io.Copy(w, resp.Body)
 	if err != nil {
+		fmt.Println("error 2")
+		fmt.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -287,7 +291,7 @@ func GetPlayback(w http.ResponseWriter, r *http.Request) {
 	starttime := r.FormValue("start_time")
 	endtime := r.FormValue("end_time")
 	// Implement logic to make a GET request to another external service with the provided query parameters
-	// For example, make a GET request to localhost:3001/playback?starttime=xxx&endtime=yyy
+	// For example, make a GET request to localhost:3002/playback?starttime=xxx&endtime=yyy
 	// Use the "net/http" package to make the external request
 
 	playbackURL := fmt.Sprintf("%s?start_time=%s&end_time=%s", producerSvc, starttime, endtime)

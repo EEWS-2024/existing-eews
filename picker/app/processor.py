@@ -6,7 +6,6 @@ import copy
 import time as t
 import os
 
-import psutil
 from confluent_kafka import Consumer, Producer
 import requests
 from dotenv import load_dotenv
@@ -17,11 +16,10 @@ import numpy as np
 from scipy.optimize import minimize
 import math
 
-from .prometheus_metric import LATENCY, EXECUTION_TIME, THROUGHPUT
 
 load_dotenv()
 
-ML_URL = os.getenv("ML_URL", "http://172.20.0.69:80")
+ML_URL = os.getenv("ML_URL", "http://172.20.0.85:80")
 # PRED_URL = os.getenv("PRED_URL", "http://localhost:3000/predict")
 PRED_URL = f"{ML_URL}/predict"
 # INIT_URL = os.getenv("INIT_URL", "http://localhost:3000/restart")
@@ -48,88 +46,54 @@ class KafkaDataProcessor:
         self.redis = redis
         self.mongo = mongo
 
-        self.experiment_attempt = 0
-        self.experiment_execution_times = []
-        self.experiment_processed_data = []
-        self.experiment_latencies = []
-        self.experiment_success_times = []
-        self.cpu_usages = []  # Add this line
-        self.memory_usages = []  # Add this line
-
-    def save_experiment(self):
-        experiment_execution_time = self.experiment_execution_times[1:] if self.experiment_attempt == 0 else self.experiment_execution_times
-
-        stats_data = {
-            "execution_times": experiment_execution_time,
-            "processed_data": self.experiment_processed_data,
-            "latencies": self.experiment_latencies,
-            "success_times": self.experiment_success_times,
-            "cpu_usages": self.cpu_usages,  # Add this line
-            "memory_usages": self.memory_usages  # Add this line
-        }
-        with open(f"./out/experiment_stats_{self.experiment_attempt}.json", "w") as f:
-            json.dump(stats_data, f, indent=4)
-
-        self.experiment_execution_times = []
-        self.experiment_processed_data = []
-        self.experiment_latencies =[]
-        self.experiment_success_times = []
-        self.cpu_usages = []  # Add this line
-        self.memory_usages = []  # Add this line
+    # def consume(self, topic: str):
+    #     self.consumer.subscribe([topic])
+    #     show_nf = True
+    #
+    #     while True:
+    #         try:
+    #             msg = self.consumer.poll(0.1)
+    #             if msg is None:
+    #                 if show_nf:
+    #                     print("No message received")
+    #                 show_nf = False
+    #                 continue
+    #             if msg.error():
+    #                 print(f"Error: {msg.error()}")
+    #                 continue
+    #
+    #             show_nf = True
+    #             value = json.loads(msg.value())
+    #
+    #             logvalue = copy.copy(value)
+    #             logvalue["data"] = None
+    #
+    #             if "type" in value and value["type"] == "start":
+    #                 self.pooler.reset()
+    #                 continue
+    #             if "type" in value and value["type"] != "trace":
+    #                 continue
+    #
+    #             with open("out/dump.txt", "a", encoding="utf-8") as f:
+    #                 f.write(f"{value}\n")
+    #             self.__process_received_data(value)
+    #
+    #         except Exception as e:
+    #             print(f"Error: {str(e)}")
+    #             continue
 
     def consume(self, topic: str):
-        self.consumer.subscribe([topic])
-        show_nf = True
-
-        service_start_time = time.time()
-        experiment_data_count = 0
-        while True:
-            try:
-                experiment_start_time = time.time()
-
-                msg = self.consumer.poll(0.1)
-                if msg is None:
-                    if show_nf:
-                        print("No message received")
-                    show_nf = False
+        print("CONSUMING", topic)
+        with open("out/dump.json", "r", encoding="utf-8") as f:
+            values = json.load(f)
+            for value in values:
+                try:
+                    self.__process_received_data(value)
+                except Exception as e:
+                    print("outer error")
+                    print(e)
+                    print(f"Error: {str(e)}")
                     continue
-                if msg.error():
-                    print(f"Error: {msg.error()}")
-                    continue
-
-                show_nf = True
-                value = json.loads(msg.value())
-
-                logvalue = copy.copy(value)
-                logvalue["data"] = None
-
-                if "type" in value and value["type"] == "start":
-                    self.pooler.reset()
-                    continue
-                if "type" in value and value["type"] != "trace":
-                    continue
-
-                self.experiment_latencies.append(time.time() - value['published_at'])
-                self.__process_received_data(value)
-                experiment_data_count += len(value["data"])
-                if time.time() - experiment_start_time >= 1:
-                    self.experiment_processed_data.append(experiment_data_count)
-                    experiment_data_count = 0
-
-                end_time = time.time()
-                self.experiment_execution_times.append(end_time - experiment_start_time)
-                self.cpu_usages.append(psutil.cpu_percent())  # Add this line
-                self.memory_usages.append(psutil.virtual_memory().percent)
-
-                if end_time - service_start_time >= 900.0:
-                    self.save_experiment()
-                    self.experiment_attempt += 1
-                    service_start_time = time.time()
-
-                THROUGHPUT.inc()
-            except Exception as e:
-                print(f"Error: {str(e)}")
-                continue
 
     def __process_received_data(self, value: Dict[str, Any]):
         station = value["station"]

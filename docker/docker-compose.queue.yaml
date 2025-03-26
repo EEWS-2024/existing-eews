@@ -1,0 +1,8 @@
+services:
+  eews-queue:
+    build:
+      context: ../queue
+      dockerfile: Dockerfile
+    image: docker.io/slackingdjaeger/main-eews-queue:latest
+    env_file:
+      - ./secrets/.queue.env
